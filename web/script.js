@@ -454,18 +454,19 @@ document.getElementById("segAdd").addEventListener('click', segment_add_click);
 // Add Split
 function segment_add_split()
 {
-    if (route_sel_segment != null)
+    if (route_sel_segment == null)
     {
-
-        for(i in route)
-        {
-            if (route[i]["segment"] == route_sel_segment )
-            {
-                route[i]["splits"].push({"name":selected,"rw":false})
-            }
-        }
-        route_list();
+        segment_add("Default Segment");
     }
+
+    for(i in route)
+    {
+        if (route[i]["segment"] == route_sel_segment )
+        {
+            route[i]["splits"].push({"name":selected,"rw":false})
+        }
+    }
+    route_list();
     drawMap();
 }
 document.getElementById("segAddSplit").addEventListener('click', segment_add_split);
