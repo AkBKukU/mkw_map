@@ -1,0 +1,193 @@
+body
+{
+
+	font-family: sans-serif;
+	color: #ddd;
+}
+
+#pswitches_imgs
+{
+    list-style:none;
+    margin: 0px;
+    padding: 0px;
+}
+#menu_left
+{
+	list-style:none;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+    margin: 0px;
+    padding: 0px;
+	position: absolute;
+	left: 0px;
+	top:  0px;
+	height: calc(100% - 230px);
+	width: 408px;
+	background-color: #000c;
+	overflow-y: scroll;
+}
+#menu_right
+{
+	list-style:none;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	margin: 0px;
+	padding: 0px;
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	height: 400px;
+	width: 408px;
+	background-color: #000c;
+	overflow-y: scroll;
+}
+#menu_right h3
+{
+	margin: 0.25em;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+#menu_right div
+{
+	margin: 0.25em;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+#menu_right #route_segments
+{
+	list-style:none;
+	margin: 0px;
+	padding: 0px;
+}
+#menu_right input[type='checkbox']:checked + label
+{
+	color: #f00;
+
+}
+#menu_right #route_splits input[type='checkbox']:not(:checked) + label
+{
+	color: #555;
+
+}
+#menu_right #route_splits input[type='checkbox']
+{
+	display: none;
+
+}
+#menu_right #route_splits
+{
+	list-style:none;
+	margin: 0px;
+	padding: 0px;
+}
+#menu_right #route_splits label
+{
+	margin-right: 0.5em;
+
+}
+#control_pswitch input
+{
+	display: none;
+}
+
+#control_pswitch label
+{
+	display: block;
+}
+#control_pswitch
+{
+	text-align: center;
+	border-radius: 1em;
+	font-weight: bold;
+
+	border-top: solid 3px #55d;
+	background-color: #22b;
+	border-bottom: solid 3px #009;
+}
+#control_pswitch.done
+{
+	border-top: solid 3px #222;
+	background-color: #444;
+	border-bottom: solid 3px #666;
+}
+
+#menu_left h3
+{
+	margin: 0.25em;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+#menu_left ul
+{
+	list-style:none;
+	margin: 0px;
+	padding: 0px;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+#pswitches_names li a:link,
+#pswitches_names li a:visited ,
+#menu_right  li a:link,
+#menu_right li a:visited{
+color: white; text-decoration: none;
+}
+#pswitches_names li a:hover,
+#menu_right li a:hover
+{
+	background-color: #00cc;
+}
+
+
+#pswitches_imgs > li > img
+{
+	position: absolute;
+
+}
+
+#location
+{
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	height: 230px;
+}
+
+#title
+{
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	height: 230px;
+
+}
+
+#titleOut
+{
+	padding:0.15em;
+	font-size: 1.5em;
+	font-family: sans-serif;
+	margin: 0px;
+
+}
+
+#transformed-mouse-pos
+{
+	position: absolute;
+	z-index: 100;
+	bottom: 0px;
+	left: 0;
+	right: 0;
+	padding:0.15em 0.3em;
+	margin-inline: auto;
+	width: fit-content;
+	font-size: 1em;
+	background-color: #000c;
+}
