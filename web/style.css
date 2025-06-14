@@ -208,12 +208,12 @@ body
 	color: #eee;
 	background-color: #222f;
 }
-
 .pretty-menu section fieldset.flexFill
 {
 	flex-grow: 100;
 	overflow-y: hidden;
 }
+
 .flexScroll
 {
 	display: flex;
@@ -228,6 +228,11 @@ body
 .flexScrollScroll
 {
 	flex-grow: 100;
+	overflow-y: scroll;
+}
+.flexScrollLimit
+{
+	max-height: 5em;
 	overflow-y: scroll;
 }
 
@@ -260,13 +265,11 @@ body
 	flex-direction: column;
 	justify-content: space-between;
 	margin: 0em;
-	padding: 0em;
-	padding-left: 1em;
-	padding-right: 1em;
+	padding: 1em;
 	position: absolute;
 	left: 0px;
 	top:  0px;
-	height: 100%;
+	height: calc(100% - 2em);
 	width: 408px;
 	overflow-y: hidden;
 }
@@ -276,12 +279,11 @@ body
 	flex-direction: column;
 	justify-content: space-between;
 	margin: 0em;
-	padding: 0em;
-	padding-right: 1em;
+	padding: 1em;
 	position: absolute;
 	right: 0px;
 	top: 0px;
-	height: 100%;
+	height: calc(100% - 2em);
 	width: 408px;
 }
 #menu_right #route_segments

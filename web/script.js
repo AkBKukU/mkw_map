@@ -27,9 +27,18 @@ let filter = "";
 loadData = null;
 endline=null;
 allends=false;
+allsegments=true;
 route=[];
 route_sel_segment=null;
 route_sel_split=null;
+segment_colors = [
+    "#f33",
+    "#3f3",
+    "#33f",
+    "#ff3",
+    "#3ff",
+    "#f3f"
+    ]
 //  Download
 function download(filename, text) {
     var element = document.createElement('a');
@@ -97,6 +106,74 @@ function readFileContent(file) {
 // ---- Events ---- //
 
 // Completed check
+function seg_remove()
+{
+        for(i in route)
+        {
+            if (route[i]["segment"] == route_sel_segment )
+            {
+                route.splice(i, 1);
+
+                if (route.length > 0)
+                {
+                    set_route_segment(route[0]["segment"]);
+                }else{
+                    route_sel_segment = null;
+                }
+                route_list();
+                drawMap();
+                return;
+
+            }
+        }
+}
+document.getElementById('segDel').addEventListener('click', seg_remove);
+
+
+function seg_up()
+{
+        for(i in route)
+        {
+            if (route[i]["segment"] == route_sel_segment )
+            {
+                if (i != 0 && 1 != route.length)
+                {
+                    i = Number(i)
+                    temp = route[i-1];
+
+                    route[i-1] = route[i];
+                    route[i] = temp;
+                    route_list();
+                    drawMap();
+                    return;
+                }
+
+            }
+        }
+}
+document.getElementById('segUp').addEventListener('click', seg_up);
+
+function seg_down()
+{
+        for(i in route)
+        {
+            if (route[i]["segment"] == route_sel_segment )
+            {
+                if (i != route.length-1 && 1 != route.length)
+                {
+                    i = Number(i)
+                    temp = route[i+1];
+
+                    route[i+1] = route[i];
+                    route[i] = temp;
+                    route_list();
+                    drawMap();
+                    return;
+                }
+            }
+        }
+}
+document.getElementById('segDown').addEventListener('click', seg_down);
 
 function split_remove()
 {
@@ -537,6 +614,8 @@ function route_list()
 {
     route_segments = document.getElementById('route_segments');
     route_segments.innerHTML = "";
+    route_splits = document.getElementById('route_splits');
+    route_splits.innerHTML = "";
     route.forEach(r => {
         lir = document.createElement("li");
         lir.id = "route_"+r["segment"];
@@ -550,8 +629,6 @@ function route_list()
         {
             lir.classList.add("highlight");
 
-            route_splits = document.getElementById('route_splits');
-            route_splits.innerHTML = "";
             r["splits"].forEach(split => {
                 li = document.createElement("li");
                 li.id ="split_li_"+split["name"];
@@ -663,7 +740,7 @@ function drawMap() {
 
     for (i in route)
     {
-        if ( route[i]["segment"] == route_sel_segment)
+        if ( route[i]["segment"] == route_sel_segment || allsegments)
         {
             ctx.beginPath();
             first=true;
@@ -684,7 +761,12 @@ function drawMap() {
                 }
             };
             ctx.lineWidth = 2;
-            ctx.strokeStyle = '#ff3333';
+            color_i = Number(i);
+            while (color_i > segment_colors.length)
+            {
+                color_i -= segment_colors.length;
+            }
+            ctx.strokeStyle = segment_colors[color_i];
             ctx.stroke();
         }
     };
