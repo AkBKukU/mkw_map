@@ -231,6 +231,15 @@ body
 	overflow-y: scroll;
 }
 
+
+
+.highlight
+{
+	border-radius: 2em;
+	background-color: #f403;
+}
+
+
 #pswitches_names
 {
     list-style:none;

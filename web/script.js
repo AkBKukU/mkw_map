@@ -11,7 +11,6 @@ const control_ps_all_ends = document.getElementById('control_ps_all_ends')
 const ps_search = document.getElementById('ps_search');
 ul_pswitches = document.getElementById("pswitches_imgs");
 
-
 // Map image
 const map = new Image();
 map.src = "web/map.png";
@@ -98,6 +97,84 @@ function readFileContent(file) {
 // ---- Events ---- //
 
 // Completed check
+
+function split_remove()
+{
+        for(i in route)
+        {
+            if (route[i]["segment"] == route_sel_segment )
+            {
+                for (j in route[i]["splits"])
+                {
+                    if (route[i]["splits"][j]["name"] == selected)
+                    {
+                        route[i]["splits"].splice(j, 1);
+                        route_list();
+                        drawMap();
+                        return;
+                    }
+                }
+            }
+        }
+}
+document.getElementById('segDelSplit').addEventListener('click', split_remove);
+
+
+function split_up()
+{
+        for(i in route)
+        {
+            if (route[i]["segment"] == route_sel_segment )
+            {
+                for (j in route[i]["splits"])
+                {
+                    if (route[i]["splits"][j]["name"] == selected)
+                    {
+                        if (j != 0 && 1 != route[i]["splits"].length)
+                        {
+                            j = Number(j)
+                            temp = route[i]["splits"][j-1];
+
+                            route[i]["splits"][j-1] = route[i]["splits"][j];
+                            route[i]["splits"][j] = temp;
+                            route_list();
+                            drawMap();
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+}
+document.getElementById('segUpSplit').addEventListener('click', split_up);
+
+function split_down()
+{
+        for(i in route)
+        {
+            if (route[i]["segment"] == route_sel_segment )
+            {
+                for (j in route[i]["splits"])
+                {
+                    if (route[i]["splits"][j]["name"] == selected)
+                    {
+                        if (j != route[i]["splits"].length-1 && 1 != route[i]["splits"].length)
+                        {
+                            j = Number(j)
+                            temp = route[i]["splits"][j+1];
+
+                            route[i]["splits"][j+1] = route[i]["splits"][j];
+                            route[i]["splits"][j] = temp;
+                            route_list();
+                            drawMap();
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+}
+document.getElementById('segDownSplit').addEventListener('click', split_down);
 
 function saveComplete()
 {
@@ -460,22 +537,27 @@ function route_list()
     route_segments = document.getElementById('route_segments');
     route_segments.innerHTML = "";
     route.forEach(r => {
-        li = document.createElement("li");
-        li.id = "route_"+r["segment"];
-        li.textContent = r["segment"];
-        li.addEventListener('click', function(e) {
+        lir = document.createElement("li");
+        lir.id = "route_"+r["segment"];
+        lir.textContent = r["segment"];
+        lir.addEventListener('click', function(e) {
             set_route_segment(r["segment"]);
         });
-        route_segments.appendChild(li);
+        route_segments.appendChild(lir);
 
         if ( r["segment"] == route_sel_segment)
         {
+            lir.classList.add("highlight");
 
             route_splits = document.getElementById('route_splits');
             route_splits.innerHTML = "";
             r["splits"].forEach(split => {
                 li = document.createElement("li");
                 li.id ="split_li_"+split["name"];
+                if (split["name"] == selected)
+                {
+                        li.classList.add("highlight");
+                }
                 split_rw_check = document.createElement("input");
                 split_rw_check.setAttribute("type","checkbox");
                 split_rw_check.id ="split_rw_"+split["name"];
@@ -652,6 +734,7 @@ function set_selected(name,move=null)
         }
     });
     setComplete(selected,null);
+    route_list();
 
 }
 
