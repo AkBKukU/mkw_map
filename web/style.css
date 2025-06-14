@@ -38,24 +38,10 @@ body
 	position: absolute;
 	right: 0px;
 	top: 0px;
-	height: 400px;
+	height: calc(100% - 230px);
 	width: 408px;
 	background-color: #000c;
 	overflow-y: scroll;
-}
-#menu_right h3
-{
-	margin: 0.25em;
-	display: flex;
-	flex-direction: column;
-	flex: 1;
-}
-#menu_right div
-{
-	margin: 0.25em;
-	display: flex;
-	flex-direction: column;
-	flex: 1;
 }
 #menu_right #route_segments
 {
