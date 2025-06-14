@@ -762,7 +762,7 @@ function drawMap() {
             };
             ctx.lineWidth = 2;
             color_i = Number(i);
-            while (color_i > segment_colors.length)
+            while (color_i >= segment_colors.length)
             {
                 color_i -= segment_colors.length;
             }
