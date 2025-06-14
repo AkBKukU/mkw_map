@@ -515,7 +515,6 @@ function set_route_segment(seg_name)
 
 function setComplete(name,done)
 {
-    control = document.getElementById('control_pswitch')
     label = document.querySelector("label[for=control_ps_complete]");
     // Find selected
     names.forEach((c) => {
@@ -530,12 +529,10 @@ function setComplete(name,done)
             // Check
             if(state)
             {
-                control.classList.add("done");
-                label.textContent = "Done";
+                label.textContent = "Completed";
                 document.getElementById(c['name']).src = "web/icon_ps_old.png";
             }else{
-                control.classList.remove("done");
-                label.textContent = "New";
+                label.textContent = "Uncompleted";
                 document.getElementById(c['name']).src = "web/icon_ps_new.png";
             }
         }

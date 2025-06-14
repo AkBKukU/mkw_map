@@ -7,56 +7,132 @@
 <body style="background-color: #333; margin: 0px;">
 	<div id=map_viewer>
 		<canvas id="map_canvas" width="100%" height="100%"></canvas>
+		<div id="transformed-mouse-pos"></div>
 		<ul id="pswitches_imgs">
 		</ul>
 
-		<div id="menu_left">
-			<h1 id="titleOut"></h1>
-			<div id="control_pswitch">
-				<input type="checkbox" id="control_ps_complete" name="control_ps_complete" unchecked />
-				<label for=control_ps_complete>New</label>
-			</div>
-			<input id=completeSave type="button" value="Save Completion"/>
-			<input id=completeLoad type="file" value="Load Completion" />
-			<div id="menu_pswitch">
-				<h3> P-Switch List </h3>
-				<div id="pswitch_all_ends">
-					<input type="checkbox" id="control_ps_all_ends" name="control_ps_all_ends" unchecked />
-					<label for=control_ps_all_ends>Show All Ends</label>
+		<div id="menu_left" >
+			<div class="pretty-menu" style="z-index: 100;">
+				<header>
+					<h3 id="titleOut"></h3>
+				</header>
+				<div>
+					<section>
+						<fieldset>
+							<legend>P-Switch Complettion Tracking</legend>
+
+							<table>
+								<tr>
+									<td colspan=2><input type="checkbox" id="control_ps_complete" name="control_ps_complete" unchecked />
+					<label for=control_ps_complete class="fakeButton">Uncompleted</label></td>
+								</tr>
+								<tr>
+				<td><input id=completeSave type="button" value="Save Completion"/></td>
+				<td><label for=completeLoad class="fakeButton">Load Completion</label>
+				<input id=completeLoad type="file" value="Load Completion" /></td>
+								</tr>
+							</table>
+						</fieldset>
+
+
+
+						<fieldset class="flexFill">
+							<legend>P-Switch List</legend>
+							<div class="flexScroll">
+								<div class="flexScrollNormal" ><input type="text" id="ps_search" placeholder="Search P-Switches..."></div>
+								<div class="flexScrollScroll" ><ul  class="flexScrollInner" id="pswitches_names"></div>
+							</div>
+						</fieldset>
+				</section>
 				</div>
-				<label for=ps_search>Search:</label><input id="ps_search">
-				<ul id="pswitches_names">
-				</ul>
+			</div>
+			<div class="pretty-menu" style="flex-shrink: 0;">
+				<header>
+					<h3>Location</h3>
+				</header>
+				<div class="nopad">
+				<a id="view_location" href=""><img id="location" src=""></a>
+				</div>
 			</div>
 		</div>
 
 
-		<div id="menu_right">
-			<h3> Routing </h3>
+		<div id="menu_right" >
+		<div class="pretty-menu" style="z-index: 100;">
+			<header>
+				<h3> Routing </h3>
+			</header>
 			<div>
-					<input id=routeSave type="button" value="Save Route"/>
-					<input id=routeLoad type="file" value="Load Route" />
-			</div>
-			<div>
-				<h4> Segments </h4>
-				<label for=segName>Name:</label><input id="segName">
-				<input id=segAdd type="button" value="Add Segment"/>
-				<ul id="route_segments">
-				</ul>
-			</div>
-			<div>
-				<h4> Splits </h4>
-				<input id=segAddSplit type="button" value="Add P-Switch"/>
-				<ul id="route_splits">
-				</ul>
-			</div>
-		</div>
+				<section>
+					<fieldset>
+						<legend>Save/Load</legend>
+						<table>
+							<tr>
+								<td><input id=routeSave type="button" value="Save Route"/></td>
+								<td>
+								<label for=routeLoad class="fakeButton">Load Route</label>
+								<input id=routeLoad type="file" value="Load Route" />
+								</td>
+							</tr>
+						</table>
 
-		<div id="transformed-mouse-pos"></div>
+					</fieldset>
+
+					<fieldset>
+						<legend>Options</legend>
+						<table>
+							<tr>
+						<td><input type="checkbox" id="control_ps_all_ends" name="control_ps_all_ends" unchecked />
+								<label for=control_ps_all_ends class="fakeButton">Show All Ends</label></td>
+							</tr>
+						</table>
+					</fieldset>
+
+					<fieldset>
+						<legend>Segments</legend>
+						<table>
+							<tr>
+					<td><input type="text" id="segName" placeholder="Segment name..."></td>
+					<td><input id=segAdd type="button" value="Add Segment"/></td>
+							</tr>
+
+							<tr>
+					<td colspan=2><hr /></td>
+							</tr>
+							<tr>
+					<td><ul id="route_segments"></td>
+							</tr>
+							</tr>
+						</table>
+					</ul>
+
+					</fieldset>
+
+					<fieldset class="flexFill">
+						<legend>Splits</legend>
+						<div class="flexScroll">
+							<div class="flexScrollNormal" ><input id=segAddSplit type="button" value="Add P-Switch"/></div>
+							<div class="flexScrollScroll" ><ul id="route_splits"></div>
+						</div>
+					</fieldset>
+			</section>
+
+	</div>
+	</div>
+			<div class="pretty-menu" style="flex-shrink: 0;">
+				<header>
+					<h3>Mission Title</h3>
+				</header>
+				<div class="nopad">
+				<a id="view_title" href=""><img id="title" src=""></a>
+				</div>
+			</div>
+	</div>
+	</div>
+	</div>
 	</div>
 
-	<a id="view_location" href=""><img id="location" src=""></a>
-	<a id="view_title" href=""><img id="title" src=""></a>
+
 <script type="text/javascript" src="P-Switches/list.js"></script>
 <script type="text/javascript" src="web/script.js"></script>
 </body>
