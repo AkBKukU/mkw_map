@@ -8,6 +8,7 @@ const transformedMousePos = document.getElementById('transformed-mouse-pos');
 const titleOut = document.getElementById('titleOut');
 const control_ps_complete = document.getElementById('control_ps_complete')
 const control_ps_all_ends = document.getElementById('control_ps_all_ends')
+const control_all_segs = document.getElementById('control_all_segs')
 const ps_search = document.getElementById('ps_search');
 ul_pswitches = document.getElementById("pswitches_imgs");
 
@@ -27,7 +28,7 @@ let filter = "";
 loadData = null;
 endline=null;
 allends=false;
-allsegments=true;
+allsegments=false;
 route=[];
 route_sel_segment=null;
 route_sel_split=null;
@@ -421,6 +422,10 @@ control_ps_complete.addEventListener('change', (event) => {
 });
 control_ps_all_ends.addEventListener('change', (event) => {
     allends=event.currentTarget.checked;
+    drawMap();
+});
+control_all_segs.addEventListener('change', (event) => {
+    allsegments=event.currentTarget.checked;
     drawMap();
 });
 
