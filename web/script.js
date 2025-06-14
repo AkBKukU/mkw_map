@@ -28,7 +28,7 @@ let filter = "";
 loadData = null;
 endline=null;
 allends=false;
-route={};
+route=[];
 route_sel_segment=null;
 route_sel_split=null;
 //  Download
@@ -175,17 +175,20 @@ function saveRoute()
 
     Segments = document.createElementNS(xmlns_v, "Segments");
 
-    for (const [key, r] of Object.entries(route)) {
-        for (const [split, rw] of Object.entries(r)) {
+    for (i in route)
+    {
+
+        route[i]["splits"].forEach(split => {
+
             Seg = document.createElementNS(xmlns_v, "Segment");
             Name = document.createElementNS(xmlns_v, "Name");
             pre="";
-            if (rw)
+            if (split["rw"])
             {
                 pre="[RW] ";
             }
-            Name.innerHTML = pre+""+split;
-            Name.setAttribute("map_seg",key);
+            Name.innerHTML = pre+""+split["name"];
+            Name.setAttribute("map_seg",route[i]["segment"]);
             Seg.appendChild(Name);
             Icon = document.createElementNS(xmlns_v, "Icon");
             Seg.appendChild(Icon);
@@ -200,7 +203,7 @@ function saveRoute()
             Seg.appendChild(SegmentHistory);
 
             Segments.appendChild(Seg);
-        };
+        });
     };
 
     Run.appendChild(Segments);
@@ -221,7 +224,7 @@ async function uploadRoute()
     const [file] = document.getElementById("routeLoad").files;
     seg="";
     if (file) {
-        route={};
+        route=[];
         xml=await file.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(xml, "application/xml");
@@ -233,14 +236,17 @@ async function uploadRoute()
                 if ( child.tagName == "Name")
                 {
                     seg=child.getAttribute("map_seg");
-                    test = !(seg in route);
-                    if(test || typeof route === 'undefined')
-                    {
-                        route[seg]=[];
-                    }
+                    segment_add(seg);
                     split=child.textContent.replace("[RW] ", "");
                     rw = child.textContent.includes("[RW]");
-                    route[seg][split.trim()] = rw;
+
+                    for(i in route)
+                    {
+                        if (route[i]["segment"] == route_sel_segment )
+                        {
+                                route[i]["splits"].push({"name":split,"rw":rw})
+                        }
+                    }
                 }
             }
         }
@@ -359,20 +365,12 @@ addEventListener("resize", (event) => { })
 
 
 // Add Segment
-function segment_add()
+function segment_add_click()
 {
     const segName = document.getElementById('segName');
-
-    if(segName.value in route)
-    {
-        alert("Segment already exists!")
-        return;
-    }
-    route[segName.value]=[];
-
-    set_route_segment(segName.value);
+    segment_add(segName.value);
 }
-document.getElementById("segAdd").addEventListener('click', segment_add);
+document.getElementById("segAdd").addEventListener('click', segment_add_click);
 
 
 
@@ -381,7 +379,14 @@ function segment_add_split()
 {
     if (route_sel_segment != null)
     {
-        route[route_sel_segment][selected]=0;
+
+        for(i in route)
+        {
+            if (route[i]["segment"] == route_sel_segment )
+            {
+                route[i]["splits"].push({"name":selected,"rw":false})
+            }
+        }
         route_list();
     }
     drawMap();
@@ -390,12 +395,25 @@ document.getElementById("segAddSplit").addEventListener('click', segment_add_spl
 
 
 // Split RW
-function segment_split_rw(name, rw)
+function segment_split_rw(name)
 {
+    console.log(name)
     if (route_sel_segment != null)
     {
-        split_rw_check = document.getElementById("split_rw_"+name);
-        route[route_sel_segment][name]=split_rw_check.checked;
+        for(i in route)
+        {
+            if (route[i]["segment"] == route_sel_segment )
+            {
+                for (j in route[i]["splits"])
+                {
+                    if (route[i]["splits"][j]["name"] == name)
+                    {
+                        split_rw_check = document.getElementById("split_rw_"+route[i]["splits"][j]["name"]);
+                        route[i]["splits"][j]["rw"]=split_rw_check.checked;
+                    }
+                }
+            }
+        }
     }
     drawMap();
 }
@@ -420,57 +438,71 @@ function decodeHtml(html) {
 
 // ---- Feature Functions ---- //
 
+// Add Segment
+function segment_add(name)
+{
+
+    for(i in route)
+    {
+        if (route[i]["segment"] == name )
+        {
+            console.log("Segment already exists!");
+            return;
+        }
+    }
+    route.push({"segment":name, "splits":[]});
+
+    set_route_segment(name);
+}
 
 function route_list()
 {
     route_segments = document.getElementById('route_segments');
     route_segments.innerHTML = "";
-    for (const [key, r] of Object.entries(route))
-    {
+    route.forEach(r => {
         li = document.createElement("li");
-        li.id = "route_"+key;
-        li.textContent = key;
+        li.id = "route_"+r["segment"];
+        li.textContent = r["segment"];
         li.addEventListener('click', function(e) {
-            set_route_segment(key);
+            set_route_segment(r["segment"]);
         });
         route_segments.appendChild(li);
 
-        if ( key == route_sel_segment)
+        if ( r["segment"] == route_sel_segment)
         {
 
             route_splits = document.getElementById('route_splits');
             route_splits.innerHTML = "";
-            for (const [split, rw] of Object.entries(r))
-            {
+            r["splits"].forEach(split => {
                 li = document.createElement("li");
-                li.id ="split_li_"+split;
-
+                li.id ="split_li_"+split["name"];
                 split_rw_check = document.createElement("input");
                 split_rw_check.setAttribute("type","checkbox");
-                split_rw_check.id ="split_rw_"+split;
-                split_rw_check.checked = rw;
+                split_rw_check.id ="split_rw_"+split["name"];
+                split_rw_check.checked = split["rw"];
                 split_rw_check.addEventListener('change', function(e) {
-                    segment_split_rw(split);
+                    segment_split_rw(split["name"]);
                 });
+                console.log(name)
                 li.appendChild(split_rw_check);
 
                 split_rw_label = document.createElement("label");
-                split_rw_label.setAttribute("for","split_rw_"+split);
+                split_rw_label.setAttribute("for","split_rw_"+split["name"]);
                 split_rw_label.textContent = "RW";
                 li.appendChild(split_rw_label);
 
                 split_name = document.createElement("span");
-                split_name.id = "split_"+split;
-                split_name.textContent = split;
+                split_name.id = "split_"+split["name"];
+                split_name.textContent = split["name"];
                 split_name.addEventListener('click', function(e) {
-                    set_selected(split);
+                    set_selected(split["name"]);
                 });
                 li.appendChild(split_name);
 
                 route_splits.appendChild(li);
-            };
+            });
         }
-    }
+    });
 }
 
 function set_route_segment(seg_name)
@@ -549,15 +581,15 @@ function drawMap() {
         }
     });
 
-    for (const [key, r] of Object.entries(route))
+    for (i in route)
     {
-        if ( key == route_sel_segment)
+        if ( route[i]["segment"] == route_sel_segment)
         {
             ctx.beginPath();
             first=true;
-            for (const [split, rw] of Object.entries(r))
+            for (j in route[i]["splits"])
             {
-                c = names.find(obj => {return obj.name === split});
+                c = names.find(obj => {return obj.name === route[i]["splits"][j]["name"]});
                 if (first)
                 {
                     ctx.moveTo(c["map_position"][0]+c["map_offset"][0], c["map_position"][1]+c["map_offset"][1]);
@@ -566,7 +598,7 @@ function drawMap() {
                     ctx.lineTo(c["map_position"][0]+c["map_offset"][0], c["map_position"][1]+c["map_offset"][1]);
                 }
 
-                if("end_position" in c && ! rw)
+                if("end_position" in c && ! route[i]["splits"][j]["rw"])
                 {
                     ctx.lineTo(c["end_position"][0]+c["map_offset"][0], c["end_position"][1]+c["map_offset"][1]);
                 }
