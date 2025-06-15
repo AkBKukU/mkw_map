@@ -785,15 +785,15 @@ function set_selected(name,move=null)
     titleOut.innerText = name;
     window.location.hash = "#"+name;
     img_location = document.getElementById("location");
-    img_location.src = "P-Switches/"+name+"/location.png";
+    img_location.src = "P-Switches/"+name.replace("#","").replace("?","")+"/location.png";
     a_location = document.getElementById("view_location");
-    a_location.href = "P-Switches/"+name+"/location.png";
+    a_location.href = "P-Switches/"+name.replace("#","").replace("?","")+"/location.png";
     a_location.target = '_blank';
 
     img_title = document.getElementById("title");
-    img_title.src = "P-Switches/"+name+"/title.png";
+    img_title.src = "P-Switches/"+name.replace("#","").replace("?","")+"/title.png";
     a_title = document.getElementById("view_title");
-    a_title.href = "P-Switches/"+name+"/title.png";
+    a_title.href = "P-Switches/"+name.replace("#","").replace("?","")+"/title.png";
     a_title.target = '_blank';
 
     names.forEach((c) => {
