@@ -246,10 +246,14 @@ body
 	background-color: #f403;
 }
 
+#pswitches_names li
+{
+  display: list-item;
+  list-style-position: inside;
+}
 
 #pswitches_names
 {
-    list-style:none;
     margin: 0px;
     padding: 0px;
 }
@@ -347,14 +351,14 @@ color: #222; text-decoration: none;
 {
 	width: 100%;
 	height: 230px;
-	margin-bottom:-1em;
+	margin-bottom:-0.3em;
 }
 
 #title
 {
 	width: 100%;
 	height: 230px;
-	margin-bottom:-1em;
+	margin-bottom:-0.3em;
 
 }
 

@@ -445,7 +445,7 @@ function ps_search_filter() {
         img_item = document.getElementById(c['name']);
         if(filter=="" || c['name'].toUpperCase().includes(filter.toUpperCase()))
         {
-            list_item.style.display = "block";
+            list_item.style.display = "list-item";
             img_item.style.display = "block";
         }else{
             list_item.style.display = "none";
@@ -866,6 +866,7 @@ function map_initialize()
 
         // Create map markers
         li = document.createElement("li");
+        li.style.display = "list-item";
         img = document.createElement("img");
         img.src = "web/icon_ps_new.png";
         img.id = c['name'];
