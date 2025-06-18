@@ -785,15 +785,15 @@ function set_selected(name,move=null)
     titleOut.innerText = name;
     window.location.hash = "#"+name;
     img_location = document.getElementById("location");
-    img_location.src = "P-Switches/"+name.replace("#","").replace("?","")+"/300_location.jpg";
+    img_location.src = "P-Switches/"+name.replaceAll("#","").replaceAll("?","").replaceAll("\"","")+"/300_location.jpg";
     a_location = document.getElementById("view_location");
-    a_location.href = "P-Switches/"+name.replace("#","").replace("?","")+"/location.jpg";
+    a_location.href = "P-Switches/"+name.replaceAll("#","").replaceAll("?","").replaceAll("\"","")+"/location.jpg";
     a_location.target = '_blank';
 
     img_title = document.getElementById("title");
-    img_title.src = "P-Switches/"+name.replace("#","").replace("?","")+"/300_title.jpg";
+    img_title.src = "P-Switches/"+name.replaceAll("#","").replaceAll("?","").replaceAll("\"","")+"/300_title.jpg";
     a_title = document.getElementById("view_title");
-    a_title.href = "P-Switches/"+name.replace("#","").replace("?","")+"/title.jpg";
+    a_title.href = "P-Switches/"+name.replaceAll("#","").replaceAll("?","").replaceAll("\"","")+"/title.jpg";
     a_title.target = '_blank';
 
     names.forEach((c) => {
