@@ -795,23 +795,23 @@ function set_selected(name,move=null)
     a_title.href = "P-Switches/"+pathClean(name)+"/title.jpg";
     a_title.target = '_blank';
 
-    c = marker_find(name,true);
-    if (c == -1) return;
+    sc = marker_find(name,true);
+    if (sc == -1) return;
 
     if(move != null) mapMove(
-        c["map_position"][0]+c["map_offset"][0] ,
-        c["map_position"][1]+c["map_offset"][1] ,
+        sc["map_position"][0]+sc["map_offset"][0] ,
+        sc["map_position"][1]+sc["map_offset"][1] ,
         move);
-    document.getElementById(c['name']).classList.add("selected");
+    document.getElementById(sc['name']).classList.add("selected");
 
-    if(typeof c["end_position"] === 'undefined') {
+    if(typeof sc["end_position"] === 'undefined') {
         endline=null;
         drawMap();
     }
     else {
         endline=[
-        [c["map_position"][0]+c["map_offset"][0], c["map_position"][1]+c["map_offset"][1]],
-        [c["end_position"][0]+c["map_offset"][0], c["end_position"][1]+c["map_offset"][1]]
+        [sc["map_position"][0]+sc["map_offset"][0], sc["map_position"][1]+sc["map_offset"][1]],
+        [sc["end_position"][0]+sc["map_offset"][0], sc["end_position"][1]+sc["map_offset"][1]]
         ];
         drawMap();
     }
