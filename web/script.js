@@ -41,217 +41,136 @@ segment_colors = [
     "#f3f"
     ]
 
-//  Download
-function download(filename, text) {
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    element.setAttribute('download', filename);
 
-    element.style.display = 'none';
-    document.body.appendChild(element);
-
-    element.click();
-
-    document.body.removeChild(element);
-}
-//  Upload
-async function upload()
-{
-    const [file] = document.getElementById("completeLoad").files;
-
-    if (file) {
-        loadData =  JSON.parse(await file.text());
-    }
-    loadComplete();
-};
-
-/*
-// Start file download.
-
-
-// Upload
-document.getElementById('input-file')
-.addEventListener('change', getFile)
-
-function getFile(event) {
-    const input = event.target
-    if ('files' in input && input.files.length > 0) {
-        placeFileContent(
-        document.getElementById('content-target'),
-        input.files[0])
-    }
-}
-
-function placeFileContent(target, file) {
-    readFileContent(file).then(content => {
-        target.value = content
-    }).catch(error => console.log(error))
-}
-
-function readFileContent(file) {
-    const reader = new FileReader()
-    return new Promise((resolve, reject) => {
-        reader.onload = event => resolve(event.target.result)
-        reader.onerror = error => reject(error)
-        reader.readAsText(file)
-    })
-}
-
-        <div>
-        <label for="input-file">Specify a file:</label><br>
-        <input type="file" id="input-file">
-        </div>
-
-        <textarea id="content-target"></textarea>
-*/
 
 // ---- Events ---- //
 
 // Completed check
 function seg_remove()
 {
-        for(i in route)
-        {
-            if (route[i]["segment"] == route_sel_segment )
-            {
-                route.splice(i, 1);
+    index = segment_find_index(route_sel_segment);
+    if (index == -1) return;
 
-                if (route.length > 0)
-                {
-                    set_route_segment(route[0]["segment"]);
-                }else{
-                    route_sel_segment = null;
-                }
-                route_list();
-                drawMap();
-                return;
+    route.splice(index, 1);
 
-            }
-        }
+    if (route.length > 0)
+    {
+        set_route_segment(route[0]["segment"]);
+    }else{
+        route_sel_segment = null;
+    }
+    route_list();
+    drawMap();
+    return;
 }
 document.getElementById('segDel').addEventListener('click', seg_remove);
 
 
 function seg_up()
 {
-        for(i in route)
-        {
-            if (route[i]["segment"] == route_sel_segment )
-            {
-                if (i != 0 && 1 != route.length)
-                {
-                    i = Number(i)
-                    temp = route[i-1];
+    index = segment_find_index(route_sel_segment);
+    if (index == -1) return;
 
-                    route[i-1] = route[i];
-                    route[i] = temp;
-                    route_list();
-                    drawMap();
-                    return;
-                }
+    if (index != 0 && 1 != route.length)
+    {
+        index = Number(index)
+        temp = route[index-1];
 
-            }
-        }
+        route[index-1] = route[index];
+        route[index] = temp;
+        route_list();
+        drawMap();
+        return;
+    }
+
 }
 document.getElementById('segUp').addEventListener('click', seg_up);
 
 function seg_down()
 {
-        for(i in route)
-        {
-            if (route[i]["segment"] == route_sel_segment )
-            {
-                if (i != route.length-1 && 1 != route.length)
-                {
-                    i = Number(i)
-                    temp = route[i+1];
+    index = segment_find_index(route_sel_segment);
+    if (index == -1) return;
 
-                    route[i+1] = route[i];
-                    route[i] = temp;
-                    route_list();
-                    drawMap();
-                    return;
-                }
-            }
-        }
+    if (index != route.length-1 && 1 != route.length)
+    {
+        index = Number(index)
+        temp = route[index+1];
+
+        route[index+1] = route[index];
+        route[index] = temp;
+        route_list();
+        drawMap();
+        return;
+    }
 }
 document.getElementById('segDown').addEventListener('click', seg_down);
 
 function split_remove()
 {
-        for(i in route)
+    index = segment_find_index(route_sel_segment);
+    if (index == -1) return;
+
+    for (j in route[index]["splits"])
+    {
+        if (route[index]["splits"][j]["name"] == selected)
         {
-            if (route[i]["segment"] == route_sel_segment )
-            {
-                for (j in route[i]["splits"])
-                {
-                    if (route[i]["splits"][j]["name"] == selected)
-                    {
-                        route[i]["splits"].splice(j, 1);
-                        route_list();
-                        drawMap();
-                        return;
-                    }
-                }
-            }
+            route[index]["splits"].splice(j, 1);
+            route_list();
+            drawMap();
+            return;
         }
+    }
 }
 document.getElementById('segDelSplit').addEventListener('click', split_remove);
 
 
 function split_up()
 {
-        for(i in route)
-        {
-            if (route[i]["segment"] == route_sel_segment )
-            {
-                for (j in route[i]["splits"])
-                {
-                    if (route[i]["splits"][j]["name"] == selected)
-                    {
-                        if (j != 0 && 1 != route[i]["splits"].length)
-                        {
-                            j = Number(j)
-                            temp = route[i]["splits"][j-1];
+    index = segment_find_index(route_sel_segment);
+    if (index == -1) return;
 
-                            route[i]["splits"][j-1] = route[i]["splits"][j];
-                            route[i]["splits"][j] = temp;
-                            route_list();
-                            drawMap();
-                            return;
-                        }
-                    }
-                }
+    for (j in route[index]["splits"])
+    {
+        if (route[index]["splits"][j]["name"] == selected)
+        {
+            if (j != 0 && 1 != route[index]["splits"].length)
+            {
+                j = Number(j)
+                temp = route[index]["splits"][j-1];
+
+                route[index]["splits"][j-1] = route[index]["splits"][j];
+                route[index]["splits"][j] = temp;
+                route_list();
+                drawMap();
+                return;
             }
         }
+    }
 }
 document.getElementById('segUpSplit').addEventListener('click', split_up);
 
 function split_down()
 {
-        for(i in route)
-        {
-            if (route[i]["segment"] == route_sel_segment )
-            {
-                for (j in route[i]["splits"])
-                {
-                    if (route[i]["splits"][j]["name"] == selected)
-                    {
-                        if (j != route[i]["splits"].length-1 && 1 != route[i]["splits"].length)
-                        {
-                            j = Number(j)
-                            temp = route[i]["splits"][j+1];
+    index = segment_find_index(route_sel_segment);
+    if (index == -1) return;
 
-                            route[i]["splits"][j+1] = route[i]["splits"][j];
-                            route[i]["splits"][j] = temp;
-                            route_list();
-                            drawMap();
-                            return;
-                        }
-                    }
-                }
+    for (j in route[index]["splits"])
+    {
+        if (route[index]["splits"][j]["name"] == selected)
+        {
+            if (j != route[index]["splits"].length-1 && 1 != route[index]["splits"].length)
+            {
+                j = Number(j)
+                temp = route[index]["splits"][j+1];
+
+                route[index]["splits"][j+1] = route[index]["splits"][j];
+                route[index]["splits"][j] = temp;
+                route_list();
+                drawMap();
+                return;
             }
         }
+    }
 }
 document.getElementById('segDownSplit').addEventListener('click', split_down);
 
@@ -267,15 +186,22 @@ function saveComplete()
 }
 document.getElementById("completeSave").addEventListener('click', saveComplete);
 
-function loadComplete()
+//  Upload
+async function uploadCompletion()
 {
+    const [file] = document.getElementById("completeLoad").files;
+
+    if (file) {
+        loadData =  JSON.parse(await file.text());
+    }
+
     names.forEach((c) => {
         c["done"] = loadData[c["name"]];
         setComplete(c["name"],c["done"]);
     });
     drawMap();
-}
-document.getElementById("completeLoad").addEventListener('change', upload);
+};
+document.getElementById("completeLoad").addEventListener('change', uploadCompletion);
 
 // Completed check
 
@@ -396,13 +322,8 @@ async function uploadRoute()
                     split=child.textContent.replace("[RW] ", "");
                     rw = child.textContent.includes("[RW]");
 
-                    for(i in route)
-                    {
-                        if (route[i]["segment"] == route_sel_segment )
-                        {
-                                route[i]["splits"].push({"name":split,"rw":rw})
-                        }
-                    }
+                    index = segment_find_index(route_sel_segment);
+                    route[index]["splits"].push({"name":split,"rw":rw})
                 }
             }
         }
@@ -537,18 +458,21 @@ document.getElementById("segAdd").addEventListener('click', segment_add_click);
 // Add Split
 function segment_add_split()
 {
-    if (route_sel_segment == null)
+    index = segment_find_index(route_sel_segment);
+    if (index == -1)
     {
-        segment_add("Default Segment");
-    }
 
-    for(i in route)
-    {
-        if (route[i]["segment"] == route_sel_segment )
+        if (route_sel_segment == null)
         {
-            route[i]["splits"].push({"name":selected,"rw":false})
+            segment_add("Default Segment");
+            index = segment_find_index(route_sel_segment);
+        }else{
+            return;
         }
     }
+
+    route[index]["splits"].push({"name":selected,"rw":false})
+
     route_list();
     drawMap();
 }
@@ -558,26 +482,23 @@ document.getElementById("segAddSplit").addEventListener('click', segment_add_spl
 // Split RW
 function segment_split_rw(name)
 {
-    console.log(name)
-    if (route_sel_segment != null)
+
+    index = segment_find_index(route_sel_segment);
+    if (index == -1) return;
+
+    for (j in route[index]["splits"])
     {
-        for(i in route)
+        if (route[index]["splits"][j]["name"] == name)
         {
-            if (route[i]["segment"] == route_sel_segment )
-            {
-                for (j in route[i]["splits"])
-                {
-                    if (route[i]["splits"][j]["name"] == name)
-                    {
-                        split_rw_check = document.getElementById("split_rw_"+route[i]["splits"][j]["name"]);
-                        route[i]["splits"][j]["rw"]=split_rw_check.checked;
-                    }
-                }
-            }
+            split_rw_check = document.getElementById("split_rw_"+route[index]["splits"][j]["name"]);
+            route[index]["splits"][j]["rw"]=split_rw_check.checked;
         }
     }
+
     drawMap();
 }
+
+
 
 
 
@@ -590,13 +511,48 @@ function decodeHtml(html) {
     return txt.value;
 }
 
-
+// Clean path of special characters
 function pathClean(path)
 {
     return path
         .replaceAll("#","")
         .replaceAll("?","")
         .replaceAll("\"","");
+}
+
+//  Download
+function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+}
+
+// Find Segment index
+function segment_find_index(name)
+{
+    if (route_sel_segment == null)
+    {
+        console.log("Segment null")
+        return -1;
+    }
+
+    // Go through all route segments
+    for(i in route)
+    {
+        if (route[i]["segment"] == name )
+        {
+            return i;
+        }
+    }
+    console.log("Segment not found: " + name)
+    return -1;
 }
 
 
@@ -609,14 +565,12 @@ function pathClean(path)
 function segment_add(name)
 {
 
-    for(i in route)
+    if (segment_find_index(name) != -1 )
     {
-        if (route[i]["segment"] == name )
-        {
-            console.log("Segment already exists!");
-            return;
-        }
+        console.log("Segment already exists!");
+        return;
     }
+
     route.push({"segment":name, "splits":[]});
 
     set_route_segment(name);
