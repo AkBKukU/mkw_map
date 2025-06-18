@@ -242,8 +242,18 @@ body
 
 .highlight
 {
+
 	border-radius: 2em;
 	background-color: #f403;
+}
+
+
+.marker.selected
+{
+	margin: -5px;
+	border: solid 5px #00f;
+	border-radius: 32px;
+
 }
 
 #pswitches_names li

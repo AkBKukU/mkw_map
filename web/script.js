@@ -25,6 +25,7 @@ let totalTranslate = { x: 0, y: 0 };
 let scale = 1;
 let selected = null;
 let filter = "";
+marker_radius = 16;
 loadData = null;
 endline=null;
 allends=false;
@@ -555,6 +556,42 @@ function segment_find_index(name)
     return -1;
 }
 
+// Find marker
+function marker_find(name, copy=false)
+{
+    if (name == null)
+    {
+        console.log("Marker null")
+        return -1;
+    }
+
+
+    if (copy)
+    {
+        out = -1;
+        // Find selected
+        names.forEach((c) => {
+            if (c['name'] == name)
+            {
+                out = c;
+            }
+        });
+        return out;
+    }else{
+        // Go through all route segments
+        for(i in names)
+        {
+            if (names[i]["name"] == name )
+            {
+                return i;
+            }
+        }
+    }
+
+    console.log("Marker not found: " + name)
+    return -1;
+}
+
 
 
 
@@ -642,31 +679,30 @@ function set_route_segment(seg_name)
 function setComplete(name,done)
 {
     label = document.querySelector("label[for=control_ps_complete]");
-    // Find selected
-    names.forEach((c) => {
-        if (c['name'] == name)
-        {
-            if (done != null)
-            {
-                c['done'] = done;
-            }
-            state = c['done'];
 
-            // Check
-            if(state)
-            {
-                label.textContent = "Completed";
-                document.getElementById(c['name']).src = "web/icon_ps_old.png";
-            }else{
-                label.textContent = "Uncompleted";
-                document.getElementById(c['name']).src = "web/icon_ps_new.png";
-            }
-        }
-    });
+    mindex = marker_find(name);
+    if (mindex == -1) return;
+
+    // Only change data if vaule provided
+    if (done != null)
+    {
+        names[mindex]['done'] = done;
+    }
+    state = names[mindex]['done'];
+
+    // Update UI to show comleted state
+    if(state)
+    {
+        label.textContent = "Completed";
+        document.getElementById(names[mindex]['name']).src = "web/icon_ps_old.png";
+    }else{
+        label.textContent = "Uncompleted";
+        document.getElementById(names[mindex]['name']).src = "web/icon_ps_new.png";
+    }
 
     if (name == selected)
     {
-        selected,control_ps_complete.checked = state;
+        control_ps_complete.checked = state;
     }
 }
 
@@ -677,7 +713,7 @@ function drawMap() {
     ctx.restore();
 
     ctx.drawImage(map, 0, 0, 1920, 1080);
-    map_set_pswitch(names);
+    map_set_pswitch();
 
     // Draw endpoints
     names.forEach((c) => {
@@ -742,6 +778,8 @@ function drawMap() {
 
 function set_selected(name,move=null)
 {
+    if ( selected != null && marker_find(selected) != -1) document.getElementById(selected).classList.remove("selected");
+
     selected = name;
     titleOut.innerText = name;
     window.location.hash = "#"+name;
@@ -757,31 +795,26 @@ function set_selected(name,move=null)
     a_title.href = "P-Switches/"+pathClean(name)+"/title.jpg";
     a_title.target = '_blank';
 
-    names.forEach((c) => {
-        if (c['name'] == name)
-        {
-            if(move != null) mapMove(
-                c["map_position"][0]+c["map_offset"][0] ,
-                c["map_position"][1]+c["map_offset"][1] ,
-                move);
-            document.getElementById(c['name']).style.border = "solid 5px #00f";
-            document.getElementById(c['name']).style.borderRadius = "32px";
-            if(typeof c["end_position"] === 'undefined') {
-                endline=null;
-                drawMap();
-            }
-            else {
-                endline=[
-                [c["map_position"][0]+c["map_offset"][0], c["map_position"][1]+c["map_offset"][1]],
-                [c["end_position"][0]+c["map_offset"][0], c["end_position"][1]+c["map_offset"][1]]
-                ];
-                drawMap();
-            }
-        }else{
-            document.getElementById(c['name']).style.border = "solid 0px #0000";
-            document.getElementById(c['name']).style.borderRadius = "32px";
-        }
-    });
+    c = marker_find(name,true);
+    if (c == -1) return;
+
+    if(move != null) mapMove(
+        c["map_position"][0]+c["map_offset"][0] ,
+        c["map_position"][1]+c["map_offset"][1] ,
+        move);
+    document.getElementById(c['name']).classList.add("selected");
+
+    if(typeof c["end_position"] === 'undefined') {
+        endline=null;
+        drawMap();
+    }
+    else {
+        endline=[
+        [c["map_position"][0]+c["map_offset"][0], c["map_position"][1]+c["map_offset"][1]],
+        [c["end_position"][0]+c["map_offset"][0], c["end_position"][1]+c["map_offset"][1]]
+        ];
+        drawMap();
+    }
     setComplete(selected,null);
     route_list();
 
@@ -789,28 +822,28 @@ function set_selected(name,move=null)
 
 
 
-function map_set_pswitch(data)
+function map_set_pswitch()
 {
     ps_search_filter();
-    data.forEach((c) => {
+    names.forEach((c) => {
         img = document.getElementById(c['name']);
-    if(typeof c["map_offset"] === 'undefined') {
-        pos = getTransformedPointNonInvert(c["map_position"][0], c["map_position"][1]);
-    }
-    else {
-        pos = getTransformedPointNonInvert(c["map_position"][0]+c["map_offset"][0], c["map_position"][1]+c["map_offset"][1]);
-    }
-    if (c['name'] == selected)
-    {
-        borderOffset=5;
-    }else{borderOffset=0;}
-    img.style.left = pos.x -16-borderOffset + "px";
-    img.style.top = pos.y -16-borderOffset + "px";
-    if(pos.y > canvas.height-16 || pos.y < 0 || pos.x > canvas.width-16 || pos.x < 0)
-    {
-        img.style.display = "none";
-    }
-});
+
+        // Verify a map offset exists
+        if(typeof c["map_offset"] === 'undefined') {
+            pos = getTransformedPointNonInvert(c["map_position"][0], c["map_position"][1]);
+        }
+        else {
+            pos = getTransformedPointNonInvert(c["map_position"][0]+c["map_offset"][0], c["map_position"][1]+c["map_offset"][1]);
+        }
+        img.style.left = pos.x - marker_radius + "px";
+        img.style.top = pos.y - marker_radius+ "px";
+        if(
+            pos.y > canvas.height - marker_radius || pos.y < 0 ||
+            pos.x > canvas.width - marker_radius || pos.x < 0
+        ) {
+            img.style.display = "none";
+        }
+    });
 }
 
 
@@ -831,6 +864,7 @@ function map_initialize()
         img = document.createElement("img");
         img.src = "web/icon_ps_new.png";
         img.id = c['name'];
+        img.classList.add("marker");
         img.setAttribute('title', c['name'])
         img.addEventListener('click', function(e) {
             set_selected(c['name']);
