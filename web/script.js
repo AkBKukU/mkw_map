@@ -244,7 +244,6 @@ function markerCustomAdd()
 
     markers["custom"].push({"name":name,"map_position":[map_pointer.x,map_pointer.y]});
     markers["custom"].sort((a, b) => a.name.localeCompare(b.name))
-    map_addMarker(name,"custom");
     document.getElementById('custom_names').innerHTML="";
     markers["custom"].forEach((c) => {
         // Create map markers
