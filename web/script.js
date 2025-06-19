@@ -788,42 +788,42 @@ addEventListener("resize", (event) => { })
 
 function mapControZoomIn()
 {
-    map_control_zoom+=0.1;
+    map_control_zoom+=0.3;
     mapMove(map_control_x,map_control_y,map_control_zoom);
 }
 document.getElementById("map_ctrl_zoom_in").addEventListener('click', mapControZoomIn);
 
 function mapControZoomOut()
 {
-    map_control_zoom-=0.1;
+    map_control_zoom-=0.3;
     mapMove(map_control_x,map_control_y,map_control_zoom);
 }
 document.getElementById("map_ctrl_zoom_out").addEventListener('click', mapControZoomOut);
 
 function mapControZoomUp()
 {
-    map_control_y-=(window.innerHeight/10)*(1/map_control_zoom);
+    map_control_y-=(window.innerHeight/5)*(1/map_control_zoom);
     mapMove(map_control_x,map_control_y,map_control_zoom);
 }
 document.getElementById("map_ctrl_zoom_up").addEventListener('click', mapControZoomUp);
 
 function mapControZoomDown()
 {
-    map_control_y+=(window.innerHeight/10)*(1/map_control_zoom);
+    map_control_y+=(window.innerHeight/5)*(1/map_control_zoom);
     mapMove(map_control_x,map_control_y,map_control_zoom);
 }
 document.getElementById("map_ctrl_zoom_down").addEventListener('click', mapControZoomDown);
 
 function mapControZoomLeft()
 {
-    map_control_x-=(window.innerWidth/10)*(1/map_control_zoom);
+    map_control_x-=(window.innerWidth/5)*(1/map_control_zoom);
     mapMove(map_control_x,map_control_y,map_control_zoom);
 }
 document.getElementById("map_ctrl_zoom_left").addEventListener('click', mapControZoomLeft);
 
 function mapControZoomRight()
 {
-    map_control_x+=(window.innerWidth/10)*(1/map_control_zoom);
+    map_control_x+=(window.innerWidth/5)*(1/map_control_zoom);
     mapMove(map_control_x,map_control_y,map_control_zoom);
 }
 document.getElementById("map_ctrl_zoom_right").addEventListener('click', mapControZoomRight);
