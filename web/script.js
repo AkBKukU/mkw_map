@@ -1343,4 +1343,7 @@ if (isMobile()) {
     alert("phone");
 }else{
     alert("Not phone");
+    showRouting(null,false);
+    showPSLocation(null,false);
+    showPSTitle(null,false);
 }
