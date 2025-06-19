@@ -25,6 +25,10 @@ map_pointer = {
     y: 0
 };
 
+//
+// response.sort((a, b) => b.age - a.age)
+//
+
 map_control_x = 1920/2;
 map_control_y = 1080/2;
 map_control_zoom = 1;
@@ -239,7 +243,14 @@ function markerCustomAdd()
     }
 
     markers["custom"].push({"name":name,"map_position":[map_pointer.x,map_pointer.y]});
-    map_addMarker(name,"custom")
+    markers["custom"].sort((a, b) => a.name.localeCompare(b.name))
+    map_addMarker(name,"custom");
+    document.getElementById('custom_names').innerHTML="";
+    markers["custom"].forEach((c) => {
+        // Create map markers
+        map_addMarker(c['name'],"custom");
+
+    });
     drawMap();
 
 }
