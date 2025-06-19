@@ -1223,11 +1223,13 @@ function set_selected(name,move=null,key=null)
 {
     if ( selected != null && marker_find(selected,true) != -1) document.getElementById(selected).classList.remove("selected");
 
+    selected = name;
     sel_marker = document.getElementById(name);
 
     if (sel_marker == null)
     {
         alert("Marker does not exist: "+name);
+        route_list();
         return;
     }
 
