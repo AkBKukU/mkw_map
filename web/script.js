@@ -8,6 +8,7 @@ const transformedMousePos = document.getElementById('transformed-mouse-pos');
 const titleOut = document.getElementById('titleOut');
 const control_ps_complete = document.getElementById('control_ps_complete')
 const control_ps_all_ends = document.getElementById('control_ps_all_ends')
+const control_marker_pswitch = document.getElementById('control_marker_pswitch')
 const control_all_segs = document.getElementById('control_all_segs')
 const ps_search = document.getElementById('ps_search');
 ul_pswitches = document.getElementById("pswitches_imgs");
@@ -18,10 +19,16 @@ map.src = "web/map.png";
 map.onload = drawMap;
 window.innerWidth
 
+map_pointer = {
+    valid: false,
+    x: 0,
+    y: 0
+};
+
 let isDragging = false;
 let dragStartPosition = { x: 0, y: 0 };
+let clickStartPosition = { x: 0, y: 0 };
 let currentTransformedCursor;
-let totalTranslate = { x: 0, y: 0 };
 let scale = 1;
 let selected = null;
 let selected_key = null;
@@ -44,12 +51,194 @@ segment_colors = [
     "#f3f"
     ]
 
+
 markers = {};
 markers["pswitch"]=names;
 markers["custom"]=[];
+markers["track"]=[
+    {
+        "name":"Acorn Heights",
+        "map_position":[927,83],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Airship Fortress",
+        "map_position":[490,299],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Boo Cinema",
+        "map_position":[1099,152],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Bowser's Castle",
+        "map_position":[633,195],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Cheep Cheep Falls",
+        "map_position":[1110,369],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Choco Mountain",
+        "map_position":[775,539],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Crown City",
+        "map_position":[765,780],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Dandelion Depths",
+        "map_position":[1094,558],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Desert Hills",
+        "map_position":[446,751],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Dino Dino Jungle",
+        "map_position":[1116,934],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"DK Pass",
+        "map_position":[1220,424],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"DK Spaceport",
+        "map_position":[738,941],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Dry Bones Burnout",
+        "map_position":[797,165],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Faraway Oasis",
+        "map_position":[1096,757],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Great ? Block Ruins",
+        "map_position":[1285,878],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Koopa Troopa Beach",
+        "map_position":[927,866],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Mario Bros. Circuit",
+        "map_position":[588,656],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Mario Circuit",
+        "map_position":[939,272],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Moo Moo Meadows",
+        "map_position":[933,451],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Peach Beach",
+        "map_position":[1375,737],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Peach Stadium",
+        "map_position":[932,620],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Salty Salty Speedway",
+        "map_position":[1256,663],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Shy Guy Bazaar",
+        "map_position":[451,552],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Sky-High Sundae",
+        "map_position":[1377,352],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Starview Peak",
+        "map_position":[1237,250],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Toad's Factory",
+        "map_position":[770,350],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Wario Shipyard",
+        "map_position":[1410,550],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Wario Stadium",
+        "map_position":[637,443],
+        "map_offset": [29, 29]
+    },
+    {
+        "name":"Whistlestop Summit",
+        "map_position":[602,848],
+        "map_offset": [29, 29]
+    }
+];
+
+
+marker_show_pswitch=true;
+marker_show_custom=false;
+marker_show_track=false;
 //markers["custom"].push({"name":"The middle of the ocean","map_position":[888,777]});
 
 // ---- Events ---- //
+
+
+// Add Segment
+function markerCustomAdd()
+{
+    const name = document.getElementById('markerCustomName').value;
+    if (!map_pointer.valid)
+    {
+        alert("Please select a location on the map first.");
+        return;
+    }
+    if (name == "")
+    {
+        alert("Please enter a marker name.");
+        return;
+    }
+    if (marker_find(name,true) != -1)
+    {
+        alert("Please enter a unique marker name.");
+        return;
+    }
+
+    markers["custom"].push({"name":name,"map_position":[map_pointer.x,map_pointer.y]});
+    map_addMarker(name,"custom")
+    drawMap();
+
+}
+document.getElementById("markerCustomAdd").addEventListener('click', markerCustomAdd);
+
 
 // Completed check
 function seg_remove()
@@ -182,9 +371,13 @@ document.getElementById('segDownSplit').addEventListener('click', split_down);
 
 function saveComplete()
 {
-    saveData = {"pswitch":[]};
+    saveData = {"pswitch":[],"custom":[]};
     markers["pswitch"].forEach((c) => {
         saveData["pswitch"].push({ "name" : c["name"], "done":c["done"] });
+    });
+
+    markers["custom"].forEach((c) => {
+        saveData["custom"].push({ "name" : c["name"], "x":c["map_position"][0], "y":c["map_position"][1] });
     });
 
     var xmlns_v = "urn:v";
@@ -203,6 +396,10 @@ async function uploadCompletion()
 
     loadData["pswitch"].forEach((c) => {
         setComplete(c["name"],c["done"],"pswitch");
+    });
+    loadData["custom"].forEach((c) => {
+    markers["custom"].push({"name":c["name"],"map_position":[c["x"],c["y"]]});
+    map_addMarker(c["name"],"custom")
     });
     drawMap();
 };
@@ -356,6 +553,69 @@ control_all_segs.addEventListener('change', (event) => {
     drawMap();
 });
 
+
+function showMarkersPswitch()
+{
+    if(control_marker_pswitch.checked)
+    {
+         document.getElementById('field_markers_pswitch').style.display = "block";
+         document.getElementById('menu_location').style.display = "block";
+         document.getElementById('menu_title').style.display = "block";
+    }else{
+        document.getElementById('field_markers_pswitch').style.display = "none";
+         document.getElementById('menu_location').style.display = "none";
+         document.getElementById('menu_title').style.display = "none";
+    }
+    marker_show_pswitch=control_marker_pswitch.checked;
+    drawMap();
+}
+control_marker_pswitch.addEventListener('change', (event) => {
+    showMarkersPswitch()
+});
+
+function showRouting()
+{
+    if(document.getElementById('control_show_routing').checked)
+    {
+         document.getElementById('menu_routing').style.display = "block";
+    }else{
+        document.getElementById('menu_routing').style.display = "none";
+    }
+}
+document.getElementById('control_show_routing').addEventListener('change', (event) => {
+    showRouting()
+});
+
+function showMarkersCustom()
+{
+    if(document.getElementById('control_marker_custom').checked)
+    {
+         document.getElementById('field_markers_custom').style.display = "block";
+    }else{
+        document.getElementById('field_markers_custom').style.display = "none";
+    }
+    marker_show_custom=control_marker_custom.checked;
+    drawMap();
+}
+document.getElementById('control_marker_custom').addEventListener('change', (event) => {
+    showMarkersCustom()
+});
+
+function showMarkersTracks()
+{
+    if(document.getElementById('control_marker_track').checked)
+    {
+         document.getElementById('field_markers_track').style.display = "block";
+    }else{
+        document.getElementById('field_markers_track').style.display = "none";
+    }
+    marker_show_track=control_marker_track.checked;
+    drawMap();
+}
+document.getElementById('control_marker_track').addEventListener('change', (event) => {
+    showMarkersTracks()
+});
+
 // List search
 const ps_search_filter_set = function(e) {
     filter = e.target.value;
@@ -395,6 +655,10 @@ function getTransformedPointNonInvert(x, y) {
 }
 
 function onMouseDown(event) {
+    if (!isDragging)
+    {
+        clickStartPosition = {x:event.offsetX, y:event.offsetY};
+    }
     isDragging = true;
     dragStartPosition = getTransformedPoint(event.offsetX, event.offsetY);
 }
@@ -404,28 +668,41 @@ function onMouseMove(event) {
 
     if (isDragging) {
         ctx.translate(currentTransformedCursor.x - dragStartPosition.x, currentTransformedCursor.y - dragStartPosition.y);
-        totalTranslate.x += currentTransformedCursor.x - dragStartPosition.x;
-        totalTranslate.y += currentTransformedCursor.y - dragStartPosition.y;
         drawMap();
     }
-    transformedMousePos.innerText = `X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}`;
+    if (map_pointer.valid)
+    {
+        transformedMousePos.innerText = `X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}, Pointer X: ${Math.round(map_pointer.x)}, Y: ${Math.round(map_pointer.y)}`;
+    }else{
+        transformedMousePos.innerText = `X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}`;
+    }
 }
 
 function onMouseUp() {
     isDragging = false;
+    if (
+        clickStartPosition.x == event.offsetX &&
+        clickStartPosition.y == event.offsetY
+    ){
+        map_pointer.valid=true;
+        map_pointer.x = currentTransformedCursor.x;
+        map_pointer.y = currentTransformedCursor.y;
+        drawMap();
+    }
 }
 
 function onWheel(event) {
     const zoom = event.deltaY < 0 ? 10/9 : 0.9;
     scale *= zoom;
     ctx.translate(currentTransformedCursor.x, currentTransformedCursor.y);
-    totalTranslate.x = (totalTranslate.x+currentTransformedCursor.x)*(1/zoom);
-    totalTranslate.y = (totalTranslate.y+currentTransformedCursor.y)*(1/zoom);
     ctx.scale(zoom, zoom);
     ctx.translate(-currentTransformedCursor.x, -currentTransformedCursor.y);
-    totalTranslate.x = (totalTranslate.x-currentTransformedCursor.x)*(zoom);
-    totalTranslate.y = (totalTranslate.y-currentTransformedCursor.y)*(zoom);
-    transformedMousePos.innerText = `X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}`;
+    if (map_pointer.valid)
+    {
+        transformedMousePos.innerText = `X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}, Pointer X: ${Math.round(map_pointer.x)}, Y: ${Math.round(map_pointer.y)}`;
+    }else{
+        transformedMousePos.innerText = `X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}`;
+    }
 
     drawMap();
     event.preventDefault();
@@ -569,6 +846,8 @@ function marker_find(name, copy=false,key="pswitch")
     if (name == null)
     {
         console.log("Marker null")
+
+        found_key = null;
         return -1;
     }
 
@@ -618,6 +897,7 @@ function marker_find(name, copy=false,key="pswitch")
     }
 
     console.log("Marker not found: " + name)
+    found_key = null;
     return -1;
 }
 
@@ -664,24 +944,29 @@ function route_list()
             r["splits"].forEach(split => {
                 li = document.createElement("li");
                 li.id ="split_li_"+split["name"];
+                marker_find(split["name"],true);
                 if (split["name"] == selected)
                 {
                         li.classList.add("highlight");
                 }
-                split_rw_check = document.createElement("input");
-                split_rw_check.setAttribute("type","checkbox");
-                split_rw_check.id ="split_rw_"+split["name"];
-                split_rw_check.checked = split["rw"];
-                split_rw_check.addEventListener('change', function(e) {
-                    segment_split_rw(split["name"]);
-                });
-                console.log(name)
-                li.appendChild(split_rw_check);
 
-                split_rw_label = document.createElement("label");
-                split_rw_label.setAttribute("for","split_rw_"+split["name"]);
-                split_rw_label.textContent = "RW";
-                li.appendChild(split_rw_label);
+                if (found_key == "pswitch")
+                {
+                    split_rw_check = document.createElement("input");
+                    split_rw_check.setAttribute("type","checkbox");
+                    split_rw_check.id ="split_rw_"+split["name"];
+                    split_rw_check.checked = split["rw"];
+                    split_rw_check.addEventListener('change', function(e) {
+                        segment_split_rw(split["name"]);
+                    });
+                    console.log(name)
+                    li.appendChild(split_rw_check);
+
+                    split_rw_label = document.createElement("label");
+                    split_rw_label.setAttribute("for","split_rw_"+split["name"]);
+                    split_rw_label.textContent = "RW";
+                    li.appendChild(split_rw_label);
+                }
 
                 split_name = document.createElement("span");
                 split_name.id = "split_"+split["name"];
@@ -744,10 +1029,23 @@ function drawMap() {
     ctx.drawImage(map, 0, 0, 1920, 1080);
     map_set_pswitch();
 
+    if (map_pointer.valid)
+    {
+        ctx.beginPath();
+        ctx.moveTo(map_pointer.x-marker_radius,map_pointer.y);
+        ctx.lineTo(map_pointer.x+marker_radius,map_pointer.y);
+        ctx.moveTo(map_pointer.x,map_pointer.y-marker_radius);
+        ctx.lineTo(map_pointer.x,map_pointer.y+marker_radius);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#333';
+        ctx.stroke();
+
+    }
+
     // Draw endpoints
     for (const [key, value] of Object.entries(markers)) {
         if (key == "pswitch") value.forEach((c) => {
-            if (c['name'] == selected|| allends)
+            if (marker_show_pswitch && (c['name'] == selected|| allends))
             {
 
                 img_item = document.getElementById(c['name']);
@@ -819,10 +1117,19 @@ function drawMap() {
 
 function set_selected(name,move=null,key=null)
 {
-    if ( selected != null && marker_find(selected) != -1) document.getElementById(selected).classList.remove("selected");
+    if ( selected != null && marker_find(selected,true) != -1) document.getElementById(selected).classList.remove("selected");
+
+    sel_marker = document.getElementById(name);
+
+    if (sel_marker == null)
+    {
+        alert("Marker does not exist: "+name);
+        return;
+    }
+
+    sel_marker.classList.add("selected");
 
     selected = name;
-    document.getElementById(selected).classList.add("selected");
     titleOut.innerText = name;
     window.location.hash = "#"+name;
 
@@ -912,6 +1219,10 @@ function map_set_pswitch()
             ) {
                 img.style.display = "none";
             }
+
+            if (key  == "pswitch" && !marker_show_pswitch) img.style.display = "none";
+            if (key  == "custom" &&   !marker_show_custom) img.style.display = "none";
+            if (key  == "track" &&   !marker_show_track) img.style.display = "none";
         });
 
     }
@@ -923,6 +1234,32 @@ function map_set_pswitch()
 
 
 // Build map data
+function map_addMarker(name,key)
+{
+    img = document.createElement("div");
+    img.id = name;
+    img.classList.add("marker_"+key);
+    img.classList.add("marker");
+    img.setAttribute('title', name)
+    img.addEventListener('click', function(e) {
+        set_selected(name,null,key);
+    });
+    ul_pswitches.appendChild(img);
+
+    // Text List
+    ul_pswitch_names = document.getElementById(key+"_names");
+    li = document.createElement("li");
+    li.id = "list_"+name;
+    a = document.createElement("a");
+    a.innerText = name;
+    a.href = "#"+name;
+    a.addEventListener('click', function(e) {
+        set_selected(name,3,key);
+    });
+    li.appendChild(a);
+    ul_pswitch_names.appendChild(li);
+}
+
 function map_initialize()
 {
     // Create P-Switch Items
@@ -931,46 +1268,8 @@ function map_initialize()
             c["done"]=false;
 
             // Create map markers
-            img = document.createElement("div");
-            img.id = c['name'];
-            img.classList.add("marker_"+key);
-            img.classList.add("marker");
-            img.setAttribute('title', c['name'])
-            img.addEventListener('click', function(e) {
-                set_selected(c['name'],null,key);
-            });
-            ul_pswitches.appendChild(img);
+            map_addMarker(c['name'],key);
 
-            if (key == "pswitch")
-            {
-                // Text List
-                ul_pswitches_names = document.getElementById("pswitches_names");
-                li = document.createElement("li");
-                li.id = "list_"+c['name'];
-                a = document.createElement("a");
-                a.innerText = c['name'];
-                a.href = "#"+c['name'];
-                a.addEventListener('click', function(e) {
-                    set_selected(c['name'],3,key);
-                });
-                li.appendChild(a);
-                ul_pswitches_names.appendChild(li);
-            }
-            if (key == "custom")
-            {
-                // Text List
-                ul_pswitches_names = document.getElementById("custom_names");
-                li = document.createElement("li");
-                li.id = "list_"+c['name'];
-                a = document.createElement("a");
-                a.innerText = c['name'];
-                a.href = "#"+c['name'];
-                a.addEventListener('click', function(e) {
-                    set_selected(c['name'],3,key);
-                });
-                li.appendChild(a);
-                ul_pswitches_names.appendChild(li);
-            }
         });
 
     };

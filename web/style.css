@@ -4,6 +4,7 @@ body
 	font-family: sans-serif;
 	color: #ddd;
 }
+
 .pretty-menu > div.pretty_min
 {
 	display: none;
@@ -254,6 +255,11 @@ body
 	height: 32px;
 }
 
+.marker_track
+{
+	background-image: url("marker_track.svg");
+}
+
 .marker_custom
 {
 	background-image: url("marker_custom.svg");
@@ -274,6 +280,19 @@ body
 	border: solid 5px #00f;
 	border-radius: 32px;
 
+}
+.marker_track.selected
+{
+	margin: -3px;
+	border: solid 3px #f00;
+	border-radius: 12px;
+}
+
+.marker_custom.selected
+{
+	margin: -3px;
+	border: solid 3px #f00;
+	border-radius: 12px;
 }
 
 .markerList li
