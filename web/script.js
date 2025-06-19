@@ -25,6 +25,10 @@ map_pointer = {
     y: 0
 };
 
+map_control_x = 1920/2;
+map_control_y = 1080/2;
+map_control_zoom = 1;
+
 let isDragging = false;
 let dragStartPosition = { x: 0, y: 0 };
 let clickStartPosition = { x: 0, y: 0 };
@@ -782,6 +786,51 @@ canvas.addEventListener('wheel', onWheel);
 addEventListener("resize", (event) => { })
 
 
+function mapControZoomIn()
+{
+    map_control_zoom+=0.1;
+    mapMove(map_control_x,map_control_y,map_control_zoom);
+}
+document.getElementById("map_ctrl_zoom_in").addEventListener('click', mapControZoomIn);
+
+function mapControZoomOut()
+{
+    map_control_zoom-=0.1;
+    mapMove(map_control_x,map_control_y,map_control_zoom);
+}
+document.getElementById("map_ctrl_zoom_out").addEventListener('click', mapControZoomOut);
+
+function mapControZoomUp()
+{
+    map_control_y-=(window.innerHeight/10)*(1/map_control_zoom);
+    mapMove(map_control_x,map_control_y,map_control_zoom);
+}
+document.getElementById("map_ctrl_zoom_up").addEventListener('click', mapControZoomUp);
+
+function mapControZoomDown()
+{
+    map_control_y+=(window.innerHeight/10)*(1/map_control_zoom);
+    mapMove(map_control_x,map_control_y,map_control_zoom);
+}
+document.getElementById("map_ctrl_zoom_down").addEventListener('click', mapControZoomDown);
+
+function mapControZoomLeft()
+{
+    map_control_x-=(window.innerWidth/10)*(1/map_control_zoom);
+    mapMove(map_control_x,map_control_y,map_control_zoom);
+}
+document.getElementById("map_ctrl_zoom_left").addEventListener('click', mapControZoomLeft);
+
+function mapControZoomRight()
+{
+    map_control_x+=(window.innerWidth/10)*(1/map_control_zoom);
+    mapMove(map_control_x,map_control_y,map_control_zoom);
+}
+document.getElementById("map_ctrl_zoom_right").addEventListener('click', mapControZoomRight);
+
+
+
+
 // Add Segment
 function segment_add_click()
 {
@@ -1354,16 +1403,22 @@ function windowWidthLayout()
         showRouting(null,false);
         showPSLocation(null,false);
         showPSTitle(null,false);
+        document.getElementById('map_nav_controls').style.display="block"
+        document.getElementById('map_bottom').style.fontSize="3em"
         document.getElementById('menu_main').style.height="30%"
+        document.getElementById('map_bottom').style.left="auto"
         document.getElementById('menu_left').style.width="calc(100% - 2em)"
         document.getElementById('menu_left').append(document.getElementById('menu_routing'));
         document.getElementById('menu_left').append(document.getElementById('menu_title'));
     }else{
+        document.getElementById('map_nav_controls').style.display="none"
+        document.getElementById('map_bottom').style.fontSize="1em"
+        document.getElementById('map_bottom').style.left="0"
         document.getElementById('menu_main').style.height="auto"
         document.getElementById('menu_left').style.width="408px"
         document.getElementById('menu_right').append(document.getElementById('menu_routing'));
         document.getElementById('menu_right').append(document.getElementById('menu_title'));
     }
-    mapMove(1920/2,1080/2,1);
+    mapMove(map_control_x,map_control_y,map_control_zoom);
 }
 windowWidthLayout();

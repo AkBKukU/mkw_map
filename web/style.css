@@ -410,7 +410,7 @@ color: #222; text-decoration: none;
 
 }
 
-#transformed-mouse-pos
+#map_bottom
 {
 	position: absolute;
 	z-index: 100;
