@@ -567,6 +567,8 @@ control_all_segs.addEventListener('change', (event) => {
 
 function showMarkersPswitch(set_state = null)
 {
+    if (set_state != null) control_marker_pswitch.checked = set_state;
+
     if(control_marker_pswitch.checked)
     {
          document.getElementById('field_markers_pswitch').style.display = "block";
@@ -592,6 +594,7 @@ control_marker_pswitch.addEventListener('change', (event) => {
 
 function showRouting(event,set_state = null)
 {
+    if (set_state != null) document.getElementById('control_show_routing').checked = set_state;
     if(document.getElementById('control_show_routing').checked)
     {
          document.getElementById('menu_routing').style.display = "block";
@@ -605,6 +608,7 @@ document.getElementById('control_show_routing').addEventListener('change', (even
 
 function showPSLocation(event,set_state = null)
 {
+    if (set_state != null) document.getElementById('control_show_pslocation').checked = set_state;
     if(document.getElementById('control_show_pslocation').checked)
     {
          document.getElementById('menu_location').style.display = "block";
@@ -618,6 +622,7 @@ document.getElementById('control_show_pslocation').addEventListener('change', (e
 
 function showPSTitle(event,set_state = null)
 {
+    if (set_state != null) document.getElementById('control_show_pstitle').checked = set_state;
     if(document.getElementById('control_show_pstitle').checked)
     {
          document.getElementById('menu_title').style.display = "block";
@@ -631,6 +636,7 @@ document.getElementById('control_show_pstitle').addEventListener('change', (even
 
 function showMarkersCustom(event,set_state = null)
 {
+    if (set_state != null) document.getElementById('control_marker_custom').checked = set_state;
     if(document.getElementById('control_marker_custom').checked)
     {
          document.getElementById('field_markers_custom').style.display = "block";
@@ -646,6 +652,7 @@ document.getElementById('control_marker_custom').addEventListener('change', (eve
 
 function showMarkersTracks(event,set_state = null)
 {
+    if (set_state != null) document.getElementById('control_marker_track').checked = set_state;
     if(document.getElementById('control_marker_track').checked)
     {
          document.getElementById('field_markers_track').style.display = "block";
@@ -1341,9 +1348,9 @@ function isMobile() {
 if (isMobile()) {
 //do mobile things
     alert("phone");
-}else{
-    alert("Not phone");
     showRouting(null,false);
     showPSLocation(null,false);
     showPSTitle(null,false);
+}else{
+    alert("Not phone");
 }
