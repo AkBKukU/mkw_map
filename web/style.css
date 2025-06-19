@@ -51,6 +51,8 @@ body
 /* Coloring */
 	background-color: #444;
 }
+
+
 .pretty-menu > div
 {
 	flex-grow: 100;
@@ -210,6 +212,12 @@ body
 	color: #eee;
 	background-color: #222f;
 }
+.pretty-menu fieldset > legend a,
+.pretty-menu fieldset > legend a:link,
+.pretty-menu fieldset > legend a:visited
+{
+	color: #999; text-decoration: none;
+}
 .pretty-menu section fieldset.flexFill
 {
 	flex-grow: 100;
@@ -254,6 +262,11 @@ body
 	display: block;
 	width: 32px;
 	height: 32px;
+}
+
+.marker_pswitch.spoil
+{
+	background-image:none;
 }
 
 .marker_track

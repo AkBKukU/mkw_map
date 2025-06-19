@@ -29,6 +29,8 @@ map_control_x = 1920/2;
 map_control_y = 1080/2;
 map_control_zoom = 1;
 
+spoiler = false;
+
 let isDragging = false;
 let dragStartPosition = { x: 0, y: 0 };
 let clickStartPosition = { x: 0, y: 0 };
@@ -567,6 +569,14 @@ control_all_segs.addEventListener('change', (event) => {
     allsegments=event.currentTarget.checked;
     drawMap();
 });
+document.body.onkeyup = function(e) {
+    if (e.key == " " ||
+        e.code == "Space" ||
+        e.keyCode == 32
+    ) {
+        setComplete(selected,!control_ps_complete.checked,selected_key);
+    }
+}
 
 
 function showMarkersPswitch(set_state = null)
@@ -1348,6 +1358,10 @@ function map_addMarker(name,key)
     img.id = name;
     img.classList.add("marker_"+key);
     img.classList.add("marker");
+    if(key == "pswitch" && spoiler)
+    {
+        img.classList.add("spoil");
+    }
     img.setAttribute('title', name)
     img.addEventListener('click', function(e) {
         set_selected(name,null,key);
@@ -1377,6 +1391,8 @@ function map_delMarker(name,key)
 
 function map_initialize()
 {
+    let params = new URLSearchParams(document.location.search);
+    spoiler = params.get("spoiler") != null; // enable spoiler mode if set
     // Create P-Switch Items
     for (const [key, value] of Object.entries(markers)) {
         value.forEach((c) => {
