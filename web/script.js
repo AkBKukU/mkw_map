@@ -1247,8 +1247,10 @@ function set_selected(name,move=null,key=null)
 
     if (key == "pswitch")
     {
-        document.getElementById("menu_location").style.display = "block";
-        document.getElementById("menu_title").style.display = "block";
+        if(document.getElementById('control_show_pslocation').checked)
+            document.getElementById("menu_location").style.display = "block";
+        if(document.getElementById('control_show_pstitle').checked)
+            document.getElementById("menu_title").style.display = "block";
         img_location = document.getElementById("location");
         img_location.src = "P-Switches/"+pathClean(name)+"/300_location.jpg";
         a_location = document.getElementById("view_location");
