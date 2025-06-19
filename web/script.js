@@ -24,10 +24,12 @@ let currentTransformedCursor;
 let totalTranslate = { x: 0, y: 0 };
 let scale = 1;
 let selected = null;
+let selected_key = null;
+let found = null;
+let found_key = null;
 let filter = "";
 marker_radius = 16;
 loadData = null;
-endline=null;
 allends=false;
 allsegments=false;
 route=[];
@@ -42,7 +44,10 @@ segment_colors = [
     "#f3f"
     ]
 
-
+markers = {};
+markers["pswitch"]=names;
+markers["custom"]=[];
+//markers["custom"].push({"name":"The middle of the ocean","map_position":[888,777]});
 
 // ---- Events ---- //
 
@@ -177,9 +182,9 @@ document.getElementById('segDownSplit').addEventListener('click', split_down);
 
 function saveComplete()
 {
-    saveData = {};
-    names.forEach((c) => {
-        saveData[c["name"]] = c["done"];
+    saveData = {"pswitch":[]};
+    markers["pswitch"].forEach((c) => {
+        saveData["pswitch"].push({ "name" : c["name"], "done":c["done"] });
     });
 
     var xmlns_v = "urn:v";
@@ -196,9 +201,8 @@ async function uploadCompletion()
         loadData =  JSON.parse(await file.text());
     }
 
-    names.forEach((c) => {
-        c["done"] = loadData[c["name"]];
-        setComplete(c["name"],c["done"]);
+    loadData["pswitch"].forEach((c) => {
+        setComplete(c["name"],c["done"],"pswitch");
     });
     drawMap();
 };
@@ -338,7 +342,7 @@ document.getElementById("routeLoad").addEventListener('change', uploadRoute);
 
 function oncheck()
 {
-    setComplete(selected,control_ps_complete.checked);
+    setComplete(selected,control_ps_complete.checked,selected_key);
 }
 control_ps_complete.addEventListener('change', (event) => {
     oncheck()
@@ -362,19 +366,22 @@ const ps_search_filter_set = function(e) {
 // TODO - Make this generic based off of textContent of list items
 function ps_search_filter() {
     // loop list
-    names.forEach((c) => {
-        // Match
-        list_item = document.getElementById("list_"+c['name']);
-        img_item = document.getElementById(c['name']);
-        if(filter=="" || c['name'].toUpperCase().includes(filter.toUpperCase()))
-        {
-            list_item.style.display = "list-item";
-            img_item.style.display = "block";
-        }else{
-            list_item.style.display = "none";
-            img_item.style.display = "none";
-        }
-    });
+
+    for (const [key, value] of Object.entries(markers)) {
+        if (key == "pswitch") value.forEach((c) => {
+            // Match
+            list_item = document.getElementById("list_"+c['name']);
+            img_item = document.getElementById(c['name']);
+            if(filter=="" || c['name'].toUpperCase().includes(filter.toUpperCase()))
+            {
+                list_item.style.display = "list-item";
+                img_item.style.display = "block";
+            }else{
+                list_item.style.display = "none";
+                img_item.style.display = "none";
+            }
+        });
+    }
 }
 ps_search.addEventListener('input', ps_search_filter_set);
 
@@ -557,7 +564,7 @@ function segment_find_index(name)
 }
 
 // Find marker
-function marker_find(name, copy=false)
+function marker_find(name, copy=false,key="pswitch")
 {
     if (name == null)
     {
@@ -570,18 +577,40 @@ function marker_find(name, copy=false)
     {
         out = -1;
         // Find selected
-        names.forEach((c) => {
+        markers[key].forEach((c) => {
             if (c['name'] == name)
             {
                 out = c;
             }
         });
-        return out;
+        if (out != -1){
+            found = out;
+            found_key = key;
+            return out;
+        }
+
+        // Try deeper search of other keys
+        for (const [key, value] of Object.entries(markers)) {
+            out = -1;
+            value.forEach((mc) => {
+                // Find selected
+                if (mc['name'] == name)
+                {
+                    out = mc;
+                }
+            });
+            if (out != -1){
+                found = out;
+                found_key = key;
+                return out;
+            }
+
+        }
     }else{
         // Go through all route segments
-        for(i in names)
+        for(i in markers[key])
         {
-            if (names[i]["name"] == name )
+            if (markers[key][i]["name"] == name )
             {
                 return i;
             }
@@ -676,28 +705,28 @@ function set_route_segment(seg_name)
     //route_sel_split=null;
 }
 
-function setComplete(name,done)
+function setComplete(name,done,key=null)
 {
     label = document.querySelector("label[for=control_ps_complete]");
 
-    mindex = marker_find(name);
+    mindex = marker_find(name,false,key);
     if (mindex == -1) return;
 
     // Only change data if vaule provided
     if (done != null)
     {
-        names[mindex]['done'] = done;
+        markers[key][mindex]['done'] = done;
     }
-    state = names[mindex]['done'];
+    state = markers[key][mindex]['done'];
 
     // Update UI to show comleted state
     if(state)
     {
+        document.getElementById(markers[key][mindex]['name']).classList.add("complete");
         label.textContent = "Completed";
-        document.getElementById(names[mindex]['name']).src = "web/icon_ps_old.png";
     }else{
+        document.getElementById(markers[key][mindex]['name']).classList.remove("complete");
         label.textContent = "Uncompleted";
-        document.getElementById(names[mindex]['name']).src = "web/icon_ps_new.png";
     }
 
     if (name == selected)
@@ -716,29 +745,31 @@ function drawMap() {
     map_set_pswitch();
 
     // Draw endpoints
-    names.forEach((c) => {
-        if (c['name'] == selected|| allends)
-        {
+    for (const [key, value] of Object.entries(markers)) {
+        if (key == "pswitch") value.forEach((c) => {
+            if (c['name'] == selected|| allends)
+            {
 
-            img_item = document.getElementById(c['name']);
-            if("end_position" in c && img_item.style.display != "none") {
-                ctx.beginPath();
-                ctx.moveTo(c["map_position"][0]+c["map_offset"][0], c["map_position"][1]+c["map_offset"][1]);
-                ctx.lineTo(c["end_position"][0]+c["map_offset"][0], c["end_position"][1]+c["map_offset"][1]);
-                ctx.lineWidth = 4;
-                ctx.strokeStyle = '#333333';
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.arc(c["end_position"][0]+c["map_offset"][0], c["end_position"][1]+c["map_offset"][1], 4, 0, 2 * Math.PI, false);
-                if("end_flying" in c) {
-                    ctx.fillStyle = '#3333ff';
-                }else{
-                    ctx.fillStyle = '#333333';
+                img_item = document.getElementById(c['name']);
+                if("end_position" in c && img_item.style.display != "none") {
+                    ctx.beginPath();
+                    ctx.moveTo(c["map_position"][0]+c["map_offset"][0], c["map_position"][1]+c["map_offset"][1]);
+                    ctx.lineTo(c["end_position"][0]+c["map_offset"][0], c["end_position"][1]+c["map_offset"][1]);
+                    ctx.lineWidth = 4;
+                    ctx.strokeStyle = '#333333';
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.arc(c["end_position"][0]+c["map_offset"][0], c["end_position"][1]+c["map_offset"][1], 4, 0, 2 * Math.PI, false);
+                    if("end_flying" in c) {
+                        ctx.fillStyle = '#3333ff';
+                    }else{
+                        ctx.fillStyle = '#333333';
+                    }
+                    ctx.fill();
                 }
-                ctx.fill();
             }
-        }
-    });
+        });
+    }
 
     for (i in route)
     {
@@ -748,18 +779,28 @@ function drawMap() {
             first=true;
             for (j in route[i]["splits"])
             {
-                c = names.find(obj => {return obj.name === route[i]["splits"][j]["name"]});
+                c = marker_find(route[i]["splits"][j]["name"],true);
+
+
+                if(typeof c["map_offset"] === 'undefined') {
+                    offx = 0;
+                    offy = 0;
+                }else{
+                    offx = c["map_offset"][0];
+                    offy = c["map_offset"][1];
+                }
+
                 if (first)
                 {
-                    ctx.moveTo(c["map_position"][0]+c["map_offset"][0], c["map_position"][1]+c["map_offset"][1]);
+                    ctx.moveTo(c["map_position"][0]+offx, c["map_position"][1]+offy);
                     first = false;
                 }else{
-                    ctx.lineTo(c["map_position"][0]+c["map_offset"][0], c["map_position"][1]+c["map_offset"][1]);
+                    ctx.lineTo(c["map_position"][0]+offx, c["map_position"][1]+offy);
                 }
 
                 if("end_position" in c && ! route[i]["splits"][j]["rw"])
                 {
-                    ctx.lineTo(c["end_position"][0]+c["map_offset"][0], c["end_position"][1]+c["map_offset"][1]);
+                    ctx.lineTo(c["end_position"][0]+offx, c["end_position"][1]+offy);
                 }
             };
             ctx.lineWidth = 2;
@@ -776,46 +817,66 @@ function drawMap() {
 
 }
 
-function set_selected(name,move=null)
+function set_selected(name,move=null,key=null)
 {
     if ( selected != null && marker_find(selected) != -1) document.getElementById(selected).classList.remove("selected");
 
     selected = name;
+    document.getElementById(selected).classList.add("selected");
     titleOut.innerText = name;
     window.location.hash = "#"+name;
-    img_location = document.getElementById("location");
-    img_location.src = "P-Switches/"+pathClean(name)+"/300_location.jpg";
-    a_location = document.getElementById("view_location");
-    a_location.href = "P-Switches/"+pathClean(name)+"/location.jpg";
-    a_location.target = '_blank';
 
-    img_title = document.getElementById("title");
-    img_title.src = "P-Switches/"+pathClean(name)+"/300_title.jpg";
-    a_title = document.getElementById("view_title");
-    a_title.href = "P-Switches/"+pathClean(name)+"/title.jpg";
-    a_title.target = '_blank';
+    // Only used for selecting from route list
+    if (key == null)
+    {
+        marker_find(name,true);
+        if (found_key != null)
+        {
+            key = found_key;
+        }
+    }
+    selected_key = key;
 
-    sc = marker_find(name,true);
+    if (key == "pswitch")
+    {
+        document.getElementById("menu_location").style.display = "block";
+        document.getElementById("menu_title").style.display = "block";
+        img_location = document.getElementById("location");
+        img_location.src = "P-Switches/"+pathClean(name)+"/300_location.jpg";
+        a_location = document.getElementById("view_location");
+        a_location.href = "P-Switches/"+pathClean(name)+"/location.jpg";
+        a_location.target = '_blank';
+
+        img_title = document.getElementById("title");
+        img_title.src = "P-Switches/"+pathClean(name)+"/300_title.jpg";
+        a_title = document.getElementById("view_title");
+        a_title.href = "P-Switches/"+pathClean(name)+"/title.jpg";
+        a_title.target = '_blank';
+    }else{
+        document.getElementById("menu_location").style.display = "none";
+        document.getElementById("menu_title").style.display = "none";
+    }
+
+
+    // Move map view
+    sc = marker_find(name,true,key);
     if (sc == -1) return;
 
-    if(move != null) mapMove(
-        sc["map_position"][0]+sc["map_offset"][0] ,
-        sc["map_position"][1]+sc["map_offset"][1] ,
-        move);
-    document.getElementById(sc['name']).classList.add("selected");
+    if(typeof sc["map_offset"] === 'undefined') {
+        offx = 0;
+        offy = 0;
+    }else{
+        offx = sc["map_offset"][0];
+        offy = sc["map_offset"][1];
+    }
 
-    if(typeof sc["end_position"] === 'undefined') {
-        endline=null;
-        drawMap();
-    }
-    else {
-        endline=[
-        [sc["map_position"][0]+sc["map_offset"][0], sc["map_position"][1]+sc["map_offset"][1]],
-        [sc["end_position"][0]+sc["map_offset"][0], sc["end_position"][1]+sc["map_offset"][1]]
-        ];
-        drawMap();
-    }
-    setComplete(selected,null);
+    if(move != null) mapMove(
+        sc["map_position"][0]+offx ,
+        sc["map_position"][1]+offy ,
+        move);
+
+    drawMap();
+    setComplete(selected,null,key);
     route_list();
 
 }
@@ -824,26 +885,36 @@ function set_selected(name,move=null)
 
 function map_set_pswitch()
 {
-    ps_search_filter();
-    names.forEach((c) => {
-        img = document.getElementById(c['name']);
+    for (const [key, value] of Object.entries(markers)) {
+        if (key  == "pswitch")
+        {
+            ps_search_filter();
+            dispay_set=true;
+        }else{
+            dispay_set=false;
+        }
+        value.forEach((msps) => {
+            img = document.getElementById(msps['name']);
+            if (!dispay_set) img.style.display = "block";
 
-        // Verify a map offset exists
-        if(typeof c["map_offset"] === 'undefined') {
-            pos = getTransformedPointNonInvert(c["map_position"][0], c["map_position"][1]);
-        }
-        else {
-            pos = getTransformedPointNonInvert(c["map_position"][0]+c["map_offset"][0], c["map_position"][1]+c["map_offset"][1]);
-        }
-        img.style.left = pos.x - marker_radius + "px";
-        img.style.top = pos.y - marker_radius+ "px";
-        if(
-            pos.y > canvas.height - marker_radius || pos.y < 0 ||
-            pos.x > canvas.width - marker_radius || pos.x < 0
-        ) {
-            img.style.display = "none";
-        }
-    });
+            // Verify a map offset exists
+            if(typeof msps["map_offset"] === 'undefined') {
+                pos = getTransformedPointNonInvert(msps["map_position"][0], msps["map_position"][1]);
+            }
+            else {
+                pos = getTransformedPointNonInvert(msps["map_position"][0]+msps["map_offset"][0], msps["map_position"][1]+msps["map_offset"][1]);
+            }
+            img.style.left = pos.x - marker_radius + "px";
+            img.style.top = pos.y - marker_radius+ "px";
+            if(
+                pos.y > canvas.height - marker_radius || pos.y < 0 ||
+                pos.x > canvas.width - marker_radius || pos.x < 0
+            ) {
+                img.style.display = "none";
+            }
+        });
+
+    }
 }
 
 
@@ -855,36 +926,54 @@ function map_set_pswitch()
 function map_initialize()
 {
     // Create P-Switch Items
-    names.forEach((c) => {
-        c["done"]=false;
+    for (const [key, value] of Object.entries(markers)) {
+        value.forEach((c) => {
+            c["done"]=false;
 
-        // Create map markers
-        li = document.createElement("li");
-        li.style.display = "list-item";
-        img = document.createElement("img");
-        img.src = "web/icon_ps_new.png";
-        img.id = c['name'];
-        img.classList.add("marker");
-        img.setAttribute('title', c['name'])
-        img.addEventListener('click', function(e) {
-            set_selected(c['name']);
-        });
-        li.appendChild(img);
-        ul_pswitches.appendChild(li);
+            // Create map markers
+            img = document.createElement("div");
+            img.id = c['name'];
+            img.classList.add("marker_"+key);
+            img.classList.add("marker");
+            img.setAttribute('title', c['name'])
+            img.addEventListener('click', function(e) {
+                set_selected(c['name'],null,key);
+            });
+            ul_pswitches.appendChild(img);
 
-        // Text List
-        ul_pswitches_names = document.getElementById("pswitches_names");
-        li = document.createElement("li");
-        li.id = "list_"+c['name'];
-        a = document.createElement("a");
-        a.innerText = c['name'];
-        a.href = "#"+c['name'];
-        a.addEventListener('click', function(e) {
-            set_selected(c['name'],3);
+            if (key == "pswitch")
+            {
+                // Text List
+                ul_pswitches_names = document.getElementById("pswitches_names");
+                li = document.createElement("li");
+                li.id = "list_"+c['name'];
+                a = document.createElement("a");
+                a.innerText = c['name'];
+                a.href = "#"+c['name'];
+                a.addEventListener('click', function(e) {
+                    set_selected(c['name'],3,key);
+                });
+                li.appendChild(a);
+                ul_pswitches_names.appendChild(li);
+            }
+            if (key == "custom")
+            {
+                // Text List
+                ul_pswitches_names = document.getElementById("custom_names");
+                li = document.createElement("li");
+                li.id = "list_"+c['name'];
+                a = document.createElement("a");
+                a.innerText = c['name'];
+                a.href = "#"+c['name'];
+                a.addEventListener('click', function(e) {
+                    set_selected(c['name'],3,key);
+                });
+                li.appendChild(a);
+                ul_pswitches_names.appendChild(li);
+            }
         });
-        li.appendChild(a);
-        ul_pswitches_names.appendChild(li);
-    });
+
+    };
 
     var hash = window.location.hash.substring(1);
     if (hash != "")

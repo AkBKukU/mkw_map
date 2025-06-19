@@ -247,8 +247,28 @@ body
 	background-color: #f403;
 }
 
+.marker
+{
+	display: block;
+	width: 32px;
+	height: 32px;
+}
 
-.marker.selected
+.marker_custom
+{
+	background-image: url("marker_custom.svg");
+}
+.marker_pswitch
+{
+	background-image: url("marker_ps_new.svg");
+}
+
+.marker_pswitch.complete
+{
+	background-image: url("marker_ps_old.svg");
+}
+
+.marker_pswitch.selected
 {
 	margin: -5px;
 	border: solid 5px #00f;
@@ -256,13 +276,13 @@ body
 
 }
 
-#pswitches_names li
+.markerList li
 {
   display: list-item;
   list-style-position: inside;
 }
 
-#pswitches_names
+.markerList
 {
     margin: 0px;
     padding: 0px;
@@ -338,20 +358,20 @@ body
 }
 
 
-#pswitches_names li a:link,
-#pswitches_names li a:visited ,
+.markerList li a:link,
+.markerList li a:visited ,
 #menu_right  li a:link,
 #menu_right li a:visited{
 color: #222; text-decoration: none;
 }
-#pswitches_names li a:hover,
+.markerList li a:hover,
 #menu_right li a:hover
 {
 	background-color: #00f4;
 }
 
 
-#pswitches_imgs > li > img
+#pswitches_imgs > div
 {
 	position: absolute;
 
@@ -361,14 +381,14 @@ color: #222; text-decoration: none;
 {
 	width: 100%;
 	height: 230px;
-	margin-bottom:-0.3em;
+	margin-bottom:-0.2em;
 }
 
 #title
 {
 	width: 100%;
 	height: 230px;
-	margin-bottom:-0.3em;
+	margin-bottom:-0.2em;
 
 }
 
