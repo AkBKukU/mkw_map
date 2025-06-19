@@ -771,7 +771,9 @@ function mapMove(x,y,scale) {
 onresize = (event) => {
     ctx.canvas.width  = window.innerWidth;
     ctx.canvas.height = window.innerHeight;
-    drawMap();}
+    drawMap();
+    windowWidthLayout();
+}
 
 canvas.addEventListener('mousedown', onMouseDown);
 canvas.addEventListener('mousemove', onMouseMove);
@@ -1345,12 +1347,22 @@ function isMobile() {
   return window.innerWidth < minWidth || screen.width < minWidth;
 }
 
-if (isMobile()) {
-//do mobile things
-    alert("phone");
-    showRouting(null,false);
-    showPSLocation(null,false);
-    showPSTitle(null,false);
-}else{
-    alert("Not phone");
+function windowWidthLayout()
+{
+    if (isMobile()) {
+    //do mobile things
+        showRouting(null,false);
+        showPSLocation(null,false);
+        showPSTitle(null,false);
+        document.getElementById('menu_main').style.height="30%"
+        document.getElementById('menu_left').style.width="calc(100% - 2em)"
+        document.getElementById('menu_left').append(document.getElementById('menu_routing'));
+        document.getElementById('menu_left').append(document.getElementById('menu_title'));
+    }else{
+        document.getElementById('menu_main').style.height="auto"
+        document.getElementById('menu_left').style.width="408px"
+        document.getElementById('menu_right').append(document.getElementById('menu_routing'));
+        document.getElementById('menu_right').append(document.getElementById('menu_title'));
+    }
 }
+windowWidthLayout();
