@@ -222,7 +222,7 @@ body
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	overflow-y: hidden;
+	overflow-y: scroll;
 }
 .flexScrollNormal
 {
@@ -231,7 +231,8 @@ body
 .flexScrollScroll
 {
 	flex-grow: 100;
-	overflow-y: scroll;
+    overflow: auto;
+	min-height: 3em;
 }
 .flexScrollLimit
 {

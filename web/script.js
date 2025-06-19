@@ -238,6 +238,17 @@ function markerCustomAdd()
 
 }
 document.getElementById("markerCustomAdd").addEventListener('click', markerCustomAdd);
+function markerCustomDel()
+{
+    mindex = marker_find(selected,false,"custom");
+    split_remove(selected);
+    markers["custom"].splice(mindex,1);
+    map_delMarker(selected,"custom")
+    set_selected(markers["pswitch"][0]["name"],null,"pswitch");
+    drawMap();
+
+}
+document.getElementById("markerCustomDel").addEventListener('click', markerCustomDel);
 
 
 // Completed check
@@ -1258,6 +1269,13 @@ function map_addMarker(name,key)
     });
     li.appendChild(a);
     ul_pswitch_names.appendChild(li);
+}
+function map_delMarker(name,key)
+{
+    img = document.getElementById(name);
+    img.remove();
+    li = document.getElementById("list_"+name);
+    li.remove();
 }
 
 function map_initialize()
