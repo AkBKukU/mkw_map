@@ -1333,9 +1333,12 @@ function map_initialize()
 
 map_initialize();
 
-var isMobile = navigator.userAgent.includes("mobile");
+function isMobile() {
+  const minWidth = 768; // Minimum width for desktop devices
+  return window.innerWidth < minWidth || screen.width < minWidth;
+}
 
-if (isMobile) {
+if (isMobile()) {
 //do mobile things
     alert("phone");
 }else{
