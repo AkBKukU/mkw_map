@@ -1364,5 +1364,6 @@ function windowWidthLayout()
         document.getElementById('menu_right').append(document.getElementById('menu_routing'));
         document.getElementById('menu_right').append(document.getElementById('menu_title'));
     }
+    mapMove(1920/2,1080/2,1);
 }
 windowWidthLayout();
