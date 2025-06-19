@@ -769,6 +769,9 @@ function mapMove(x,y,scale) {
         -y+window.innerHeight/(2*scale)
     );
     drawMap();
+    map_control_x = x;
+    map_control_y = y;
+    map_control_zoom = scale;
 }
 
 
