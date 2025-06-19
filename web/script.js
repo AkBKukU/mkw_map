@@ -565,17 +565,23 @@ control_all_segs.addEventListener('change', (event) => {
 });
 
 
-function showMarkersPswitch()
+function showMarkersPswitch(set_state = null)
 {
     if(control_marker_pswitch.checked)
     {
          document.getElementById('field_markers_pswitch').style.display = "block";
-         document.getElementById('menu_location').style.display = "block";
-         document.getElementById('menu_title').style.display = "block";
+        if(document.getElementById('control_show_pslocation').checked)
+        {
+            document.getElementById('menu_location').style.display = "block";
+        }
+        if(document.getElementById('control_show_pstitle').checked)
+        {
+            document.getElementById('menu_title').style.display = "block";
+        }
     }else{
         document.getElementById('field_markers_pswitch').style.display = "none";
-         document.getElementById('menu_location').style.display = "none";
-         document.getElementById('menu_title').style.display = "none";
+        document.getElementById('menu_location').style.display = "none";
+        document.getElementById('menu_title').style.display = "none";
     }
     marker_show_pswitch=control_marker_pswitch.checked;
     drawMap();
@@ -584,7 +590,7 @@ control_marker_pswitch.addEventListener('change', (event) => {
     showMarkersPswitch()
 });
 
-function showRouting()
+function showRouting(event,set_state = null)
 {
     if(document.getElementById('control_show_routing').checked)
     {
@@ -597,7 +603,33 @@ document.getElementById('control_show_routing').addEventListener('change', (even
     showRouting()
 });
 
-function showMarkersCustom()
+function showPSLocation(event,set_state = null)
+{
+    if(document.getElementById('control_show_pslocation').checked)
+    {
+         document.getElementById('menu_location').style.display = "block";
+    }else{
+        document.getElementById('menu_location').style.display = "none";
+    }
+}
+document.getElementById('control_show_pslocation').addEventListener('change', (event) => {
+    showPSLocation()
+});
+
+function showPSTitle(event,set_state = null)
+{
+    if(document.getElementById('control_show_pstitle').checked)
+    {
+         document.getElementById('menu_title').style.display = "block";
+    }else{
+        document.getElementById('menu_title').style.display = "none";
+    }
+}
+document.getElementById('control_show_pstitle').addEventListener('change', (event) => {
+    showPSTitle()
+});
+
+function showMarkersCustom(event,set_state = null)
 {
     if(document.getElementById('control_marker_custom').checked)
     {
@@ -612,7 +644,7 @@ document.getElementById('control_marker_custom').addEventListener('change', (eve
     showMarkersCustom()
 });
 
-function showMarkersTracks()
+function showMarkersTracks(event,set_state = null)
 {
     if(document.getElementById('control_marker_track').checked)
     {
@@ -1300,3 +1332,12 @@ function map_initialize()
 }
 
 map_initialize();
+
+var isMobile = navigator.userAgent.includes("mobile");
+
+if (isMobile) {
+//do mobile things
+    alert("phone");
+}else{
+    alert("Not phone");
+}
