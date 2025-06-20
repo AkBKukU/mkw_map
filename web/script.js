@@ -217,12 +217,13 @@ markers["track"]=[
 marker_show_pswitch=true;
 marker_show_custom=false;
 marker_show_track=false;
-//markers["custom"].push({"name":"The middle of the ocean","map_position":[888,777]});
 
-// ---- Events ---- //
+// --------------------------------- Events --------------------------------- //
 
 
-// Add Segment
+// --------------------------------- Custom Markers
+
+// Add Custom Marker
 function markerCustomAdd()
 {
     const name = document.getElementById('markerCustomName').value;
@@ -254,6 +255,8 @@ function markerCustomAdd()
 
 }
 document.getElementById("markerCustomAdd").addEventListener('click', markerCustomAdd);
+
+// Delete Custom Marker
 function markerCustomDel()
 {
     mindex = marker_find(selected,false,"custom");
@@ -267,7 +270,40 @@ function markerCustomDel()
 document.getElementById("markerCustomDel").addEventListener('click', markerCustomDel);
 
 
-// Completed check
+// --------------------------------- Segment
+
+// Set Segment
+function set_route_segment(seg_name)
+{
+    route_sel_segment=seg_name;
+    route_list();
+    drawMap();
+    //route_sel_split=null;
+}
+
+// Add Segment
+function segment_add(name)
+{
+
+    if (segment_find_index(name) != -1 )
+    {
+        console.log("Segment already exists!");
+        return;
+    }
+
+    route.push({"segment":name, "splits":[]});
+
+    set_route_segment(name);
+}
+// Add Segment Event
+function segment_add_click()
+{
+    const segName = document.getElementById('segName');
+    segment_add(segName.value);
+}
+document.getElementById("segAdd").addEventListener('click', segment_add_click);
+
+// Delete Segment
 function seg_remove()
 {
     index = segment_find_index(route_sel_segment);
@@ -287,7 +323,7 @@ function seg_remove()
 }
 document.getElementById('segDel').addEventListener('click', seg_remove);
 
-
+// Move Segment Up
 function seg_up()
 {
     index = segment_find_index(route_sel_segment);
@@ -308,6 +344,7 @@ function seg_up()
 }
 document.getElementById('segUp').addEventListener('click', seg_up);
 
+// Move Segment Down
 function seg_down()
 {
     index = segment_find_index(route_sel_segment);
@@ -327,6 +364,53 @@ function seg_down()
 }
 document.getElementById('segDown').addEventListener('click', seg_down);
 
+
+// --------------------------------- Splits
+
+// Add Split
+function segment_add_split()
+{
+    index = segment_find_index(route_sel_segment);
+    if (index == -1)
+    {
+
+        if (route_sel_segment == null)
+        {
+            segment_add("Default Segment");
+            index = segment_find_index(route_sel_segment);
+        }else{
+            return;
+        }
+    }
+
+    route[index]["splits"].push({"name":selected,"rw":false})
+
+    route_list();
+    drawMap();
+}
+document.getElementById("segAddSplit").addEventListener('click', segment_add_split);
+
+
+// Split RW
+function segment_split_rw(name)
+{
+
+    index = segment_find_index(route_sel_segment);
+    if (index == -1) return;
+
+    for (j in route[index]["splits"])
+    {
+        if (route[index]["splits"][j]["name"] == name)
+        {
+            split_rw_check = document.getElementById("split_rw_"+route[index]["splits"][j]["name"]);
+            route[index]["splits"][j]["rw"]=split_rw_check.checked;
+        }
+    }
+
+    drawMap();
+}
+
+// Delete Split
 function split_remove()
 {
     index = segment_find_index(route_sel_segment);
@@ -345,7 +429,7 @@ function split_remove()
 }
 document.getElementById('segDelSplit').addEventListener('click', split_remove);
 
-
+// Move Split Up
 function split_up()
 {
     index = segment_find_index(route_sel_segment);
@@ -371,6 +455,7 @@ function split_up()
 }
 document.getElementById('segUpSplit').addEventListener('click', split_up);
 
+// Move Split Down
 function split_down()
 {
     index = segment_find_index(route_sel_segment);
@@ -396,6 +481,10 @@ function split_down()
 }
 document.getElementById('segDownSplit').addEventListener('click', split_down);
 
+
+// --------------------------------- Completion File Handling
+
+// Save Completion
 function saveComplete()
 {
     saveData = {"pswitch":[],"custom":[]};
@@ -412,7 +501,7 @@ function saveComplete()
 }
 document.getElementById("completeSave").addEventListener('click', saveComplete);
 
-//  Upload
+// Upload Completion
 async function uploadCompletion()
 {
     const [file] = document.getElementById("completeLoad").files;
@@ -432,8 +521,10 @@ async function uploadCompletion()
 };
 document.getElementById("completeLoad").addEventListener('change', uploadCompletion);
 
-// Completed check
 
+// --------------------------------- Route File Handling
+
+// Save Route
 function saveRoute()
 {
     var xmlns_v = "urn:v";
@@ -529,7 +620,7 @@ function saveRoute()
 }
 document.getElementById("routeSave").addEventListener('click', saveRoute);
 
-//  Upload
+// Upload Route
 async function uploadRoute()
 {
     const [file] = document.getElementById("routeLoad").files;
@@ -564,6 +655,10 @@ async function uploadRoute()
 };
 document.getElementById("routeLoad").addEventListener('change', uploadRoute);
 
+
+// --------------------------------- Completion Tracking
+
+// Mark Completed
 function oncheck()
 {
     setComplete(selected,control_ps_complete.checked,selected_key);
@@ -588,109 +683,7 @@ document.body.onkeyup = function(e) {
     }
 }
 
-
-function showMarkersPswitch(set_state = null)
-{
-    if (set_state != null) control_marker_pswitch.checked = set_state;
-
-    if(control_marker_pswitch.checked)
-    {
-         document.getElementById('field_markers_pswitch').style.display = "block";
-        if(document.getElementById('control_show_pslocation').checked)
-        {
-            document.getElementById('menu_location').style.display = "block";
-        }
-        if(document.getElementById('control_show_pstitle').checked)
-        {
-            document.getElementById('menu_title').style.display = "block";
-        }
-    }else{
-        document.getElementById('field_markers_pswitch').style.display = "none";
-        document.getElementById('menu_location').style.display = "none";
-        document.getElementById('menu_title').style.display = "none";
-    }
-    marker_show_pswitch=control_marker_pswitch.checked;
-    drawMap();
-}
-control_marker_pswitch.addEventListener('change', (event) => {
-    showMarkersPswitch()
-});
-
-function showRouting(event,set_state = null)
-{
-    if (set_state != null) document.getElementById('control_show_routing').checked = set_state;
-    if(document.getElementById('control_show_routing').checked)
-    {
-         document.getElementById('menu_routing').style.display = "block";
-    }else{
-        document.getElementById('menu_routing').style.display = "none";
-    }
-}
-document.getElementById('control_show_routing').addEventListener('change', (event) => {
-    showRouting()
-});
-
-function showPSLocation(event,set_state = null)
-{
-    if (set_state != null) document.getElementById('control_show_pslocation').checked = set_state;
-    if(document.getElementById('control_show_pslocation').checked)
-    {
-         document.getElementById('menu_location').style.display = "block";
-    }else{
-        document.getElementById('menu_location').style.display = "none";
-    }
-}
-document.getElementById('control_show_pslocation').addEventListener('change', (event) => {
-    showPSLocation()
-});
-
-function showPSTitle(event,set_state = null)
-{
-    if (set_state != null) document.getElementById('control_show_pstitle').checked = set_state;
-    if(document.getElementById('control_show_pstitle').checked)
-    {
-         document.getElementById('menu_title').style.display = "block";
-    }else{
-        document.getElementById('menu_title').style.display = "none";
-    }
-}
-document.getElementById('control_show_pstitle').addEventListener('change', (event) => {
-    showPSTitle()
-});
-
-function showMarkersCustom(event,set_state = null)
-{
-    if (set_state != null) document.getElementById('control_marker_custom').checked = set_state;
-    if(document.getElementById('control_marker_custom').checked)
-    {
-         document.getElementById('field_markers_custom').style.display = "block";
-    }else{
-        document.getElementById('field_markers_custom').style.display = "none";
-    }
-    marker_show_custom=control_marker_custom.checked;
-    drawMap();
-}
-document.getElementById('control_marker_custom').addEventListener('change', (event) => {
-    showMarkersCustom()
-});
-
-function showMarkersTracks(event,set_state = null)
-{
-    if (set_state != null) document.getElementById('control_marker_track').checked = set_state;
-    if(document.getElementById('control_marker_track').checked)
-    {
-         document.getElementById('field_markers_track').style.display = "block";
-    }else{
-        document.getElementById('field_markers_track').style.display = "none";
-    }
-    marker_show_track=control_marker_track.checked;
-    drawMap();
-}
-document.getElementById('control_marker_track').addEventListener('change', (event) => {
-    showMarkersTracks()
-});
-
-// List search
+// Filter search
 const ps_search_filter_set = function(e) {
     filter = e.target.value;
     ps_search_filter();
@@ -719,15 +712,131 @@ function ps_search_filter() {
 }
 ps_search.addEventListener('input', ps_search_filter_set);
 
+
+// --------------------------------- Menu Visibility
+
+// Toggle P-Switch
+function showMarkersPswitch(set_state = null)
+{
+    if (set_state != null) control_marker_pswitch.checked = set_state;
+
+    if(control_marker_pswitch.checked)
+    {
+         document.getElementById('field_markers_pswitch').style.display = "block";
+        if(document.getElementById('control_show_pslocation').checked)
+        {
+            document.getElementById('menu_location').style.display = "block";
+        }
+        if(document.getElementById('control_show_pstitle').checked)
+        {
+            document.getElementById('menu_title').style.display = "block";
+        }
+    }else{
+        document.getElementById('field_markers_pswitch').style.display = "none";
+        document.getElementById('menu_location').style.display = "none";
+        document.getElementById('menu_title').style.display = "none";
+    }
+    marker_show_pswitch=control_marker_pswitch.checked;
+    drawMap();
+}
+control_marker_pswitch.addEventListener('change', (event) => {
+    showMarkersPswitch()
+});
+
+// Toggle Routing
+function showRouting(event,set_state = null)
+{
+    if (set_state != null) document.getElementById('control_show_routing').checked = set_state;
+    if(document.getElementById('control_show_routing').checked)
+    {
+         document.getElementById('menu_routing').style.display = "block";
+    }else{
+        document.getElementById('menu_routing').style.display = "none";
+    }
+}
+document.getElementById('control_show_routing').addEventListener('change', (event) => {
+    showRouting()
+});
+
+// Toggle Location Image
+function showPSLocation(event,set_state = null)
+{
+    if (set_state != null) document.getElementById('control_show_pslocation').checked = set_state;
+    if(document.getElementById('control_show_pslocation').checked)
+    {
+         document.getElementById('menu_location').style.display = "block";
+    }else{
+        document.getElementById('menu_location').style.display = "none";
+    }
+}
+document.getElementById('control_show_pslocation').addEventListener('change', (event) => {
+    showPSLocation()
+});
+
+// Toggle Location Title
+function showPSTitle(event,set_state = null)
+{
+    if (set_state != null) document.getElementById('control_show_pstitle').checked = set_state;
+    if(document.getElementById('control_show_pstitle').checked)
+    {
+         document.getElementById('menu_title').style.display = "block";
+    }else{
+        document.getElementById('menu_title').style.display = "none";
+    }
+}
+document.getElementById('control_show_pstitle').addEventListener('change', (event) => {
+    showPSTitle()
+});
+
+// Toggle Custom Markers
+function showMarkersCustom(event,set_state = null)
+{
+    if (set_state != null) document.getElementById('control_marker_custom').checked = set_state;
+    if(document.getElementById('control_marker_custom').checked)
+    {
+         document.getElementById('field_markers_custom').style.display = "block";
+    }else{
+        document.getElementById('field_markers_custom').style.display = "none";
+    }
+    marker_show_custom=control_marker_custom.checked;
+    drawMap();
+}
+document.getElementById('control_marker_custom').addEventListener('change', (event) => {
+    showMarkersCustom()
+});
+
+// Toggle Course Starts
+function showMarkersTracks(event,set_state = null)
+{
+    if (set_state != null) document.getElementById('control_marker_track').checked = set_state;
+    if(document.getElementById('control_marker_track').checked)
+    {
+         document.getElementById('field_markers_track').style.display = "block";
+    }else{
+        document.getElementById('field_markers_track').style.display = "none";
+    }
+    marker_show_track=control_marker_track.checked;
+    drawMap();
+}
+document.getElementById('control_marker_track').addEventListener('change', (event) => {
+    showMarkersTracks()
+});
+
+
+// --------------------------------- Map Control
+
+// Point Translation
 function getTransformedPoint(x, y) {
     const originalPoint = new DOMPoint(x, y);
     return ctx.getTransform().invertSelf().transformPoint(originalPoint);
 }
+// Point Translation Invert
 function getTransformedPointNonInvert(x, y) {
     const originalPoint = new DOMPoint(x, y);
     return ctx.getTransform().transformPoint(originalPoint);
 }
 
+// Click Mouse Down
 function onMouseDown(event) {
     if (!isDragging)
     {
@@ -736,7 +845,9 @@ function onMouseDown(event) {
     isDragging = true;
     dragStartPosition = getTransformedPoint(event.offsetX, event.offsetY);
 }
+canvas.addEventListener('mousedown', onMouseDown);
 
+// Mouse Moves
 function onMouseMove(event) {
     currentTransformedCursor = getTransformedPoint(event.offsetX, event.offsetY);
 
@@ -751,7 +862,9 @@ function onMouseMove(event) {
         transformedMousePos.innerText = `X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}`;
     }
 }
+canvas.addEventListener('mousemove', onMouseMove);
 
+// Release Mouse
 function onMouseUp() {
     isDragging = false;
     if (
@@ -764,7 +877,9 @@ function onMouseUp() {
         drawMap();
     }
 }
+canvas.addEventListener('mouseup', onMouseUp);
 
+// Mouse Scroll
 function onWheel(event) {
     const zoom = event.deltaY < 0 ? 10/9 : 0.9;
     scale *= zoom;
@@ -781,34 +896,21 @@ function onWheel(event) {
     drawMap();
     event.preventDefault();
 }
-function mapMove(x,y,scale) {
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.scale(scale, scale);
-    ctx.translate(
-        -x+window.innerWidth/(2*scale),
-        -y+window.innerHeight/(2*scale)
-    );
-    drawMap();
-    map_control_x = x;
-    map_control_y = y;
-    map_control_zoom = scale;
-}
+canvas.addEventListener('wheel', onWheel);
 
-
+// Window Resize
 onresize = (event) => {
     ctx.canvas.width  = window.innerWidth;
     ctx.canvas.height = window.innerHeight;
     drawMap();
     windowWidthLayout();
 }
-
-canvas.addEventListener('mousedown', onMouseDown);
-canvas.addEventListener('mousemove', onMouseMove);
-canvas.addEventListener('mouseup', onMouseUp);
-canvas.addEventListener('wheel', onWheel);
 addEventListener("resize", (event) => { })
 
 
+// --------------------------------- Map Control Buttons
+
+// Map Control Zoom In
 function mapControZoomIn()
 {
     map_control_zoom+=0.3;
@@ -816,6 +918,7 @@ function mapControZoomIn()
 }
 document.getElementById("map_ctrl_zoom_in").addEventListener('click', mapControZoomIn);
 
+// Map Control Zoom Out
 function mapControZoomOut()
 {
     map_control_zoom-=0.3;
@@ -823,95 +926,45 @@ function mapControZoomOut()
 }
 document.getElementById("map_ctrl_zoom_out").addEventListener('click', mapControZoomOut);
 
-function mapControZoomUp()
+// Map Control Pan Up
+function mapControPanUp()
 {
     map_control_y-=(window.innerHeight/5)*(1/map_control_zoom);
     mapMove(map_control_x,map_control_y,map_control_zoom);
 }
-document.getElementById("map_ctrl_zoom_up").addEventListener('click', mapControZoomUp);
+document.getElementById("map_ctrl_zoom_up").addEventListener('click', mapControPanUp);
 
-function mapControZoomDown()
+// Map Control Pan Down
+function mapControPanDown()
 {
     map_control_y+=(window.innerHeight/5)*(1/map_control_zoom);
     mapMove(map_control_x,map_control_y,map_control_zoom);
 }
-document.getElementById("map_ctrl_zoom_down").addEventListener('click', mapControZoomDown);
+document.getElementById("map_ctrl_zoom_down").addEventListener('click', mapControPanDown);
 
-function mapControZoomLeft()
+// Map Control Pan Left
+function mapControPanLeft()
 {
     map_control_x-=(window.innerWidth/5)*(1/map_control_zoom);
     mapMove(map_control_x,map_control_y,map_control_zoom);
 }
-document.getElementById("map_ctrl_zoom_left").addEventListener('click', mapControZoomLeft);
+document.getElementById("map_ctrl_zoom_left").addEventListener('click', mapControPanLeft);
 
-function mapControZoomRight()
+// Map Control Pan Right
+function mapControPanRight()
 {
     map_control_x+=(window.innerWidth/5)*(1/map_control_zoom);
     mapMove(map_control_x,map_control_y,map_control_zoom);
 }
-document.getElementById("map_ctrl_zoom_right").addEventListener('click', mapControZoomRight);
-
-
-
-
-// Add Segment
-function segment_add_click()
-{
-    const segName = document.getElementById('segName');
-    segment_add(segName.value);
-}
-document.getElementById("segAdd").addEventListener('click', segment_add_click);
-
-
-
-// Add Split
-function segment_add_split()
-{
-    index = segment_find_index(route_sel_segment);
-    if (index == -1)
-    {
-
-        if (route_sel_segment == null)
-        {
-            segment_add("Default Segment");
-            index = segment_find_index(route_sel_segment);
-        }else{
-            return;
-        }
-    }
-
-    route[index]["splits"].push({"name":selected,"rw":false})
-
-    route_list();
-    drawMap();
-}
-document.getElementById("segAddSplit").addEventListener('click', segment_add_split);
-
-
-// Split RW
-function segment_split_rw(name)
-{
-
-    index = segment_find_index(route_sel_segment);
-    if (index == -1) return;
-
-    for (j in route[index]["splits"])
-    {
-        if (route[index]["splits"][j]["name"] == name)
-        {
-            split_rw_check = document.getElementById("split_rw_"+route[index]["splits"][j]["name"]);
-            route[index]["splits"][j]["rw"]=split_rw_check.checked;
-        }
-    }
-
-    drawMap();
-}
+document.getElementById("map_ctrl_zoom_right").addEventListener('click', mapControPanRight);
 
 
 
 
 
-// ---- Utility Functions ---- //
+
+
+// --------------------------- Utility Functions ---------------------------- //
 
 // URL Escape Decoding
 function decodeHtml(html) {
@@ -929,7 +982,7 @@ function pathClean(path)
         .replaceAll("\"","");
 }
 
-//  Download
+// Download
 function download(filename, text) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -1025,26 +1078,22 @@ function marker_find(name, copy=false,key="pswitch")
     return -1;
 }
 
-
-
-
-
-// ---- Feature Functions ---- //
-
-// Add Segment
-function segment_add(name)
-{
-
-    if (segment_find_index(name) != -1 )
-    {
-        console.log("Segment already exists!");
-        return;
-    }
-
-    route.push({"segment":name, "splits":[]});
-
-    set_route_segment(name);
+// Move Map and Scale
+function mapMove(x,y,scale) {
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(scale, scale);
+    ctx.translate(
+        -x+window.innerWidth/(2*scale),
+                  -y+window.innerHeight/(2*scale)
+    );
+    drawMap();
+    map_control_x = x;
+    map_control_y = y;
+    map_control_zoom = scale;
 }
+
+
+// --------------------------- Feature Functions ---------------------------- //
 
 function route_list()
 {
@@ -1052,24 +1101,27 @@ function route_list()
     route_segments.innerHTML = "";
     route_splits = document.getElementById('route_splits');
     route_splits.innerHTML = "";
-    route.forEach(r => {
+
+    for (let i in route)
+    {
         lir = document.createElement("li");
-        lir.id = "route_"+r["segment"];
-        lir.textContent = r["segment"];
+        lir.id = "route_"+route[i]["segment"];
+        lir.textContent = route[i]["segment"];
         lir.addEventListener('click', function(e) {
-            set_route_segment(r["segment"]);
+            set_route_segment(route[i]["segment"]);
         });
         route_segments.appendChild(lir);
 
-        if ( r["segment"] == route_sel_segment)
+        if ( route[i]["segment"] == route_sel_segment)
         {
             lir.classList.add("highlight");
 
-            r["splits"].forEach(split => {
+            for (let j in route[i]["splits"])
+            {
                 li = document.createElement("li");
-                li.id ="split_li_"+split["name"];
-                marker_find(split["name"],true);
-                if (split["name"] == selected)
+                li.id ="split_li_"+route[i]["splits"][j]["name"];
+                marker_find(route[i]["splits"][j]["name"],true);
+                if (route[i]["splits"][j]["name"] == selected)
                 {
                         li.classList.add("highlight");
                 }
@@ -1078,40 +1130,32 @@ function route_list()
                 {
                     split_rw_check = document.createElement("input");
                     split_rw_check.setAttribute("type","checkbox");
-                    split_rw_check.id ="split_rw_"+split["name"];
-                    split_rw_check.checked = split["rw"];
+                    split_rw_check.id ="split_rw_"+route[i]["splits"][j]["name"];
+                    split_rw_check.checked = route[i]["splits"][j]["rw"];
                     split_rw_check.addEventListener('change', function(e) {
-                        segment_split_rw(split["name"]);
+                        segment_split_rw(route[i]["splits"][j]["name"]);
                     });
                     console.log(name)
                     li.appendChild(split_rw_check);
 
                     split_rw_label = document.createElement("label");
-                    split_rw_label.setAttribute("for","split_rw_"+split["name"]);
+                    split_rw_label.setAttribute("for","split_rw_"+route[i]["splits"][j]["name"]);
                     split_rw_label.textContent = "RW";
                     li.appendChild(split_rw_label);
                 }
 
                 split_name = document.createElement("span");
-                split_name.id = "split_"+split["name"];
-                split_name.textContent = split["name"];
+                split_name.id = "split_"+route[i]["splits"][j]["name"];
+                split_name.textContent = route[i]["splits"][j]["name"];
                 split_name.addEventListener('click', function(e) {
-                    set_selected(split["name"]);
+                    set_selected(route[i]["splits"][j]["name"]);
                 });
                 li.appendChild(split_name);
 
                 route_splits.appendChild(li);
-            });
+            }
         }
-    });
-}
-
-function set_route_segment(seg_name)
-{
-    route_sel_segment=seg_name;
-    route_list();
-    drawMap();
-    //route_sel_split=null;
+    }
 }
 
 function setComplete(name,done,key=null)
@@ -1358,6 +1402,8 @@ function map_set_pswitch()
 
 
 
+
+// --------------------------- Inititialization  ---------------------------- //
 
 
 
