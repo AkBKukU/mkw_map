@@ -253,7 +253,6 @@ body
 .highlight
 {
 
-	border-radius: 2em;
 	background-color: #f403;
 }
 
@@ -390,6 +389,18 @@ body
 
 }
 
+#route_segments li.selected
+{
+	background-color: #00f3;
+}
+#route_splits li.selected
+{
+	background-color: #00f3;
+}
+#route_splits li.higlight
+{
+	background-color: #f403;
+}
 
 .markerList li a:link,
 .markerList li a:visited ,
