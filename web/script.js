@@ -277,6 +277,19 @@ function set_route_segment(seg_name)
     route_list();
     drawMap();
     //route_sel_split=null;
+
+    index = segment_find_index(route_sel_segment);
+
+    bounds = calcRouteCenterBounds(route[index]["splits"],1);
+
+    view_x = window.innerWidth-900;
+    view_y = window.innerHeight;
+
+    scale = view_x/bounds.bounds.x;
+    if (scale*bounds.bounds.y > view_y )
+        scale = view_y/bounds.bounds.y;
+
+    mapMove(bounds.center.x,bounds.center.y,scale);
 }
 
 // Add Segment
@@ -1085,6 +1098,75 @@ function mapMove(x,y,scale) {
     map_control_x = x;
     map_control_y = y;
     map_control_zoom = scale;
+}
+
+function posOff(marker,end=false)
+{
+    if(typeof marker["map_offset"] === 'undefined') {
+        offx = 0;
+        offy = 0;
+    }else{
+        offx = marker["map_offset"][0];
+        offy = marker["map_offset"][1];
+    }
+    if (end)
+    {
+        if(typeof marker["end_position"] === 'undefined') return null;
+        return [marker["end_position"][0]+offx,marker["end_position"][1]+offy];
+    }else{
+        return [marker["map_position"][0]+offx,marker["map_position"][1]+offy];
+    }
+}
+
+// Route position Center and bounds
+function calcRouteCenterBounds(broute,pad=0)
+{
+    let x_max = null;
+    let x_min = null;
+    let y_max = null;
+    let y_min = null;
+
+    for (i in broute)
+    {
+        // Get marker
+        let c = marker_find(broute[i]["name"],true);
+
+        // Check end and then start
+        let steps = 2;
+        while(steps)
+        {
+            steps-=1;
+            // Check end first based on steps count
+            pos = posOff(c, (steps > 0));
+
+            // Check if had end position
+            if (pos == null) continue;
+
+            if (x_min == null || pos[0] < x_min)
+                x_min = pos[0];
+            if (x_max == null || pos[0] > x_max)
+                x_max = pos[0];
+            if (y_min == null || pos[1] < y_min)
+                y_min = pos[1];
+            if (y_max == null || pos[1] > y_max)
+                y_max = pos[1];
+        }
+    }
+
+    result = {
+        center:
+        {
+            x: x_min + (x_max-x_min)/2 ,
+            y: y_min + (y_max-y_min)/2
+        },
+        bounds:
+        {
+            x: (x_max-x_min) * (1+pad),
+            y: (y_max-y_min) * (1+pad)
+        }
+    };
+
+    return result;
 }
 
 
