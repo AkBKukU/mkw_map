@@ -919,9 +919,9 @@ function onTouchMove(event) {
   {
       // Zoom zoom
 
+      distance = Math.hypot(touch[0].pageX-touch[1].pageX, touch[0].pageY-touch[1].pageY);
       if (touch_distance != null)
       {
-        distance = Math.hypot(touch[0].pageX-touch[1].pageX, touch[0].pageY-touch[1].pageY);
 
         onWheel(event,distance/touch_distance);
       }
