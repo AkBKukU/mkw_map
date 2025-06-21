@@ -321,7 +321,7 @@ body
 }
 
 
-#pswitches_imgs
+.marker_imgs
 {
     list-style:none;
     margin: 0px;
@@ -415,7 +415,7 @@ color: #222; text-decoration: none;
 }
 
 
-#pswitches_imgs > div
+.marker_imgs > div
 {
 	position: absolute;
 

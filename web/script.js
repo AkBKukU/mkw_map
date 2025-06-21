@@ -247,11 +247,13 @@ function markerCustomAdd(event, verbose=true)
     markers["custom"].push({"name":name,"map_position":[map_pointer.x,map_pointer.y]});
     markers["custom"].sort((a, b) => a.name.localeCompare(b.name))
     document.getElementById('custom_names').innerHTML="";
+    document.getElementById('custom_imgs').innerHTML="";
     markers["custom"].forEach((c) => {
         // Create map markers
         map_addMarker(c['name'],"custom");
 
     });
+    console.log("Added Custom Marker")
     drawMap();
 
 }
@@ -1036,7 +1038,7 @@ function marker_find(name, copy=false,key="pswitch")
 {
     if (name == null)
     {
-        console.log("Marker null")
+        //console.log("Marker null")
 
         found_key = null;
         return -1;
@@ -1087,7 +1089,7 @@ function marker_find(name, copy=false,key="pswitch")
         }
     }
 
-    console.log("Marker not found: " + name)
+    //console.log("Marker not found: " + name)
     found_key = null;
     return -1;
 }
@@ -1540,7 +1542,8 @@ function map_addMarker(name,key)
     img.addEventListener('click', function(e) {
         set_selected(name,null,key,true);
     });
-    ul_pswitches.appendChild(img);
+    img_ul = document.getElementById(key+"_imgs");
+    img_ul.appendChild(img);
 
     // Text List
     ul_pswitch_names = document.getElementById(key+"_names");
@@ -1554,6 +1557,7 @@ function map_addMarker(name,key)
     });
     li.appendChild(a);
     ul_pswitch_names.appendChild(li);
+    console.log("Added Marker")
 }
 
 function map_delMarker(name,key)
