@@ -900,6 +900,7 @@ function onMouseMove(event,x=null,  y=null) {
         transformedMousePos.innerText = `X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}`;
     }
 }
+canvas.addEventListener('mousemove', onMouseMove);
 // Touch Start
 function onTouchMove(event) {
   const touches = event.changedTouches;
@@ -909,8 +910,6 @@ function onTouchMove(event) {
         onMouseMove(null,touch.pageX,  touch.pageY);
   }
 }
-canvas.addEventListener('mousemove', onTouchMove);
-
 canvas.addEventListener("touchmove", onTouchMove);
 // Release Mouse
 function onMouseUp(event, x=null,  y=null) {
