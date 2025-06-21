@@ -222,22 +222,25 @@ marker_show_track=false;
 // --------------------------------- Custom Markers
 
 // Add Custom Marker
-function markerCustomAdd()
+function markerCustomAdd(event, verbose=true)
 {
     const name = document.getElementById('markerCustomName').value;
     if (!map_pointer.valid)
     {
-        alert("Please select a location on the map first.");
+        if(verbose)
+            alert("Please select a location on the map first.");
         return;
     }
     if (name == "")
     {
-        alert("Please enter a marker name.");
+        if(verbose)
+            alert("Please enter a marker name.");
         return;
     }
     if (marker_find(name,true) != -1)
     {
-        alert("Please enter a unique marker name.");
+        if(verbose)
+            alert("Please enter a unique marker name.");
         return;
     }
 
@@ -522,8 +525,11 @@ async function uploadCompletion()
         setComplete(c["name"],c["done"],"pswitch");
     });
     loadData["custom"].forEach((c) => {
-    markers["custom"].push({"name":c["name"],"map_position":[c["x"],c["y"]]});
-    map_addMarker(c["name"],"custom")
+        map_pointer.x = c["x"];
+        map_pointer.y = c["y"];
+        map_pointer.valid = true;
+        document.getElementById('markerCustomName').value=c["name"];
+        markerCustomAdd(null,false);
     });
     drawMap();
 };
