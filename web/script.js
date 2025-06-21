@@ -1606,7 +1606,7 @@ function windowWidthLayout()
         showPSLocation(null,false);
         showPSTitle(null,false);
         document.getElementById('map_nav_controls').style.display="block"
-        document.getElementById('map_bottom').style.fontSize="3em"
+        document.getElementById('map_bottom').style.fontSize="2em"
         document.getElementById('menu_main').style.height="30%"
         document.getElementById('map_bottom').style.left="auto"
         document.getElementById('menu_left').style.width="calc(100% - 2em)"
