@@ -929,8 +929,9 @@ function onTouchMove(event) {
       touch_distance = distance;
 
   }else if (touches.length == 1) {
-  for (const touch of touches) {
-        onMouseMove(null,touch.pageX,  touch.pageY);
+        for (const touch of touches) {
+            onMouseMove(null,touch.pageX,  touch.pageY);
+        }
   }
 }
 canvas.addEventListener("touchmove", onTouchMove);
