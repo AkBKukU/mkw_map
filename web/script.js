@@ -32,6 +32,7 @@ map_control_zoom = 1;
 
 spoiler = false;
 touch_distance = null;
+touch_count = 0;
 touch_last = { x: 0, y: 0 };
 
 let isDragging = false;
@@ -876,10 +877,13 @@ function onTouchDown(event) {
   const touches = event.changedTouches;
 
   if (touches.length != 1) return;
+  if (touch_count == 0)
+  {
     for (const touch of touches) {
             onMouseDown(null,touch.pageX,  touch.pageY);
     }
-
+    touch_count+=1;
+  }
 }
 canvas.addEventListener('touchstart', onTouchDown);
 
@@ -917,15 +921,10 @@ function onTouchMove(event) {
 
       if (touch_distance != null)
       {
-        distance = Math.sqrt(
-            (touch.pageX-touch_last.x)*(touch.pageX-touch_last.x) +
-            (touch.pageY-touch_last.y)*(touch.pageY-touch_last.y)
-        );
+        distance = Math.hypot(touch[0].pageX-touch[1].pageX, touch[0].pageY-touch[1].pageY);
 
         onWheel(event,distance/touch_distance);
       }
-      touch_last.x=touch.pageX;
-      touch_last.y=touch.pageY;
       touch_distance = distance;
 
   }else if (touches.length == 1) {
@@ -957,13 +956,15 @@ canvas.addEventListener('mouseup', onMouseUp);
 
 // Touch Start
 function onTouchUp(event) {
-  const touches = event.changedTouches;
+    const touches = event.changedTouches;
 
-  if (touches.length != 1) return;
-  for (const touch of touches) {
+    if (touches.length != 1) return;
+    for (const touch of touches) {
         onMouseUp(null,touch.pageX,  touch.pageY);
-  }
-  touch_distance = null;
+    }
+    if (touch_count==2)
+        touch_distance = null;
+    touch_count+=1;
 }
 canvas.addEventListener('touchend', onTouchUp);
 
