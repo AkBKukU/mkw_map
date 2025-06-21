@@ -31,6 +31,8 @@ map_control_y = 1080/2;
 map_control_zoom = 1;
 
 spoiler = false;
+touch_distance = null;
+touch_last = { x: 0, y: 0 };
 
 let isDragging = false;
 let dragStartPosition = { x: 0, y: 0 };
@@ -873,9 +875,30 @@ canvas.addEventListener('mousedown', onMouseDown);
 function onTouchDown(event) {
   const touches = event.changedTouches;
 
-  if (touches.length != 1) return;
-  for (const touch of touches) {
-        onMouseDown(null,touch.pageX,  touch.pageY);
+  if (touches.length > 2)
+  {
+      return;
+  }else if (touches.length == 2)
+  {
+      // Zoom zoom
+
+      if (touch_distance != null)
+      {
+        distance = Math.sqrt(
+            (touch.pageX-touch_last.x)*(touch.pageX-touch_last.x) +
+            (touch.pageY-touch_last.y)*(touch.pageY-touch_last.y)
+        );
+
+        onWheel(event,distance/touch_distance);
+      }
+      touch_last.x=touch.pageX;
+      touch_last.y=touch.pageY;
+      touch_distance = distance;
+
+  }else if (touches.length == 1) {
+    for (const touch of touches) {
+            onMouseDown(null,touch.pageX,  touch.pageY);
+    }
   }
 }
 canvas.addEventListener('touchstart', onTouchDown);
@@ -939,11 +962,15 @@ function onTouchUp(event) {
   for (const touch of touches) {
         onMouseUp(null,touch.pageX,  touch.pageY);
   }
+  touch_distance = null;
 }
 canvas.addEventListener('touchend', onTouchUp);
+
 // Mouse Scroll
-function onWheel(event) {
+function onWheel(event,diff=0) {
     const zoom = event.deltaY < 0 ? 10/9 : 0.9;
+    if (diff !=0)
+        zoom = diff;
     scale *= zoom;
     ctx.translate(currentTransformedCursor.x, currentTransformedCursor.y);
     ctx.scale(zoom, zoom);
