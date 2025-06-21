@@ -964,10 +964,20 @@ function onTouchUp(event) {
     }
     if (touch_count==2)
         touch_distance = null;
-    touch_count+=1;
+    touch_count-=1;
 }
 canvas.addEventListener('touchend', onTouchUp);
 
+function onTouchCancel(event) {
+    const touches = event.changedTouches;
+
+    for (const touch of touches) {
+        onMouseUp(null,touch.pageX,  touch.pageY);
+    }
+    touch_distance = null;
+    touch_count=0;
+}
+canvas.addEventListener("touchcancel", onTouchCancel);
 // Mouse Scroll
 function onWheel(event,diff=0) {
     const zoom = event.deltaY < 0 ? 10/9 : 0.9;
