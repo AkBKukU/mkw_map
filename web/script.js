@@ -965,6 +965,8 @@ function onTouchUp(event) {
     if (touch_count==2)
         touch_distance = null;
     touch_count-=1;
+    if (touch_count < 0)
+        touch_count=0;
 }
 canvas.addEventListener('touchend', onTouchUp);
 
