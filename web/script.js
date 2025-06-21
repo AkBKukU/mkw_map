@@ -874,16 +874,16 @@ canvas.addEventListener('mousedown', onMouseDown);
 
 // Touch Start
 function onTouchDown(event) {
-  const touches = event.changedTouches;
+    const touches = event.changedTouches;
 
-  if (touches.length != 1) return;
-  if (touch_count == 0)
-  {
-    for (const touch of touches) {
-            onMouseDown(null,touch.pageX,  touch.pageY);
+    if (touches.length != 1) return;
+    if (touch_count == 0)
+    {
+        for (const touch of touches) {
+                onMouseDown(null,touch.pageX,  touch.pageY);
+        }
     }
     touch_count+=1;
-  }
 }
 canvas.addEventListener('touchstart', onTouchDown);
 
