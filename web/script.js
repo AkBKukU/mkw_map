@@ -853,19 +853,41 @@ function getTransformedPointNonInvert(x, y) {
 }
 
 // Click Mouse Down
-function onMouseDown(event) {
+function onMouseDown(event, x=null,  y=null) {
+
+    if (event != null)
+    {
+        x=event.offsetX;
+        y=event.offsetY;
+    }
     if (!isDragging)
     {
-        clickStartPosition = {x:event.offsetX, y:event.offsetY};
+        clickStartPosition = {x:x, y:y};
     }
     isDragging = true;
-    dragStartPosition = getTransformedPoint(event.offsetX, event.offsetY);
+    dragStartPosition = getTransformedPoint(x, y);
 }
 canvas.addEventListener('mousedown', onMouseDown);
 
+// Touch Start
+function onTouchDown(event) {
+  const touches = event.changedTouches;
+
+  if (touches.length != 1) return;
+  for (const touch of touches) {
+        onMouseDown(null,touch.pageX,  touch.pageY);
+  }
+}
+canvas.addEventListener('touchstart', onTouchDown);
+
 // Mouse Moves
-function onMouseMove(event) {
-    currentTransformedCursor = getTransformedPoint(event.offsetX, event.offsetY);
+function onMouseMove(event,x=null,  y=null) {
+    if (event != null)
+    {
+        x=event.offsetX;
+        y=event.offsetY;
+    }
+    currentTransformedCursor = getTransformedPoint(x, y);
 
     if (isDragging) {
         ctx.translate(currentTransformedCursor.x - dragStartPosition.x, currentTransformedCursor.y - dragStartPosition.y);
@@ -878,14 +900,29 @@ function onMouseMove(event) {
         transformedMousePos.innerText = `X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}`;
     }
 }
-canvas.addEventListener('mousemove', onMouseMove);
+// Touch Start
+function onTouchMove(event) {
+  const touches = event.changedTouches;
 
+  if (touches.length != 1) return;
+  for (const touch of touches) {
+        onMouseMove(null,touch.pageX,  touch.pageY);
+  }
+}
+canvas.addEventListener('mousemove', onTouchMove);
+
+canvas.addEventListener("touchmove", onTouchMove);
 // Release Mouse
-function onMouseUp() {
+function onMouseUp(event, x=null,  y=null) {
+    if (event != null)
+    {
+        x=event.offsetX;
+        y=event.offsetY;
+    }
     isDragging = false;
     if (
-        clickStartPosition.x == event.offsetX &&
-        clickStartPosition.y == event.offsetY
+        clickStartPosition.x == x &&
+        clickStartPosition.y == y
     ){
         map_pointer.valid=true;
         map_pointer.x = currentTransformedCursor.x;
@@ -895,6 +932,16 @@ function onMouseUp() {
 }
 canvas.addEventListener('mouseup', onMouseUp);
 
+// Touch Start
+function onTouchUp(event) {
+  const touches = event.changedTouches;
+
+  if (touches.length != 1) return;
+  for (const touch of touches) {
+        onMouseUp(null,touch.pageX,  touch.pageY);
+  }
+}
+canvas.addEventListener('touchend', onTouchUp);
 // Mouse Scroll
 function onWheel(event) {
     const zoom = event.deltaY < 0 ? 10/9 : 0.9;
@@ -1605,6 +1652,7 @@ function windowWidthLayout()
         showRouting(null,false);
         showPSLocation(null,false);
         showPSTitle(null,false);
+        document.querySelector('body').style.fontSize="0.8em"
         document.getElementById('map_nav_controls').style.display="block"
         document.getElementById('map_bottom').style.fontSize="2em"
         document.getElementById('menu_main').style.height="30%"
@@ -1613,6 +1661,7 @@ function windowWidthLayout()
         document.getElementById('menu_left').append(document.getElementById('menu_routing'));
         document.getElementById('menu_left').append(document.getElementById('menu_title'));
     }else{
+        document.querySelector('body').style.fontSize="1em"
         document.getElementById('map_nav_controls').style.display="none"
         document.getElementById('map_bottom').style.fontSize="1em"
         document.getElementById('map_bottom').style.left="0"

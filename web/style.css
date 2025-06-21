@@ -3,6 +3,9 @@ body
 
 	font-family: sans-serif;
 	color: #ddd;
+
+	overflow-y: hidden;
+
 }
 
 .pretty-menu > div.pretty_min
@@ -59,7 +62,7 @@ body
 	margin: 0px;
 	padding: 1em;
 	overflow-y: hidden;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 .pretty-menu > div.nopad
 {
@@ -230,7 +233,7 @@ body
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 .flexScrollNormal
 {
@@ -245,7 +248,7 @@ body
 .flexScrollLimit
 {
 	max-height: 5em;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 
