@@ -982,7 +982,7 @@ function onTouchCancel(event) {
 canvas.addEventListener("touchcancel", onTouchCancel);
 // Mouse Scroll
 function onWheel(event,diff=0) {
-    const zoom = event.deltaY < 0 ? 10/9 : 0.9;
+    zoom = event.deltaY < 0 ? 10/9 : 0.9;
     if (diff !=0)
         zoom = diff;
     scale *= zoom;
