@@ -921,6 +921,12 @@ function onTouchMove(event) {
       // Zoom zoom
 
       distance = Math.hypot(touches[0].pageX-touches[1].pageX, touches[0].pageY-touches[1].pageY);
+
+      onMouseMove(null,t
+        (touches[0].pageX + touches[1].pageX) / 2,
+        (touches[0].pageY + touches[1].pageY) / 2
+
+    );
       if (touch_distance != null)
       {
 
