@@ -69,12 +69,14 @@ markers["pswitch"]=names;
 markers["custom"]=[];
 markers["track"]=track_names;
 markers["cart"]=character_locations;
+markers["medal"]=medal_locations;
 
 
 marker_show_pswitch=true;
 marker_show_custom=false;
 marker_show_track=false;
 marker_show_cart=false;
+marker_show_medal=false;
 
 // --------------------------------- Events --------------------------------- //
 
@@ -715,6 +717,39 @@ document.getElementById('control_show_cart').addEventListener('change', (event) 
     showMarkersCarts()
 });
 
+
+// Toggle Peach Medallions
+function showMarkersMedals(event,set_state = null)
+{
+    if (set_state != null) document.getElementById('control_marker_medal').checked = set_state;
+    if(document.getElementById('control_marker_medal').checked)
+    {
+        document.getElementById('field_markers_medal').style.display = "block";
+    }else{
+        document.getElementById('field_markers_medal').style.display = "none";
+    }
+    marker_show_medal=document.getElementById('control_marker_medal').checked;
+    drawMap();
+}
+document.getElementById('control_marker_medal').addEventListener('change', (event) => {
+    showMarkersMedals()
+});
+
+// Toggle Showing incomplete data sets
+function showIncomplete(event,set_state = null)
+{
+
+    if (set_state == null) set_state = document.querySelector('label[for=control_marker_medal]').style.display != "block";
+    if(set_state)
+    {
+        document.querySelector('label[for=control_marker_medal]').style.display = "block";
+    }else{
+        document.querySelector('label[for=control_marker_medal]').style.display = "none";
+    }
+}
+document.getElementById('show_incomplete').addEventListener('click', (event) => {
+    showIncomplete()
+});
 
 // --------------------------------- Map Control
 
@@ -1446,6 +1481,7 @@ function map_set_pswitch()
             if (key  == "custom" &&   !marker_show_custom) img.style.display = "none";
             if (key  == "track" &&   !marker_show_track) img.style.display = "none";
             if (key  == "cart" &&   !marker_show_cart) img.style.display = "none";
+            if (key  == "medal" &&   !marker_show_medal) img.style.display = "none";
         });
 
     }

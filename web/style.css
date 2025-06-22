@@ -281,6 +281,15 @@ body
 	background-image:none;
 }
 
+.marker_medal
+{
+	background-image: url("marker_medallion_new.svg");
+}
+.marker_medal.complete
+{
+	background-image: url("marker_medallion_old.svg");
+}
+
 .marker_cart
 {
 	background-image: url("marker_cart.svg");
@@ -330,6 +339,13 @@ body
 {
 	margin: -5px;
 	border: solid 5px #f80;
+	border-radius: 32px;
+}
+
+.marker_medal.selected
+{
+	margin: -5px;
+	border: solid 5px #ff0;
 	border-radius: 32px;
 }
 

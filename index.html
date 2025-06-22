@@ -21,6 +21,8 @@
 		</ul>
 		<ul id="cart_imgs" class="marker_imgs">
 		</ul>
+		<ul id="medal_imgs" class="marker_imgs">
+		</ul>
 
 		<div id="menu_left" >
 			<div class="pretty-menu" id="menu_main" style="z-index: 100;">
@@ -50,6 +52,25 @@
 						<table>
 								<tr>
 								<td>
+									<input type="checkbox" id="control_show_pslocation" name="control_show_pslocation" checked />
+									<label for=control_show_pslocation class="fakeButton">PS Location</label>
+								</td>
+								<td>
+									<input type="checkbox" id="control_show_pstitle" name="control_show_pstitle" checked />
+									<label for=control_show_pstitle class="fakeButton">PS Title</label>
+								</td>
+								<td>
+									<input type="checkbox" id="control_show_routing" name="control_show_routing" checked />
+									<label for=control_show_routing class="fakeButton">Routing</label>
+								</td>
+								</tr>
+							</table>
+						</fieldset>
+						<fieldset>
+							<legend>Map Markers  <a id="show_incomplete">(Show Incomplete)</a></legend>
+							<table>
+								<tr>
+								<td>
 									<input type="checkbox" id="control_marker_pswitch" name="control_marker_pswitch" checked />
 									<label for=control_marker_pswitch class="fakeButton">P-Switches</label>
 								</td>
@@ -68,16 +89,8 @@
 								</tr>
 								<tr>
 								<td>
-									<input type="checkbox" id="control_show_pslocation" name="control_show_pslocation" checked />
-									<label for=control_show_pslocation class="fakeButton">PS Location</label>
-								</td>
-								<td>
-									<input type="checkbox" id="control_show_pstitle" name="control_show_pstitle" checked />
-									<label for=control_show_pstitle class="fakeButton">PS Title</label>
-								</td>
-								<td>
-									<input type="checkbox" id="control_show_routing" name="control_show_routing" checked />
-									<label for=control_show_routing class="fakeButton">Routing</label>
+									<input type="checkbox" id="control_marker_medal" name="control_marker_medal" unchecked />
+									<label style="display:none;" for=control_marker_medal class="fakeButton">Medallions</label>
 								</td>
 								</tr>
 							</table>
@@ -102,6 +115,12 @@
 							<legend>Character Starts</legend>
 							<div class="flexScroll">
 								<div class="flexScrollScroll" ><ol  class="flexScrollInner markerList" id="cart_names"></ol></div>
+							</div>
+						</fieldset>
+						<fieldset class="flexFill" style="flex-grow:30; display:none" id="field_markers_medal">
+							<legend>Peach Medallions</legend>
+							<div class="flexScroll">
+								<div class="flexScrollScroll" ><ol  class="flexScrollInner markerList" id="medal_names"></ol></div>
 							</div>
 						</fieldset>
 
