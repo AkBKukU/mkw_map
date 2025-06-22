@@ -1008,60 +1008,7 @@ onresize = (event) => {
     drawMap();
     windowWidthLayout();
 }
-addEventListener("resize", (event) => { })
-
-
-// --------------------------------- Map Control Buttons
-
-// Map Control Zoom In
-function mapControZoomIn()
-{
-    map_control_zoom+=0.3;
-    mapMove(map_control_x,map_control_y,map_control_zoom);
-}
-document.getElementById("map_ctrl_zoom_in").addEventListener('click', mapControZoomIn);
-
-// Map Control Zoom Out
-function mapControZoomOut()
-{
-    map_control_zoom-=0.3;
-    mapMove(map_control_x,map_control_y,map_control_zoom);
-}
-document.getElementById("map_ctrl_zoom_out").addEventListener('click', mapControZoomOut);
-
-// Map Control Pan Up
-function mapControPanUp()
-{
-    map_control_y-=(window.innerHeight/5)*(1/map_control_zoom);
-    mapMove(map_control_x,map_control_y,map_control_zoom);
-}
-document.getElementById("map_ctrl_zoom_up").addEventListener('click', mapControPanUp);
-
-// Map Control Pan Down
-function mapControPanDown()
-{
-    map_control_y+=(window.innerHeight/5)*(1/map_control_zoom);
-    mapMove(map_control_x,map_control_y,map_control_zoom);
-}
-document.getElementById("map_ctrl_zoom_down").addEventListener('click', mapControPanDown);
-
-// Map Control Pan Left
-function mapControPanLeft()
-{
-    map_control_x-=(window.innerWidth/5)*(1/map_control_zoom);
-    mapMove(map_control_x,map_control_y,map_control_zoom);
-}
-document.getElementById("map_ctrl_zoom_left").addEventListener('click', mapControPanLeft);
-
-// Map Control Pan Right
-function mapControPanRight()
-{
-    map_control_x+=(window.innerWidth/5)*(1/map_control_zoom);
-    mapMove(map_control_x,map_control_y,map_control_zoom);
-}
-document.getElementById("map_ctrl_zoom_right").addEventListener('click', mapControPanRight);
-
-
+addEventListener("resize", (event) => { });
 
 
 
@@ -1693,8 +1640,6 @@ function windowWidthLayout()
         showPSLocation(null,false);
         showPSTitle(null,false);
         document.querySelector('body').style.fontSize="0.8em"
-        document.getElementById('map_nav_controls').style.display="block"
-        document.getElementById('map_bottom').style.fontSize="2em"
         document.getElementById('menu_main').style.height="30%"
         document.getElementById('map_bottom').style.left="auto"
         document.getElementById('menu_left').style.width="calc(100% - 2em)"
@@ -1702,8 +1647,6 @@ function windowWidthLayout()
         document.getElementById('menu_left').append(document.getElementById('menu_title'));
     }else{
         document.querySelector('body').style.fontSize="1em"
-        document.getElementById('map_nav_controls').style.display="none"
-        document.getElementById('map_bottom').style.fontSize="1em"
         document.getElementById('map_bottom').style.left="0"
         document.getElementById('menu_main').style.height="auto"
         document.getElementById('menu_left').style.width="408px"
