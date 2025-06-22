@@ -738,7 +738,7 @@ document.getElementById('control_marker_medal').addEventListener('change', (even
 });
 
 // Toggle ? Panels
-function showMarkersMedals(event,set_state = null)
+function showMarkersPanels(event,set_state = null)
 {
     if (set_state != null) document.getElementById('control_marker_panel').checked = set_state;
     if(document.getElementById('control_marker_panel').checked)
@@ -751,7 +751,7 @@ function showMarkersMedals(event,set_state = null)
     drawMap();
 }
 document.getElementById('control_marker_panel').addEventListener('change', (event) => {
-    showMarkersMedals()
+    showMarkersPanels()
 });
 
 // Toggle Showing incomplete data sets
