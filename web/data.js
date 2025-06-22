@@ -310,3 +310,31 @@ medal_locations = [{'map_offset': [29, 29], 'map_position': [969, 909], 'name': 
 {'map_offset': [29, 29], 'map_position': [1221, 579], 'name': 'PM-168'},
 {'map_offset': [29, 29], 'map_position': [1406, 391], 'name': 'PM-178'},
 {'map_offset': [29, 29], 'map_position': [1405, 474], 'name': 'PM-179'}];
+
+
+panel_locations = [
+ {'map_offset': [0, 0], 'map_position': [1124, 980], 'name': 'DDJ-P1'},
+ {'map_offset': [0, 0], 'map_position': [1129, 984], 'name': 'DDJ-P2'},
+ {'map_offset': [0, 0], 'map_position': [1135, 973], 'name': 'DDJ-P3'},
+ {'map_offset': [0, 0], 'map_position': [1129, 974], 'name': 'DDJ-P4'},
+ {'map_offset': [0, 0], 'map_position': [1132, 977], 'name': 'DDJ-P5'},
+ {'map_offset': [0, 0], 'map_position': [1142, 791], 'name': 'FO-P1'},
+ {'map_offset': [0, 0], 'map_position': [1133, 782], 'name': 'FO-P2'},
+ {'map_offset': [0, 0], 'map_position': [1124, 748], 'name': 'FO-P3'},
+ {'map_offset': [0, 0], 'map_position': [1145, 765], 'name': 'FO-P4'},
+ {'map_offset': [0, 0], 'map_position': [1157, 752], 'name': 'FO-P5'},
+ {'map_offset': [0, 0], 'map_position': [1336, 901], 'name': 'GBR-P1'},
+ {'map_offset': [0, 0], 'map_position': [1336, 910], 'name': 'GBR-P2'},
+ {'map_offset': [0, 0], 'map_position': [1317, 919], 'name': 'GBR-P3'},
+ {'map_offset': [0, 0], 'map_position': [1320, 906], 'name': 'GBR-P4'},
+ {'map_offset': [0, 0], 'map_position': [1299, 906], 'name': 'GBR-P5'},
+ {'map_offset': [0, 0], 'map_position': [943, 899], 'name': 'KTB-P1'},
+ {'map_offset': [0, 0], 'map_position': [962, 904], 'name': 'KTB-P2'},
+ {'map_offset': [0, 0], 'map_position': [957, 907], 'name': 'KTB-P3'},
+ {'map_offset': [0, 0], 'map_position': [949, 914], 'name': 'KTB-P4'},
+ {'map_offset': [0, 0], 'map_position': [1399, 380], 'name': 'SHS-P1'},
+ {'map_offset': [0, 0], 'map_position': [1402, 386], 'name': 'SHS-P2'},
+ {'map_offset': [0, 0], 'map_position': [1416, 398], 'name': 'SHS-P3'},
+ {'map_offset': [0, 0], 'map_position': [1428, 389], 'name': 'SHS-P4'},
+ {'map_offset': [0, 0], 'map_position': [1425, 408], 'name': 'SHS-P5'}];
+

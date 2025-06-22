@@ -23,6 +23,8 @@
 		</ul>
 		<ul id="medal_imgs" class="marker_imgs">
 		</ul>
+		<ul id="panel_imgs" class="marker_imgs">
+		</ul>
 
 		<div id="menu_left" >
 			<div class="pretty-menu" id="menu_main" style="z-index: 100;">
@@ -92,6 +94,10 @@
 									<input type="checkbox" id="control_marker_medal" name="control_marker_medal" unchecked />
 									<label style="display:none;" for=control_marker_medal class="fakeButton">Medallions</label>
 								</td>
+								<td>
+									<input type="checkbox" id="control_marker_panel" name="control_marker_panel" unchecked />
+									<label style="display:none;" for=control_marker_panel class="fakeButton">? Panels</label>
+								</td>
 								</tr>
 							</table>
 						</fieldset>
@@ -121,6 +127,12 @@
 							<legend>Peach Medallions</legend>
 							<div class="flexScroll">
 								<div class="flexScrollScroll" ><ol  class="flexScrollInner markerList" id="medal_names"></ol></div>
+							</div>
+						</fieldset>
+						<fieldset class="flexFill" style="flex-grow:30; display:none" id="field_markers_panel">
+							<legend>? Panels</legend>
+							<div class="flexScroll">
+								<div class="flexScrollScroll" ><ol  class="flexScrollInner markerList" id="panel_names"></ol></div>
 							</div>
 						</fieldset>
 

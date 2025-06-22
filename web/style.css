@@ -281,6 +281,14 @@ body
 	background-image:none;
 }
 
+.marker_panel
+{
+	background-image: url("marker_panel_new.svg");
+}
+.marker_panel.complete
+{
+	background-image: url("marker_panel_old.svg");
+}
 .marker_medal
 {
 	background-image: url("marker_medallion_new.svg");
@@ -347,6 +355,12 @@ body
 	margin: -5px;
 	border: solid 5px #ff0;
 	border-radius: 32px;
+}
+.marker_panel.selected
+{
+	margin: -3px;
+	border: solid 3px #34f;
+	border-radius: 12px;
 }
 
 .markerList li

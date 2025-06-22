@@ -70,6 +70,7 @@ markers["custom"]=[];
 markers["track"]=track_names;
 markers["cart"]=character_locations;
 markers["medal"]=medal_locations;
+markers["panel"]=panel_locations;
 
 
 marker_show_pswitch=true;
@@ -77,6 +78,7 @@ marker_show_custom=false;
 marker_show_track=false;
 marker_show_cart=false;
 marker_show_medal=false;
+marker_show_panel=false;
 
 // --------------------------------- Events --------------------------------- //
 
@@ -735,6 +737,23 @@ document.getElementById('control_marker_medal').addEventListener('change', (even
     showMarkersMedals()
 });
 
+// Toggle ? Panels
+function showMarkersMedals(event,set_state = null)
+{
+    if (set_state != null) document.getElementById('control_marker_panel').checked = set_state;
+    if(document.getElementById('control_marker_panel').checked)
+    {
+        document.getElementById('field_markers_panel').style.display = "block";
+    }else{
+        document.getElementById('field_markers_panel').style.display = "none";
+    }
+    marker_show_panel=document.getElementById('control_marker_panel').checked;
+    drawMap();
+}
+document.getElementById('control_marker_panel').addEventListener('change', (event) => {
+    showMarkersMedals()
+});
+
 // Toggle Showing incomplete data sets
 function showIncomplete(event,set_state = null)
 {
@@ -743,8 +762,10 @@ function showIncomplete(event,set_state = null)
     if(set_state)
     {
         document.querySelector('label[for=control_marker_medal]').style.display = "block";
+        document.querySelector('label[for=control_marker_panel]').style.display = "block";
     }else{
         document.querySelector('label[for=control_marker_medal]').style.display = "none";
+        document.querySelector('label[for=control_marker_panel]').style.display = "block";
     }
 }
 document.getElementById('show_incomplete').addEventListener('click', (event) => {
@@ -1497,6 +1518,7 @@ function map_set_pswitch()
             if (key  == "track" &&   !marker_show_track) img.style.display = "none";
             if (key  == "cart" &&   !marker_show_cart) img.style.display = "none";
             if (key  == "medal" &&   !marker_show_medal) img.style.display = "none";
+            if (key  == "panel" &&   !marker_show_panel) img.style.display = "none";
         });
 
     }
