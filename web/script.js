@@ -922,7 +922,7 @@ function onTouchMove(event) {
 
       distance = Math.hypot(touches[0].pageX-touches[1].pageX, touches[0].pageY-touches[1].pageY);
 
-      onMouseMove(null,t
+      onMouseMove(null,
         (touches[0].pageX + touches[1].pageX) / 2,
         (touches[0].pageY + touches[1].pageY) / 2
 
