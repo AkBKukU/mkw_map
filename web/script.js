@@ -979,7 +979,15 @@ function onTouchUp(event) {
     if (touches.length != 1) return;
     for (const touch of touches) {
         onMouseUp(null,touch.pageX,  touch.pageY);
+        if (touch_count < 2 && !touch_start_dual)
+        {
+            dragStartPosition = getTransformedPoint(touch.pageX,  touch.pageY);
+            touch_start_dual=true;
+        }
     }
+    if (touch_count==2)
+        touch_distance = null;
+    touch_count-=1;
 
 }
 canvas.addEventListener('touchend', onTouchUp);
