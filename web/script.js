@@ -942,13 +942,13 @@ function onTouchMove(event) {
   }else if (touches.length == 1) {
         for (const touch of touches) {
             onMouseMove(null,touch.pageX,  touch.pageY);
+            if(!touch_start_dual)
+            {
+                dragStartPosition = getTransformedPoint(touch.pageX,  touch.pageY);
+                touch_start_dual=false;
+            }
         }
 
-        if(!touch_start_dual)
-        {
-            dragStartPosition = getTransformedPoint(touch.pageX,  touch.pageY);
-            touch_start_dual=false;
-        }
   }
 }
 canvas.addEventListener("touchmove", onTouchMove);
