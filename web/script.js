@@ -32,6 +32,7 @@ map_control_zoom = 1;
 
 spoiler = false;
 touch_distance = null;
+touch_start_dual = true;
 touch_count = 0;
 touch_last = { x: 0, y: 0 };
 
@@ -921,7 +922,11 @@ function onTouchMove(event) {
       // Zoom zoom
 
       distance = Math.hypot(touches[0].pageX-touches[1].pageX, touches[0].pageY-touches[1].pageY);
-
+      if (touch_start_dual) dragStartPosition = getTransformedPoint(
+        (touches[0].pageX + touches[1].pageX) / 2,
+        (touches[0].pageY + touches[1].pageY) / 2
+      );
+      touch_start_dual=false;
       onMouseMove(null,
         (touches[0].pageX + touches[1].pageX) / 2,
         (touches[0].pageY + touches[1].pageY) / 2
@@ -937,6 +942,12 @@ function onTouchMove(event) {
   }else if (touches.length == 1) {
         for (const touch of touches) {
             onMouseMove(null,touch.pageX,  touch.pageY);
+        }
+
+        if(!touch_start_dual)
+        {
+            dragStartPosition = getTransformedPoint(touch.pageX,  touch.pageY);
+            touch_start_dual=false;
         }
   }
 }
@@ -969,11 +980,12 @@ function onTouchUp(event) {
     for (const touch of touches) {
         onMouseUp(null,touch.pageX,  touch.pageY);
     }
-    if (touch_count==2)
-        touch_distance = null;
-    touch_count-=1;
-    if (touch_count < 0)
-        touch_count=0;
+
+    if (touch_count < 2 && !touch_start_dual)
+    {
+        dragStartPosition = getTransformedPoint(touch.pageX,  touch.pageY);
+        touch_start_dual=false;
+    }
 }
 canvas.addEventListener('touchend', onTouchUp);
 
