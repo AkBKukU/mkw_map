@@ -830,7 +830,7 @@ function onMouseMove(event,x=null,  y=null) {
         ctx.translate(currentTransformedCursor.x - dragStartPosition.x, currentTransformedCursor.y - dragStartPosition.y);
         drawMap();
     }
-     debug = `Touch Count: ${touch_count}, Touch Distance: ${touch_distance}, touch_start_dual ${touch_start_dual}, `;
+     debug = `id:1 Touch Count: ${touch_count}, Touch Distance: ${touch_distance}, touch_start_dual ${touch_start_dual}, `;
     if (map_pointer.valid)
     {
         transformedMousePos.innerText = debug+`X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}, Pointer X: ${Math.round(map_pointer.x)}, Y: ${Math.round(map_pointer.y)}`;
@@ -942,7 +942,7 @@ function onWheel(event,diff=0) {
     ctx.translate(currentTransformedCursor.x, currentTransformedCursor.y);
     ctx.scale(zoom, zoom);
     ctx.translate(-currentTransformedCursor.x, -currentTransformedCursor.y);
-     debug = `Touch Count: ${touch_count}, Touch Distance: ${touch_distance}, touch_start_dual ${touch_start_dual}, `;
+     debug = `id:1 Touch Count: ${touch_count}, Touch Distance: ${touch_distance}, touch_start_dual ${touch_start_dual}, `;
     if (map_pointer.valid)
     {
         transformedMousePos.innerText = debug+`X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}, Pointer X: ${Math.round(map_pointer.x)}, Y: ${Math.round(map_pointer.y)}`;
