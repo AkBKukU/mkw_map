@@ -765,7 +765,7 @@ function showIncomplete(event,set_state = null)
         document.querySelector('label[for=control_marker_panel]').style.display = "block";
     }else{
         document.querySelector('label[for=control_marker_medal]').style.display = "none";
-        document.querySelector('label[for=control_marker_panel]').style.display = "block";
+        document.querySelector('label[for=control_marker_panel]').style.display = "none";
     }
 }
 document.getElementById('show_incomplete').addEventListener('click', (event) => {
