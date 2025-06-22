@@ -912,6 +912,7 @@ canvas.addEventListener('mousemove', onMouseMove);
 function onTouchMove(event) {
   const touches = event.targetTouches;
 
+  event.preventDefault();
   if (touches.length > 2)
   {
       return;
