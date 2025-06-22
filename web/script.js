@@ -1539,6 +1539,13 @@ function map_initialize()
 {
     let params = new URLSearchParams(document.location.search);
     spoiler = params.get("spoiler") != null; // enable spoiler mode if set
+    if (spoiler)
+    {
+        spoil_link = document.getElementById("spoiler-link");
+        spoil_link.textContent = "(Spoiler)";
+        spoil_link.href = window.location.href.replace("spoiler","");
+    }
+
     // Create P-Switch Items
     for (const [key, value] of Object.entries(markers)) {
         value.forEach((c) => {
