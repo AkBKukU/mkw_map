@@ -971,6 +971,7 @@ function onMouseUp(event, x=null,  y=null) {
     }
 }
 canvas.addEventListener('mouseup', onMouseUp);
+canvas.addEventListener('mouseleave', onMouseUp);
 
 // Touch Start
 function onTouchUp(event) {
