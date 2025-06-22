@@ -806,7 +806,6 @@ canvas.addEventListener('mousedown', onMouseDown);
 function onTouchDown(event) {
     const touches = event.changedTouches;
 
-    if (touches.length != 1) return;
     if (touch_count == 0)
     {
         for (const touch of touches) {
@@ -907,7 +906,6 @@ canvas.addEventListener('mouseleave', onMouseUp);
 function onTouchUp(event) {
     const touches = event.changedTouches;
 
-    if (touches.length != 1) return;
     for (const touch of touches) {
         onMouseUp(null,touch.pageX,  touch.pageY);
         if (touch_count < 2 && !touch_start_dual)
