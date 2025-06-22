@@ -40,6 +40,7 @@ let isDragging = false;
 let dragStartPosition = { x: 0, y: 0 };
 let clickStartPosition = { x: 0, y: 0 };
 let currentTransformedCursor;
+let currentWindowPosition;
 let scale = 1;
 let selected = null;
 let selected_key = null;
@@ -1272,13 +1273,22 @@ function setComplete(name,done,key=null)
 
 function drawMap() {
     ctx.save();
+
+    // Reset scale and clear background
     ctx.setTransform(1,0,0,1,0,0);
     ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+
+    // Reset scale
     ctx.restore();
 
+    // Draw map image
     ctx.drawImage(map, 0, 0, 1920, 1080);
+
+    // Reposition map markers
+    currentWindowPosition  = getTransformedPointNonInvert(0,0);
     map_set_pswitch();
 
+    // Draw pointer on map if position valid
     if (map_pointer.valid)
     {
         ctx.beginPath();
@@ -1293,32 +1303,30 @@ function drawMap() {
     }
 
     // Draw endpoints
-    for (const [key, value] of Object.entries(markers)) {
-        if (key == "pswitch") value.forEach((c) => {
-            if (marker_show_pswitch && (c['name'] == selected|| allends))
-            {
-
-                img_item = document.getElementById(c['name']);
-                if("end_position" in c && img_item.style.display != "none") {
-                    ctx.beginPath();
-                    ctx.moveTo(c["map_position"][0]+c["map_offset"][0], c["map_position"][1]+c["map_offset"][1]);
-                    ctx.lineTo(c["end_position"][0]+c["map_offset"][0], c["end_position"][1]+c["map_offset"][1]);
-                    ctx.lineWidth = 4;
-                    ctx.strokeStyle = '#333333';
-                    ctx.stroke();
-                    ctx.beginPath();
-                    ctx.arc(c["end_position"][0]+c["map_offset"][0], c["end_position"][1]+c["map_offset"][1], 4, 0, 2 * Math.PI, false);
-                    if("end_flying" in c) {
-                        ctx.fillStyle = '#3333ff';
-                    }else{
-                        ctx.fillStyle = '#333333';
-                    }
-                    ctx.fill();
+    markers["pswitch"].forEach((c) => {
+        if (marker_show_pswitch && (c['name'] == selected || allends))
+        {
+            img_item = document.getElementById(c['name']);
+            if("end_position" in c && img_item.style.display != "none") {
+                ctx.beginPath();
+                ctx.moveTo(c["map_position"][0]+c["map_offset"][0], c["map_position"][1]+c["map_offset"][1]);
+                ctx.lineTo(c["end_position"][0]+c["map_offset"][0], c["end_position"][1]+c["map_offset"][1]);
+                ctx.lineWidth = 4;
+                ctx.strokeStyle = '#333333';
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(c["end_position"][0]+c["map_offset"][0], c["end_position"][1]+c["map_offset"][1], 4, 0, 2 * Math.PI, false);
+                if("end_flying" in c) {
+                    ctx.fillStyle = '#3333ff';
+                }else{
+                    ctx.fillStyle = '#333333';
                 }
+                ctx.fill();
             }
-        });
-    }
+        }
+    });
 
+    // Process all segments
     for (i in route)
     {
         if ( route[i]["segment"] == route_sel_segment || allsegments)
@@ -1475,20 +1483,30 @@ function map_set_pswitch()
         if (key  == "pswitch")
         {
             ps_search_filter();
+
+            // Disable visibility reset
             dispay_set=true;
         }else{
+            // Enable visibility reset
             dispay_set=false;
         }
         value.forEach((msps) => {
             img = document.getElementById(msps['name']);
+            // Ensure marker is visible before other checks
             if (!dispay_set) img.style.display = "block";
 
             // Verify a map offset exists
             if(typeof msps["map_offset"] === 'undefined') {
-                pos = getTransformedPointNonInvert(msps["map_position"][0], msps["map_position"][1]);
+                pos = {
+                    x: currentWindowPosition.x + msps["map_position"][0]*scale,
+                    y: currentWindowPosition.y + msps["map_position"][1]*scale
+                };
             }
             else {
-                pos = getTransformedPointNonInvert(msps["map_position"][0]+msps["map_offset"][0], msps["map_position"][1]+msps["map_offset"][1]);
+                pos = {
+                    x: currentWindowPosition.x + (msps["map_position"][0]+msps["map_offset"][0])*scale,
+                    y: currentWindowPosition.y + (msps["map_position"][1]+msps["map_offset"][1])*scale
+                };
             }
 
             if (scale < 1)
@@ -1505,12 +1523,6 @@ function map_set_pswitch()
                 img.style.backgroundSize = (marker_radius*2)+"px";
                 img.style.left = pos.x - marker_radius + "px";
                 img.style.top = pos.y - marker_radius+ "px";
-            }
-            if(
-                pos.y > canvas.height - marker_radius || pos.y < 0 ||
-                pos.x > canvas.width - marker_radius || pos.x < 0
-            ) {
-                img.style.display = "none";
             }
 
             if (key  == "pswitch" && !marker_show_pswitch) img.style.display = "none";
