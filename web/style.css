@@ -283,43 +283,43 @@ body
 
 .marker_panel
 {
-	background-image: url("marker_panel_new.svg");
+	background-image: url("marker_panel_new.png");
 }
 .marker_panel.complete
 {
-	background-image: url("marker_panel_old.svg");
+	background-image: url("marker_panel_old.png");
 }
 .marker_medal
 {
-	background-image: url("marker_medallion_new.svg");
+	background-image: url("marker_medallion_new.png");
 }
 .marker_medal.complete
 {
-	background-image: url("marker_medallion_old.svg");
+	background-image: url("marker_medallion_old.png");
 }
 
 .marker_cart
 {
-	background-image: url("marker_cart.svg");
+	background-image: url("marker_cart.png");
 }
 
 .marker_track
 {
-	background-image: url("marker_track.svg");
+	background-image: url("marker_track.png");
 }
 
 .marker_custom
 {
-	background-image: url("marker_custom.svg");
+	background-image: url("marker_custom.png");
 }
 .marker_pswitch
 {
-	background-image: url("marker_ps_new.svg");
+	background-image: url("marker_ps_new.png");
 }
 
 .marker_pswitch.complete
 {
-	background-image: url("marker_ps_old.svg");
+	background-image: url("marker_ps_old.png");
 }
 
 .marker_pswitch.selected

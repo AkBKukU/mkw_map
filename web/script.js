@@ -40,7 +40,6 @@ let isDragging = false;
 let dragStartPosition = { x: 0, y: 0 };
 let clickStartPosition = { x: 0, y: 0 };
 let currentTransformedCursor;
-let currentWindowPosition;
 let scale = 1;
 let selected = null;
 let selected_key = null;
@@ -147,8 +146,9 @@ function set_route_segment(seg_name)
     route_list();
     drawMap();
     //route_sel_split=null;
-
     index = segment_find_index(route_sel_segment);
+    if (route[index]["splits"].length < 2)
+        return;
 
     bounds = calcRouteCenterBounds(route[index]["splits"],1);
 
@@ -1285,7 +1285,6 @@ function drawMap() {
     ctx.drawImage(map, 0, 0, 1920, 1080);
 
     // Reposition map markers
-    currentWindowPosition  = getTransformedPointNonInvert(0,0);
     map_set_pswitch();
 
     // Draw pointer on map if position valid
@@ -1497,16 +1496,10 @@ function map_set_pswitch()
 
             // Verify a map offset exists
             if(typeof msps["map_offset"] === 'undefined') {
-                pos = {
-                    x: currentWindowPosition.x + msps["map_position"][0]*scale,
-                    y: currentWindowPosition.y + msps["map_position"][1]*scale
-                };
+                pos = getTransformedPointNonInvert(msps["map_position"][0], msps["map_position"][1]);
             }
             else {
-                pos = {
-                    x: currentWindowPosition.x + (msps["map_position"][0]+msps["map_offset"][0])*scale,
-                    y: currentWindowPosition.y + (msps["map_position"][1]+msps["map_offset"][1])*scale
-                };
+                pos = getTransformedPointNonInvert(msps["map_position"][0]+msps["map_offset"][0], msps["map_position"][1]+msps["map_offset"][1]);
             }
 
             if (scale < 1)
@@ -1523,6 +1516,12 @@ function map_set_pswitch()
                 img.style.backgroundSize = (marker_radius*2)+"px";
                 img.style.left = pos.x - marker_radius + "px";
                 img.style.top = pos.y - marker_radius+ "px";
+            }
+            if(
+                pos.y > canvas.height - marker_radius || pos.y < 0 ||
+                pos.x > canvas.width - marker_radius || pos.x < 0
+            ) {
+                img.style.display = "none";
             }
 
             if (key  == "pswitch" && !marker_show_pswitch) img.style.display = "none";
