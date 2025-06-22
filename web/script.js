@@ -945,7 +945,7 @@ function onTouchMove(event) {
             if(!touch_start_dual)
             {
                 dragStartPosition = getTransformedPoint(touch.pageX,  touch.pageY);
-                touch_start_dual=false;
+                touch_start_dual=true;
             }
         }
 
@@ -982,7 +982,7 @@ function onTouchUp(event) {
         if (touch_count < 2 && !touch_start_dual)
         {
             dragStartPosition = getTransformedPoint(touch.pageX,  touch.pageY);
-            touch_start_dual=false;
+            touch_start_dual=true;
         }
     }
 
