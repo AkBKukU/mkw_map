@@ -9,7 +9,8 @@ body
 	font-family: sans-serif;
 	color: #ddd;
 
-	overflow-y: hidden;
+	overflow: hidden;
+	overscroll-behavior: contain;
 
 }
 
