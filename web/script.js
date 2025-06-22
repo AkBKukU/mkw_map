@@ -811,9 +811,9 @@ function onMouseMove(event,x=null,  y=null) {
     }
     if (map_pointer.valid)
     {
-        transformedMousePos.innerText = `X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}, Pointer X: ${Math.round(map_pointer.x)}, Y: ${Math.round(map_pointer.y)}`;
+        transformedMousePos.innerText = `Scale: ${scale} X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}, Pointer X: ${Math.round(map_pointer.x)}, Y: ${Math.round(map_pointer.y)}`;
     }else{
-        transformedMousePos.innerText = `X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}`;
+        transformedMousePos.innerText = `Scale: ${scale} X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}`;
     }
 }
 canvas.addEventListener('mousemove', onMouseMove);
@@ -922,9 +922,9 @@ function onWheel(event,diff=0) {
     ctx.translate(-currentTransformedCursor.x, -currentTransformedCursor.y);
     if (map_pointer.valid)
     {
-        transformedMousePos.innerText = `X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}, Pointer X: ${Math.round(map_pointer.x)}, Y: ${Math.round(map_pointer.y)}`;
+        transformedMousePos.innerText = `Scale: ${scale} X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}, Pointer X: ${Math.round(map_pointer.x)}, Y: ${Math.round(map_pointer.y)}`;
     }else{
-        transformedMousePos.innerText = `X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}`;
+        transformedMousePos.innerText = `Scale: ${scale} X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}`;
     }
 
     drawMap();
@@ -1060,17 +1060,18 @@ function marker_find(name, copy=false,key="pswitch")
 }
 
 // Move Map and Scale
-function mapMove(x,y,scale) {
+function mapMove(x,y,zoom) {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.scale(scale, scale);
+    ctx.scale(zoom, zoom);
     ctx.translate(
-        -x+window.innerWidth/(2*scale),
-                  -y+window.innerHeight/(2*scale)
+        -x+window.innerWidth/(2*zoom),
+                  -y+window.innerHeight/(2*zoom)
     );
     drawMap();
     map_control_x = x;
     map_control_y = y;
-    map_control_zoom = scale;
+    map_control_zoom = zoom;
+    scale = zoom;
 }
 
 function posOff(marker,end=false)
@@ -1468,8 +1469,22 @@ function map_set_pswitch()
             else {
                 pos = getTransformedPointNonInvert(msps["map_position"][0]+msps["map_offset"][0], msps["map_position"][1]+msps["map_offset"][1]);
             }
-            img.style.left = pos.x - marker_radius + "px";
-            img.style.top = pos.y - marker_radius+ "px";
+
+            if (scale < 1)
+            {
+                img.style.width = Math.round(scale*(marker_radius*2))+"px";
+                img.style.height = Math.round(scale*(marker_radius*2))+"px";
+                img.style.backgroundSize = Math.round(scale*(marker_radius*2))+"px";
+
+                img.style.left = pos.x - scale*marker_radius + "px";
+                img.style.top = pos.y - scale*marker_radius+ "px";
+            }else{
+                img.style.width = (marker_radius*2)+"px";
+                img.style.height = (marker_radius*2)+"px";
+                img.style.backgroundSize = (marker_radius*2)+"px";
+                img.style.left = pos.x - marker_radius + "px";
+                img.style.top = pos.y - marker_radius+ "px";
+            }
             if(
                 pos.y > canvas.height - marker_radius || pos.y < 0 ||
                 pos.x > canvas.width - marker_radius || pos.x < 0
