@@ -84,15 +84,10 @@ body
 	color: #fd2;
 	text-shadow: 3px 3px #222;
 	background-color: #222;
-	background:
-	linear-gradient(135deg, #444 25%, transparent 25%) ,
-	linear-gradient(45deg, #444 25%, transparent 25%),
-	linear-gradient(135deg, transparent 24%,#333 25%, #333 45%, transparent 45%),
-	linear-gradient(45deg, transparent 24%,#333 25%, #333 45%, transparent 45%);
+	background-image: url("tire_stripe.svg");
 
-        background-size: 1.5em 2em;
 	background-color: #444;
-	background-position: right 3px bottom 0.75em;
+	background-position-y: center;
         opacity: 1
 }
 .pretty-menu section
