@@ -336,6 +336,13 @@ body
     margin: 0px;
     padding: 0px;
 }
+
+#menu_main
+{
+	z-index: 1000;
+	min-height: 10em;
+}
+
 #menu_left
 {
 	display: flex;
