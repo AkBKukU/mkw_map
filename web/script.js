@@ -811,9 +811,9 @@ function onMouseMove(event,x=null,  y=null) {
     }
     if (map_pointer.valid)
     {
-        transformedMousePos.innerText = `Scale: ${scale} X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}, Pointer X: ${Math.round(map_pointer.x)}, Y: ${Math.round(map_pointer.y)}`;
+        transformedMousePos.innerText = `X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}, Pointer X: ${Math.round(map_pointer.x)}, Y: ${Math.round(map_pointer.y)}`;
     }else{
-        transformedMousePos.innerText = `Scale: ${scale} X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}`;
+        transformedMousePos.innerText = `X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}`;
     }
 }
 canvas.addEventListener('mousemove', onMouseMove);
@@ -922,9 +922,9 @@ function onWheel(event,diff=0) {
     ctx.translate(-currentTransformedCursor.x, -currentTransformedCursor.y);
     if (map_pointer.valid)
     {
-        transformedMousePos.innerText = `Scale: ${scale} X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}, Pointer X: ${Math.round(map_pointer.x)}, Y: ${Math.round(map_pointer.y)}`;
+        transformedMousePos.innerText = `X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}, Pointer X: ${Math.round(map_pointer.x)}, Y: ${Math.round(map_pointer.y)}`;
     }else{
-        transformedMousePos.innerText = `Scale: ${scale} X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}`;
+        transformedMousePos.innerText = `X: ${Math.round(currentTransformedCursor.x)}, Y: ${Math.round(currentTransformedCursor.y)}`;
     }
 
     drawMap();
