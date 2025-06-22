@@ -19,6 +19,8 @@
 		</ul>
 		<ul id="track_imgs" class="marker_imgs">
 		</ul>
+		<ul id="cart_imgs" class="marker_imgs">
+		</ul>
 
 		<div id="menu_left" >
 			<div class="pretty-menu" id="menu_main" style="z-index: 100;">
@@ -53,11 +55,11 @@
 								</td>
 								<td>
 									<input type="checkbox" id="control_marker_track" name="control_marker_track" unchecked />
-									<label for=control_marker_track class="fakeButton">Course Starts</label>
+									<label for=control_marker_track class="fakeButton">Courses</label>
 								</td>
 								<td>
-									<input type="checkbox" id="control_show_routing" name="control_show_routing" checked />
-									<label for=control_show_routing class="fakeButton">Routing</label>
+									<input type="checkbox" id="control_show_cart" name="control_show_cart" unchecked />
+									<label for=control_show_cart class="fakeButton">Carts</label>
 								</td>
 								<td>
 									<input type="checkbox" id="control_marker_custom" name="control_marker_custom" unchecked />
@@ -72,6 +74,10 @@
 								<td>
 									<input type="checkbox" id="control_show_pstitle" name="control_show_pstitle" checked />
 									<label for=control_show_pstitle class="fakeButton">PS Title</label>
+								</td>
+								<td>
+									<input type="checkbox" id="control_show_routing" name="control_show_routing" checked />
+									<label for=control_show_routing class="fakeButton">Routing</label>
 								</td>
 								</tr>
 							</table>
@@ -90,6 +96,12 @@
 							<legend>Course Starts</legend>
 							<div class="flexScroll">
 								<div class="flexScrollScroll" ><ol  class="flexScrollInner markerList" id="track_names"></ol></div>
+							</div>
+						</fieldset>
+						<fieldset class="flexFill" style="flex-grow:30; display:none" id="field_markers_cart">
+							<legend>Character Starts</legend>
+							<div class="flexScroll">
+								<div class="flexScrollScroll" ><ol  class="flexScrollInner markerList" id="cart_names"></ol></div>
 							</div>
 						</fieldset>
 
@@ -228,6 +240,7 @@
 
 
 <script type="text/javascript" src="P-Switches/list.js"></script>
+<script type="text/javascript" src="web/data.js"></script>
 <script type="text/javascript" src="web/script.js"></script>
 </body>
 </html>

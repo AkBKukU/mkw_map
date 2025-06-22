@@ -233,6 +233,10 @@ body
 	overflow-y: hidden;
 	min-height: 10em;
 }
+.pretty-menu fieldset td label.fakeButton
+{
+	height: 100%;
+}
 
 .flexScroll
 {
@@ -277,6 +281,11 @@ body
 	background-image:none;
 }
 
+.marker_cart
+{
+	background-image: url("marker_cart.svg");
+}
+
 .marker_track
 {
 	background-image: url("marker_track.svg");
@@ -315,6 +324,13 @@ body
 	margin: -3px;
 	border: solid 3px #f00;
 	border-radius: 12px;
+}
+
+.marker_cart.selected
+{
+	margin: -5px;
+	border: solid 5px #f80;
+	border-radius: 32px;
 }
 
 .markerList li

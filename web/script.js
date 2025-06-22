@@ -67,158 +67,14 @@ segment_colors = [
 markers = {};
 markers["pswitch"]=names;
 markers["custom"]=[];
-markers["track"]=[
-    {
-        "name":"Acorn Heights",
-        "map_position":[927,83],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Airship Fortress",
-        "map_position":[490,299],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Boo Cinema",
-        "map_position":[1099,152],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Bowser's Castle",
-        "map_position":[633,195],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Cheep Cheep Falls",
-        "map_position":[1110,369],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Choco Mountain",
-        "map_position":[775,539],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Crown City",
-        "map_position":[765,780],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Dandelion Depths",
-        "map_position":[1094,558],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Desert Hills",
-        "map_position":[446,751],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Dino Dino Jungle",
-        "map_position":[1116,934],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"DK Pass",
-        "map_position":[1220,424],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"DK Spaceport",
-        "map_position":[738,941],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Dry Bones Burnout",
-        "map_position":[797,165],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Faraway Oasis",
-        "map_position":[1096,757],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Great ? Block Ruins",
-        "map_position":[1285,878],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Koopa Troopa Beach",
-        "map_position":[927,866],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Mario Bros. Circuit",
-        "map_position":[588,656],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Mario Circuit",
-        "map_position":[939,272],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Moo Moo Meadows",
-        "map_position":[933,451],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Peach Beach",
-        "map_position":[1375,737],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Peach Stadium",
-        "map_position":[932,620],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Salty Salty Speedway",
-        "map_position":[1256,663],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Shy Guy Bazaar",
-        "map_position":[451,552],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Sky-High Sundae",
-        "map_position":[1377,352],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Starview Peak",
-        "map_position":[1237,250],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Toad's Factory",
-        "map_position":[770,350],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Wario Shipyard",
-        "map_position":[1410,550],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Wario Stadium",
-        "map_position":[637,443],
-        "map_offset": [29, 29]
-    },
-    {
-        "name":"Whistlestop Summit",
-        "map_position":[602,848],
-        "map_offset": [29, 29]
-    }
-];
+markers["track"]=track_names;
+markers["cart"]=character_locations;
 
 
 marker_show_pswitch=true;
 marker_show_custom=false;
 marker_show_track=false;
+marker_show_cart=false;
 
 // --------------------------------- Events --------------------------------- //
 
@@ -840,6 +696,23 @@ function showMarkersTracks(event,set_state = null)
 }
 document.getElementById('control_marker_track').addEventListener('change', (event) => {
     showMarkersTracks()
+});
+
+// Toggle Character Starts
+function showMarkersCarts(event,set_state = null)
+{
+    if (set_state != null) document.getElementById('control_show_cart').checked = set_state;
+    if(document.getElementById('control_show_cart').checked)
+    {
+        document.getElementById('field_markers_cart').style.display = "block";
+    }else{
+        document.getElementById('field_markers_cart').style.display = "none";
+    }
+    marker_show_cart=document.getElementById('control_show_cart').checked;
+    drawMap();
+}
+document.getElementById('control_show_cart').addEventListener('change', (event) => {
+    showMarkersCarts()
 });
 
 
@@ -1572,6 +1445,7 @@ function map_set_pswitch()
             if (key  == "pswitch" && !marker_show_pswitch) img.style.display = "none";
             if (key  == "custom" &&   !marker_show_custom) img.style.display = "none";
             if (key  == "track" &&   !marker_show_track) img.style.display = "none";
+            if (key  == "cart" &&   !marker_show_cart) img.style.display = "none";
         });
 
     }
