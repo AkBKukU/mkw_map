@@ -1,0 +1,8 @@
+{
+	"name":"Collect blue coins on the slackline course!",
+	"map_position":[1037,425],
+	"map_offset":[29,29],
+	"end_position":[990,425],
+	"end_flying":1
+
+}

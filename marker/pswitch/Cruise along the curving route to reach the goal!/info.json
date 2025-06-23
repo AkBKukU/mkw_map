@@ -1,0 +1,8 @@
+{
+	"name":"Cruise along the curving route to reach the goal!",
+	"map_position":[510,379],
+	"map_offset":[29,29],
+	"end_position":[461,325],
+	"end_flying":1
+
+}

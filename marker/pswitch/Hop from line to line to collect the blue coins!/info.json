@@ -1,0 +1,8 @@
+{
+	"name":"Hop from line to line to collect the blue coins!",
+	"map_position":[853,315],
+	"map_offset":[29,29],
+	"end_position":[853,378],
+	"end_flying":1
+
+}

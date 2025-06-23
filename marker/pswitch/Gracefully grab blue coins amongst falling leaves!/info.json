@@ -1,0 +1,8 @@
+{
+	"name":"Gracefully grab blue coins amongst falling leaves!",
+	"map_position":[1099,496],
+	"map_offset":[29,29],
+	"end_position":[1060,535],
+	"end_flying":1
+
+}

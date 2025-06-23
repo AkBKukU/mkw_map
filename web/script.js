@@ -688,10 +688,8 @@ function showIncomplete(event,set_state = null)
     if(set_state)
     {
         document.querySelector('label[for=control_marker_medal]').style.display = "block";
-        document.querySelector('label[for=control_marker_panel]').style.display = "block";
     }else{
         document.querySelector('label[for=control_marker_medal]').style.display = "none";
-        document.querySelector('label[for=control_marker_panel]').style.display = "none";
     }
 }
 document.getElementById('show_incomplete').addEventListener('click', (event) => {
@@ -1367,24 +1365,37 @@ function set_selected(name,move=null,key=null,findSplit=null)
         }
     }
     selected_key = key;
+    sc = marker_find(name,true,key);
 
-    if (key == "pswitch")
+    if ("imgs" in sc)
     {
-        if(document.getElementById('control_show_pslocation').checked)
-            document.getElementById("menu_location").style.display = "block";
-        if(document.getElementById('control_show_pstitle').checked)
-            document.getElementById("menu_title").style.display = "block";
-        img_location = document.getElementById("location");
-        img_location.src = "P-Switches/"+pathClean(name)+"/300_location.jpg";
-        a_location = document.getElementById("view_location");
-        a_location.href = "P-Switches/"+pathClean(name)+"/location.jpg";
-        a_location.target = '_blank';
+        // TODO - Make image IDs for viewers generic (ie, check if box ID exists for each imgs value)
+        if (sc["imgs"].includes("location"))
+        {
+            if(document.getElementById('control_show_pslocation').checked)
+                document.getElementById("menu_location").style.display = "block";
+            img_location = document.getElementById("location");
+            img_location.src = "marker/"+key+"/"+pathClean(name)+"/300_location.jpg";
+            a_location = document.getElementById("view_location");
+            a_location.href = "marker/"+key+"/"+pathClean(name)+"/location.jpg";
+            a_location.target = '_blank';
+        }else{
+                document.getElementById("menu_location").style.display = "none";
+        }
 
-        img_title = document.getElementById("title");
-        img_title.src = "P-Switches/"+pathClean(name)+"/300_title.jpg";
-        a_title = document.getElementById("view_title");
-        a_title.href = "P-Switches/"+pathClean(name)+"/title.jpg";
-        a_title.target = '_blank';
+        if (sc["imgs"].includes("title"))
+        {
+            if(document.getElementById('control_show_pstitle').checked)
+                document.getElementById("menu_title").style.display = "block";
+            img_title = document.getElementById("title");
+            img_title.src = "marker/"+key+"/"+pathClean(name)+"/300_title.jpg";
+            a_title = document.getElementById("view_title");
+            a_title.href = "marker/"+key+"/"+pathClean(name)+"/title.jpg";
+            a_title.target = '_blank';
+        }else{
+                document.getElementById("menu_title").style.display = "none";
+        }
+
     }else{
         document.getElementById("menu_location").style.display = "none";
         document.getElementById("menu_title").style.display = "none";
@@ -1392,7 +1403,6 @@ function set_selected(name,move=null,key=null,findSplit=null)
 
 
     // Move map view
-    sc = marker_find(name,true,key);
     if (sc == -1) return;
 
     if(typeof sc["map_offset"] === 'undefined') {
