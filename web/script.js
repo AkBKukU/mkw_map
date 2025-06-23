@@ -408,96 +408,28 @@ document.getElementById("completeLoad").addEventListener('change', uploadComplet
 // Save Route
 function saveRoute()
 {
-    var xmlns_v = "urn:v";
-    Run = document.createElementNS(xmlns_v, "Run");
-    Run.setAttribute("version","1.7.0");
-
-    GameIcon = document.createElementNS(xmlns_v, "GameIcon");
-    Run.appendChild(GameIcon);
-
-    GameName = document.createElementNS(xmlns_v, "GameName");
-    GameName.innerHTML = "Mario Kart World";
-    Run.appendChild(GameName);
-
-    CategoryName = document.createElementNS(xmlns_v, "CategoryName");
-    CategoryName.innerHTML = "All P-Switches";
-    Run.appendChild(CategoryName);
-
-    LayoutPath = document.createElementNS(xmlns_v, "LayoutPath");
-    Run.appendChild(LayoutPath);
-
-    Metadata = document.createElementNS(xmlns_v, "Metadata");
-    Metadata_Run = document.createElementNS(xmlns_v, "Run");
-    Metadata_Run.setAttribute("id","");
-    Metadata.appendChild(Metadata_Run);
-
-    Metadata_Platform = document.createElementNS(xmlns_v, "Platform");
-    Metadata_Platform.setAttribute("usesEmulator","False");
-    Metadata.appendChild(Metadata_Platform);
-
-    Metadata_Region = document.createElementNS(xmlns_v, "Region");
-    Metadata.appendChild(Metadata_Region);
-
-    Metadata_Variables = document.createElementNS(xmlns_v, "Variables");
-    Metadata.appendChild(Metadata_Variables);
-
-    Metadata_CustomVariables = document.createElementNS(xmlns_v, "CustomVariables");
-    Metadata.appendChild(Metadata_CustomVariables);
-    Run.appendChild(Metadata);
-
-    Offset = document.createElementNS(xmlns_v, "Offset");
-    Offset.innerHTML = "00:00:00";
-    Run.appendChild(Offset);
-
-    AttemptCount = document.createElementNS(xmlns_v, "AttemptCount");
-    AttemptCount.innerHTML = "0";
-    Run.appendChild(AttemptCount);
-
-    AttemptHistory = document.createElementNS(xmlns_v, "AttemptHistory");
-    Run.appendChild(AttemptHistory);
-
-    Segments = document.createElementNS(xmlns_v, "Segments");
-
+    data=[];
     for (i in route)
     {
 
         route[i]["splits"].forEach(split => {
-
-            Seg = document.createElementNS(xmlns_v, "Segment");
-            Name = document.createElementNS(xmlns_v, "Name");
             pre="";
             if (split["rw"])
             {
                 pre="[RW] ";
             }
-            Name.innerHTML = pre+""+split["name"];
-            Name.setAttribute("map_seg",route[i]["segment"]);
-            Seg.appendChild(Name);
-            Icon = document.createElementNS(xmlns_v, "Icon");
-            Seg.appendChild(Icon);
-            SplitTimes = document.createElementNS(xmlns_v, "SplitTimes");
-            SplitTime = document.createElementNS(xmlns_v, "SplitTime");
-            SplitTime.setAttribute("name","Personal Best");
-            SplitTimes.appendChild(SplitTime);
-            Seg.appendChild(SplitTimes);
-            BestSegmentTime = document.createElementNS(xmlns_v, "BestSegmentTime");
-            Seg.appendChild(BestSegmentTime);
-            SegmentHistory = document.createElementNS(xmlns_v, "SegmentHistory");
-            Seg.appendChild(SegmentHistory);
-
-            Segments.appendChild(Seg);
+            data.push({
+                    "name":     pre+""+split["name"],
+                    "attributes": [
+                        {"map_seg":  route[i]["segment"]}
+                    ]
+            });
         });
     };
 
-    Run.appendChild(Segments);
+    livesplit = new LiveSplit("Mario Kart World","Map Output");
 
-    AutoSplitterSettings = document.createElementNS(xmlns_v, "AutoSplitterSettings");
-    Run.appendChild(AutoSplitterSettings);
-
-    const serializer = new XMLSerializer();
-    const xmlStr = serializer.serializeToString(Run);
-
-    download("splits.lss",xmlStr);
+    download("splits.lss",livesplit.generateXML(data));
 }
 document.getElementById("routeSave").addEventListener('click', saveRoute);
 
@@ -509,24 +441,17 @@ async function uploadRoute()
     if (file) {
         route=[];
         xml=await file.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(xml, "application/xml");
-        splits=doc.querySelectorAll("Segment");
-        for (s in splits)
+        livesplit = new LiveSplit("Mario Kart World","Map Output");
+        var data=livesplit.pareseSplitsToData(xml);
+        for (let i in data)
         {
-            if (isNaN(s)) continue;
-            for (const child of splits[s].children) {
-                if ( child.tagName == "Name")
-                {
-                    seg=child.getAttribute("map_seg");
-                    segment_add(seg);
-                    split=child.textContent.replace("[RW] ", "");
-                    rw = child.textContent.includes("[RW]");
+            segment_add(data[i].attributes[0].map_seg);
+            seg=data[i].attributes[0].map_seg;
+            split=data[i].name.replace("[RW] ", "");
+            rw = data[i].name.includes("[RW]");
 
-                    index = segment_find_index(route_sel_segment);
-                    route[index]["splits"].push({"name":split,"rw":rw})
-                }
-            }
+            index = segment_find_index(route_sel_segment);
+            route[index]["splits"].push({"name":split,"rw":rw})
         }
     }
     set_route_segment(seg);
