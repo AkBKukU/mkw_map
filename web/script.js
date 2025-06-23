@@ -77,7 +77,7 @@ marker_show_pswitch=true;
 marker_show_custom=false;
 marker_show_track=false;
 marker_show_cart=false;
-marker_show_medal=false;
+marker_show_medal=true;
 marker_show_panel=false;
 
 // --------------------------------- Events --------------------------------- //
@@ -678,22 +678,6 @@ function showMarkersPanels(event,set_state = null)
 }
 document.getElementById('control_marker_panel').addEventListener('change', (event) => {
     showMarkersPanels()
-});
-
-// Toggle Showing incomplete data sets
-function showIncomplete(event,set_state = null)
-{
-
-    if (set_state == null) set_state = document.querySelector('label[for=control_marker_medal]').style.display != "block";
-    if(set_state)
-    {
-        document.querySelector('label[for=control_marker_medal]').style.display = "block";
-    }else{
-        document.querySelector('label[for=control_marker_medal]').style.display = "none";
-    }
-}
-document.getElementById('show_incomplete').addEventListener('click', (event) => {
-    showIncomplete()
 });
 
 // Toggle Showing SKG CTA

@@ -1872,7 +1872,13 @@ character_locations=[
 
 character_locations.sort((a, b) => a.name.localeCompare(b.name))
 
-medal_locations = [{'map_offset': [0,0], 'map_position': [969, 909], 'name': 'PM-009'},
+medal_locations = [
+
+{'map_offset': [0,0], 'map_position': [1114, 606], 'name': 'PM-160'},
+{'map_offset': [0,0], 'map_position': [1137, 578], 'name': 'PM-169'},
+{'map_offset': [0,0], 'map_position': [1325, 319], 'name': 'PM-192'},
+
+{'map_offset': [0,0], 'map_position': [969, 909], 'name': 'PM-009'},
 {'map_offset': [0,0], 'map_position': [947, 895], 'name': 'PM-010'},
 {'map_offset': [0,0], 'map_position': [1023, 895], 'name': 'PM-011'},
 {'map_offset': [0,0], 'map_position': [962, 814], 'name': 'PM-012'},
@@ -2070,6 +2076,7 @@ medal_locations = [{'map_offset': [0,0], 'map_position': [969, 909], 'name': 'PM
  {'map_offset': [0, 0], 'map_position': [1013, 233], 'name': 'PM-199'},
  {'map_offset': [0, 0], 'map_position': [714, 319], 'name': 'PM-200'}];
 
+medal_locations.sort((a, b) => a.name.localeCompare(b.name))
 
 panel_locations = [{'imgs': ['location'],
   'map_offset': [0, 0],
