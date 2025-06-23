@@ -696,6 +696,16 @@ document.getElementById('show_incomplete').addEventListener('click', (event) => 
     showIncomplete()
 });
 
+// Toggle Showing SKG CTA
+function showSKG(event)
+{
+document.getElementById('skg').style.display = "none";
+}
+document.getElementById('cta-hide').addEventListener('click', (event) => {
+    showSKG()
+});
+
+
 // --------------------------------- Map Control
 
 // Point Translation
