@@ -1127,6 +1127,9 @@ function calcRouteCenterBounds(broute,pad=0)
         // Get marker
         let c = marker_find(broute[i]["name"],true);
 
+        // Skip if marker not found
+        if (c == -1) continue;
+
         // Check end and then start
         let steps = 2;
         while(steps)
@@ -1332,9 +1335,42 @@ function drawMap() {
         {
             ctx.beginPath();
             first=true;
+            skip=false;
+
+            // Configure segment line
+            ctx.lineWidth = 2;
+            color_i = Number(i);
+            while (color_i >= segment_colors.length)
+            {
+                color_i -= segment_colors.length;
+            }
+            ctx.strokeStyle = segment_colors[color_i];
+            ctx.setLineDash([]);
+
+            // Go through splits in segment
             for (j in route[i]["splits"])
             {
                 c = marker_find(route[i]["splits"][j]["name"],true);
+
+                // If marker not found for split
+                if (c==-1)
+                {
+                    // Stroke up until now normally
+                    if (i!=0 && !skip)
+                    {
+                        ctx.stroke();
+                        // Setup next line to dash stroke
+                        ctx.setLineDash([4]);
+
+                        if (route[i]["segment"] == route_sel_segment )
+                        {
+                            let list = document.getElementById("split_li_"+j);
+                            list.classList.add("error");
+                        }
+                    }
+                    skip=true;
+                    continue;
+                }
 
 
                 if(typeof c["map_offset"] === 'undefined') {
@@ -1351,6 +1387,17 @@ function drawMap() {
                     first = false;
                 }else{
                     ctx.lineTo(c["map_position"][0]+offx, c["map_position"][1]+offy);
+
+                    // Finish dash stroke and reset to normal
+                    if (skip)
+                    {
+                        ctx.stroke();
+                        ctx.beginPath();
+                        ctx.moveTo(c["map_position"][0]+offx, c["map_position"][1]+offy);
+                        ctx.setLineDash([]);
+                        skip=false;
+                    }
+
                 }
 
                 if("end_position" in c && ! route[i]["splits"][j]["rw"])
@@ -1358,13 +1405,6 @@ function drawMap() {
                     ctx.lineTo(c["end_position"][0]+offx, c["end_position"][1]+offy);
                 }
             };
-            ctx.lineWidth = 2;
-            color_i = Number(i);
-            while (color_i >= segment_colors.length)
-            {
-                color_i -= segment_colors.length;
-            }
-            ctx.strokeStyle = segment_colors[color_i];
             ctx.stroke();
         }
     };
