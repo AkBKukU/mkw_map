@@ -1524,7 +1524,7 @@ function map_addMarker(name,key)
     img.id = name;
     img.classList.add("marker_"+key);
     img.classList.add("marker");
-    if(key == "pswitch" && spoiler)
+    if((key == "pswitch" || key == "panel" || key == "medal")&& spoiler)
     {
         img.classList.add("spoil");
     }
