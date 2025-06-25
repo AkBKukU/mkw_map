@@ -1026,6 +1026,7 @@ function marker_find(name, copy=false,key="pswitch")
         {
             if (markers[key][i]["name"] == name )
             {
+                found_key = key;
                 return i;
             }
         }
