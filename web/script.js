@@ -170,6 +170,7 @@ function segment_add(name)
     if (segment_find_index(name) != -1 )
     {
         console.log("Segment already exists!");
+        set_route_segment(name);
         return;
     }
 
@@ -250,9 +251,10 @@ document.getElementById('segDown').addEventListener('click', seg_down);
 // --------------------------------- Splits
 
 // Add Split
-function segment_add_split()
+function segment_add_split(name=null, rw=false)
 {
     index = segment_find_index(route_sel_segment);
+    if (name == null) name = selected;
     if (index == -1)
     {
 
@@ -265,7 +267,7 @@ function segment_add_split()
         }
     }
 
-    route[index]["splits"].push({"name":selected,"rw":false})
+    route[index]["splits"].push({"name":name,"rw":rw})
 
     route_list();
     drawMap();
@@ -455,19 +457,24 @@ async function uploadRoute()
         route=[];
         xml=await file.text();
         livesplit = new LiveSplit("Mario Kart World","Map Output");
-        var data=livesplit.pareseSplitsToData(xml);
+        let data=livesplit.pareseSplitsToData(xml);
         for (let i in data)
         {
-            segment_add(data[i].attributes[0].map_seg);
-            seg=data[i].attributes[0].map_seg;
+            i = Number(i);
+            if (data[i].attributes.length != 0)
+            {
+                segment_add(data[i].attributes[0].map_seg);
+                seg=data[i].attributes[0].map_seg;
+            }
             split=data[i].name.replace("[RW] ", "");
             rw = data[i].name.includes("[RW]");
 
-            index = segment_find_index(route_sel_segment);
-            route[index]["splits"].push({"name":pswitchErrata(split),"rw":rw})
+            //index = segment_find_index(route_sel_segment);
+            //route[index]["splits"].push({"name":pswitchErrata(split),"rw":rw})
+            segment_add_split(pswitchErrata(split),rw)
         }
     }
-    set_route_segment(seg);
+    if (seg != "") set_route_segment(seg);
     route_list();
     drawMap();
 

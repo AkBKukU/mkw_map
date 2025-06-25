@@ -121,7 +121,7 @@ class LiveSplit
     {
         if (text=="") return null;
 
-        var data=[];
+        let data=[];
 
         const parser = new DOMParser();
         const doc = parser.parseFromString(xml, "application/xml");
