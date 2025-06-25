@@ -365,9 +365,15 @@ document.getElementById('segDownSplit').addEventListener('click', split_down);
 // Save Completion
 function saveComplete()
 {
-    saveData = {"pswitch":[],"custom":[]};
+    saveData = {"pswitch":[],"medal":[],"panel":[],"custom":[]};
     markers["pswitch"].forEach((c) => {
         saveData["pswitch"].push({ "name" : c["name"], "done":c["done"] });
+    });
+    markers["medal"].forEach((c) => {
+        saveData["medal"].push({ "name" : c["name"], "done":c["done"] });
+    });
+    markers["panel"].forEach((c) => {
+        saveData["panel"].push({ "name" : c["name"], "done":c["done"] });
     });
 
     markers["custom"].forEach((c) => {
@@ -388,10 +394,16 @@ async function uploadCompletion()
         loadData =  JSON.parse(await file.text());
     }
 
-    loadData["pswitch"].forEach((c) => {
+    if("pswitch" in loadData) loadData["pswitch"].forEach((c) => {
         setComplete(c["name"],c["done"],"pswitch");
     });
-    loadData["custom"].forEach((c) => {
+    if("medal" in loadData) loadData["medal"].forEach((c) => {
+        setComplete(c["name"],c["done"],"medal");
+    });
+    if("panel" in loadData) loadData["panel"].forEach((c) => {
+        setComplete(c["name"],c["done"],"panel");
+    });
+    if("custom" in loadData) loadData["custom"].forEach((c) => {
         map_pointer.x = c["x"];
         map_pointer.y = c["y"];
         map_pointer.valid = true;
