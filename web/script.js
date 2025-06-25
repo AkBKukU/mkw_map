@@ -127,6 +127,7 @@ document.getElementById("markerCustomAdd").addEventListener('click', markerCusto
 function markerCustomDel()
 {
     mindex = marker_find(selected,false,"custom");
+    if(found_key != "custom") return;
     split_remove(selected);
     markers["custom"].splice(mindex,1);
     map_delMarker(selected,"custom")
