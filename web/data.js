@@ -260,7 +260,7 @@ names=[   {   'end_position': [785, 748],
     {   'end_position': [757, 770],
         'map_offset': [29, 29],'imgs':["location","title"],
         'map_position': [777, 802],
-        'name': 'Race through diosaur-filled streets!'},
+        'name': 'Race through dinosaur-filled streets!'},
     {   'end_position': [503, 804],
         'map_offset': [29, 29],'imgs':["location","title"],
         'map_position': [474, 801],
@@ -1397,7 +1397,7 @@ names=[   {   'end_position': [785, 748],
     {   'end_position': [770, 235],
         'map_offset': [29, 29],'imgs':["location","title"],
         'map_position': [756, 254],
-        'name': 'Collect blue coins in the hot spings!'},
+        'name': 'Collect blue coins in the hot springs!'},
     {   'end_flying': 1,
         'end_position': [993, 230],
         'map_offset': [29, 29],'imgs':["location","title"],
@@ -1601,7 +1601,11 @@ names=[   {   'end_position': [785, 748],
         'map_position': [965, 194],
         'name': 'Collect the blue coins the Wigglers have hoarded!'}];
 
-
+names_errata =
+[
+    {bad:"Collect blue coins in the hot spings!",good:"Collect blue coins in the hot springs!"},
+    {bad:"Race through diosaur-filled streets!",good:"Race through dinosaur-filled streets!"}
+    ];
 
 track_names=[
     {

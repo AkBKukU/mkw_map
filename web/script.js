@@ -395,7 +395,7 @@ async function uploadCompletion()
     }
 
     if("pswitch" in loadData) loadData["pswitch"].forEach((c) => {
-        setComplete(c["name"],c["done"],"pswitch");
+        setComplete(pswitchErrata(c["name"]),c["done"],"pswitch");
     });
     if("medal" in loadData) loadData["medal"].forEach((c) => {
         setComplete(c["name"],c["done"],"medal");
@@ -463,7 +463,7 @@ async function uploadRoute()
             rw = data[i].name.includes("[RW]");
 
             index = segment_find_index(route_sel_segment);
-            route[index]["splits"].push({"name":split,"rw":rw})
+            route[index]["splits"].push({"name":pswitchErrata(split),"rw":rw})
         }
     }
     set_route_segment(seg);
@@ -492,12 +492,17 @@ control_all_segs.addEventListener('change', (event) => {
     allsegments=event.currentTarget.checked;
     drawMap();
 });
+
 document.body.onkeyup = function(e) {
     if (e.key == " " ||
         e.code == "Space" ||
         e.keyCode == 32
     ) {
-        setComplete(selected,!control_ps_complete.checked,selected_key);
+
+        if(document.activeElement.id == "")
+        {
+            setComplete(selected,!control_ps_complete.checked,selected_key);
+        }
     }
 }
 
@@ -897,6 +902,19 @@ addEventListener("resize", (event) => { });
 
 
 // --------------------------- Utility Functions ---------------------------- //
+
+// Name Errata Correcton
+function pswitchErrata(name)
+{
+    // Check against all known bad names
+    for(i in names_errata)
+    {
+        // If it's using the bad name, return the good one
+        if ( name == names_errata[i].bad )
+            return names_errata[i].good;
+    }
+    return name;
+}
 
 // URL Escape Decoding
 function decodeHtml(html) {
