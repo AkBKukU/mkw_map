@@ -251,7 +251,7 @@ document.getElementById('segDown').addEventListener('click', seg_down);
 // --------------------------------- Splits
 
 // Add Split
-function segment_add_split(name=null, rw=false)
+function segment_add_split(event, name=null, rw=false)
 {
     index = segment_find_index(route_sel_segment);
     if (name == null) name = selected;
@@ -471,7 +471,7 @@ async function uploadRoute()
 
             //index = segment_find_index(route_sel_segment);
             //route[index]["splits"].push({"name":pswitchErrata(split),"rw":rw})
-            segment_add_split(pswitchErrata(split),rw)
+            segment_add_split(null,pswitchErrata(split),rw)
         }
     }
     if (seg != "") set_route_segment(seg);
