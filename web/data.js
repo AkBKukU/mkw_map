@@ -1546,7 +1546,7 @@ names=[   {   'end_position': [785, 748],
     {   'end_position': [931, 546],
         'map_offset': [29, 29],'imgs':["location","title"],
         'map_position': [931, 477],
-        'name': 'Hit Ramps and reach the goal!'},
+        'name': 'Hit the ramps and reach the goal!'},
     {   'end_position': [1090, 533],
         'map_offset': [29, 29],'imgs':["location","title"],
         'map_position': [1032, 520],
@@ -1604,7 +1604,8 @@ names=[   {   'end_position': [785, 748],
 names_errata =
 [
     {bad:"Collect blue coins in the hot spings!",good:"Collect blue coins in the hot springs!"},
-    {bad:"Race through diosaur-filled streets!",good:"Race through dinosaur-filled streets!"}
+    {bad:"Race through diosaur-filled streets!",good:"Race through dinosaur-filled streets!"},
+    {bad:"Hit Ramps and reach the goal!",good:"Hit the ramps and reach the goal!"}
     ];
 
 track_names=[
