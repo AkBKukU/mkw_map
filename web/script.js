@@ -11,6 +11,8 @@ const control_ps_all_ends = document.getElementById('control_ps_all_ends')
 const control_marker_pswitch = document.getElementById('control_marker_pswitch')
 const control_all_segs = document.getElementById('control_all_segs')
 const ps_search = document.getElementById('ps_search');
+img_location = document.getElementById("location");
+img_title = document.getElementById("title");
 ul_pswitches = document.getElementById("pswitches_imgs");
 
 // Map image
@@ -1407,7 +1409,6 @@ function set_selected(name,move=null,key=null,findSplit=null)
         {
             if(document.getElementById('control_show_pslocation').checked)
                 document.getElementById("menu_location").style.display = "block";
-            img_location = document.getElementById("location");
             img_location.src = "marker/"+key+"/"+pathClean(name)+"/300_location.jpg";
             a_location = document.getElementById("view_location");
             a_location.href = "marker/"+key+"/"+pathClean(name)+"/location.jpg";
@@ -1420,7 +1421,6 @@ function set_selected(name,move=null,key=null,findSplit=null)
         {
             if(document.getElementById('control_show_pstitle').checked)
                 document.getElementById("menu_title").style.display = "block";
-            img_title = document.getElementById("title");
             img_title.src = "marker/"+key+"/"+pathClean(name)+"/300_title.jpg";
             a_title = document.getElementById("view_title");
             a_title.href = "marker/"+key+"/"+pathClean(name)+"/title.jpg";
@@ -1548,7 +1548,12 @@ function map_set_pswitch()
 
 // --------------------------- Inititialization  ---------------------------- //
 
-
+img_location.addEventListener('error', function imgOnError() {
+    document.getElementById("menu_location").style.display = "none";
+})
+img_title.addEventListener('error', function imgOnError() {
+    document.getElementById("menu_title").style.display = "none";
+})
 
 // Build map data
 function map_addMarker(name,key)
