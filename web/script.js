@@ -1617,7 +1617,7 @@ function map_initialize()
     var hash = window.location.hash.substring(1);
     if (hash != "")
     {
-        set_selected(decodeURI(hash));
+        set_selected(pswitchErrata(decodeURI(hash)));
     }
 }
 

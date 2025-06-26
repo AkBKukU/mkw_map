@@ -1008,7 +1008,7 @@ names=[   {   'end_position': [785, 748],
     {   'end_position': [1213, 565],
         'map_offset': [29, 29],'imgs':["location","title"],
         'map_position': [1219, 543],
-        'name': 'Display presision driving to gather the blue coins!'},
+        'name': 'Display precision driving to gather the blue coins!'},
     {   'end_flying': 1,
         'end_position': [451, 553],
         'map_offset': [29, 29],'imgs':["location","title"],
@@ -1099,7 +1099,7 @@ names=[   {   'end_position': [785, 748],
     {   'end_position': [1266, 536],
         'map_offset': [29, 29],'imgs':["location","title"],
         'map_position': [1225, 562],
-        'name': 'Surf thhe waves as Bulbers look on!'},
+        'name': 'Surf the waves as Bulbers look on!'},
     {   'end_position': [1110, 370],
         'map_offset': [29, 29],'imgs':["location","title"],
         'map_position': [1089, 395],
@@ -1605,7 +1605,9 @@ names_errata =
 [
     {bad:"Collect blue coins in the hot spings!",good:"Collect blue coins in the hot springs!"},
     {bad:"Race through diosaur-filled streets!",good:"Race through dinosaur-filled streets!"},
-    {bad:"Hit Ramps and reach the goal!",good:"Hit the ramps and reach the goal!"}
+    {bad:"Hit Ramps and reach the goal!",good:"Hit the ramps and reach the goal!"},
+    {bad:"Surf thhe waves as Bulbers look on!",good:"Surf the waves as Bulbers look on!"},
+    {bad:"Display presision driving to gather the blue coins!",good:"Display precision driving to gather the blue coins!"}
     ];
 
 track_names=[
