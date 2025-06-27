@@ -1601,6 +1601,8 @@ names=[   {   'end_position': [785, 748],
         'map_position': [965, 194],
         'name': 'Collect the blue coins the Wigglers have hoarded!'}];
 
+names.sort((a, b) => a.name.localeCompare(b.name))
+
 names_errata =
 [
     {bad:"Collect blue coins in the hot spings!",good:"Collect blue coins in the hot springs!"},
