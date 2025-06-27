@@ -36,6 +36,14 @@ map markers. The IDs are also used all over for searching for matching elements.
 This was fine up until the ? Panels and Peach Medallions were added and those 
 now must have arbitrary numbers assigned to ensure the IDs are unique.
 
+### Development Enviornment
+
+This project has been designed entirely without the use of a backend server. It
+can be directly locally run without needing an HTTP server. While I would like 
+to keep it that way, I am not super against it depending on backend functionality
+if there are features that require it. I have ideas for some that would so it
+may happen in the future.
+
 
 ## Screenshots
 
