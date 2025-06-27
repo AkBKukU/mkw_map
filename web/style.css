@@ -222,6 +222,12 @@ body
 {
 	color: #999; text-decoration: none;
 }
+.pretty-menu fieldset a,
+.pretty-menu fieldset a:link,
+.pretty-menu fieldset a:visited
+{
+	color: #bbf; text-decoration: none;
+}
 .pretty-menu section fieldset.flexFill
 {
 	flex-grow: 100;
