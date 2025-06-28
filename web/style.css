@@ -92,6 +92,7 @@ body
 }
 .pretty-menu section
 {
+	gap: 1rem;
 /* Shape */
 	display: flex;
 	height: 100%;
