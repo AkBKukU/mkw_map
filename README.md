@@ -6,7 +6,7 @@ and Course & Character start positions.
 You can view the current public version of the map here:
 [https://mkw.techtangents.net/](https://mkw.techtangents.net/)
 
-*Note that this project was not originally anticipated to recieve a full public release and the code isn't exactly elegent.*
+*Note that this project was not originally anticipated to receive a full public release and the code isn't exactly elegant.*
 
 ## Codebase
 
@@ -17,7 +17,7 @@ The three main files of concern are:
  - **/web/style.css** : The styling for all web elements
  - **/web/data.js** : The map marker data
 
-Image files for the map markers are found uner `/markers`. The keys used for the map markers must match the sub-directory names.
+Image files for the map markers are found under `/markers`. The keys used for the map markers must match the sub-directory names.
 
 ## Project History
 
@@ -36,7 +36,7 @@ map markers. The IDs are also used all over for searching for matching elements.
 This was fine up until the ? Panels and Peach Medallions were added and those 
 now must have arbitrary numbers assigned to ensure the IDs are unique.
 
-### Development Enviornment
+### Development Environment
 
 This project has been designed entirely without the use of a backend server. It
 can be directly locally run without needing an HTTP server. While I would like 
@@ -47,9 +47,9 @@ may happen in the future.
 
 ## Screenshots
 
-This map uses screenshots from the game. These are distributted under the 
+This map uses screenshots from the game. These are distributed under the 
 authorization provided by the [Nintendo Game Content Guidelines
 for Online Video & Image Sharing Platforms](https://www.nintendo.co.jp/networkservice_guideline/en/index.html).
 
 Only complete in game screenshots will be accepted to this repo to continue
-to stay in alginment with those guidelines.
+to stay in alignment with those guidelines.
