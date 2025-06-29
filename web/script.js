@@ -15,6 +15,8 @@ img_location = document.getElementById("location");
 img_title = document.getElementById("title");
 ul_pswitches = document.getElementById("pswitches_imgs");
 
+const STORAGE_KEY = "mario-kart-world-map";
+
 // Map image
 const map = new Image();
 map.src = "web/map.png";
@@ -38,6 +40,7 @@ touch_start_dual = true;
 touch_count = 0;
 touch_last = { x: 0, y: 0 };
 
+let loadingData = true;
 let isDragging = false;
 let dragStartPosition = { x: 0, y: 0 };
 let clickStartPosition = { x: 0, y: 0 };
@@ -121,6 +124,7 @@ function markerCustomAdd(event, verbose=true)
     });
     console.log("Added Custom Marker")
     drawMap();
+    saveToLocalStorage();
 
 }
 document.getElementById("markerCustomAdd").addEventListener('click', markerCustomAdd);
@@ -135,6 +139,7 @@ function markerCustomDel()
     map_delMarker(selected,"custom")
     set_selected(markers["pswitch"][0]["name"],null,"pswitch");
     drawMap();
+    saveToLocalStorage();
 
 }
 document.getElementById("markerCustomDel").addEventListener('click', markerCustomDel);
@@ -368,7 +373,7 @@ document.getElementById('segDownSplit').addEventListener('click', split_down);
 // --------------------------------- Completion File Handling
 
 // Save Completion
-function saveComplete()
+function createSaveData()
 {
     saveData = {"pswitch":[],"medal":[],"panel":[],"custom":[]};
     markers["pswitch"].forEach((c) => {
@@ -385,19 +390,27 @@ function saveComplete()
         saveData["custom"].push({ "name" : c["name"], "x":c["map_position"][0], "y":c["map_position"][1] });
     });
 
+    return JSON.stringify(saveData);
+}
+
+function saveToLocalStorage()
+{
+    if (!loadingData) {
+        localStorage.setItem(STORAGE_KEY, createSaveData());
+    }
+}
+
+function saveComplete()
+{
     var xmlns_v = "urn:v";
-    download("save.json",JSON.stringify(saveData));
+    download("save.json",createSaveData());
 }
 document.getElementById("completeSave").addEventListener('click', saveComplete);
 
 // Upload Completion
-async function uploadCompletion()
+async function loadSaveData(loadData)
 {
-    const [file] = document.getElementById("completeLoad").files;
-
-    if (file) {
-        loadData =  JSON.parse(await file.text());
-    }
+    loadingData = true;
 
     if("pswitch" in loadData) loadData["pswitch"].forEach((c) => {
         setComplete(pswitchErrata(c["name"]),c["done"],"pswitch");
@@ -416,7 +429,28 @@ async function uploadCompletion()
         markerCustomAdd(null,false);
     });
     drawMap();
+
+    loadingData = false;
 };
+
+function loadFromLocalStorage() {
+    if (localStorage.getItem(STORAGE_KEY)) {
+        const loadData = JSON.parse(localStorage.getItem(STORAGE_KEY));
+
+        if (loadData) {
+            loadSaveData(loadData);
+        }
+    }
+}
+
+async function uploadCompletion()
+{
+    const [file] = document.getElementById("completeLoad").files;
+
+    if (file) {
+        loadData =  JSON.parse(await file.text());
+    }
+}
 document.getElementById("completeLoad").addEventListener('change', uploadCompletion);
 
 
@@ -1230,6 +1264,8 @@ function setComplete(name,done,key=null)
     {
         control_ps_complete.checked = state;
     }
+
+    saveToLocalStorage();
 }
 
 function drawMap() {
@@ -1657,3 +1693,5 @@ function windowWidthLayout()
     mapMove(map_control_x,map_control_y,map_control_zoom);
 }
 windowWidthLayout();
+
+loadFromLocalStorage();
