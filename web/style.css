@@ -284,7 +284,7 @@ body
 	height: 32px;
 }
 
-.marker.spoil
+.spoil .marker_panel, .spoil .marker_medal, .spoil .marker_pswitch
 {
 	background-image:none;
 }

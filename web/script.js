@@ -1562,10 +1562,6 @@ function map_addMarker(name,key)
     img.id = name;
     img.classList.add("marker_"+key);
     img.classList.add("marker");
-    if((key == "pswitch" || key == "panel" || key == "medal")&& spoiler)
-    {
-        img.classList.add("spoil");
-    }
     img.setAttribute('title', name)
     img.addEventListener('click', function(e) {
         set_selected(name,null,key,true);
@@ -1596,16 +1592,41 @@ function map_delMarker(name,key)
     li.remove();
 }
 
+function set_spoiler_mode(enabled)
+{
+    spoil_link = document.getElementById("spoiler-link");
+    spoil_link.textContent = enabled ? "(Spoiler)" : "(Non-Spoiler)";
+    spoil_link.href = enabled ? "?" : "?spoiler";
+
+    const map_viewer = document.getElementById('map_viewer');
+    map_viewer.classList.toggle('spoil', enabled);
+
+    spoiler = enabled;
+}
+
+function parse_current_url()
+{
+    // Check spoiler mode
+    const params = new URLSearchParams(window.location.search);
+    set_spoiler_mode(params.get("spoiler") != null);
+
+    // Check selected marker
+    var hash = window.location.hash.substring(1);
+    if (hash != "")
+    {
+        set_selected(pswitchErrata(decodeURI(hash)));
+    }
+}
+
 function map_initialize()
 {
-    let params = new URLSearchParams(document.location.search);
-    spoiler = params.get("spoiler") != null; // enable spoiler mode if set
-    if (spoiler)
-    {
-        spoil_link = document.getElementById("spoiler-link");
-        spoil_link.textContent = "(Spoiler)";
-        spoil_link.href = window.location.href.replace("spoiler","");
-    }
+    spoil_link = document.getElementById("spoiler-link");
+    spoil_link.addEventListener('click', function (event) {
+        window.history.pushState({}, "", this.href);
+        set_spoiler_mode(!spoiler);
+        event.preventDefault();
+    });
+    window.addEventListener('popstate', parse_current_url);
 
     // Create P-Switch Items
     for (const [key, value] of Object.entries(markers)) {
@@ -1619,11 +1640,7 @@ function map_initialize()
 
     };
 
-    var hash = window.location.hash.substring(1);
-    if (hash != "")
-    {
-        set_selected(pswitchErrata(decodeURI(hash)));
-    }
+    parse_current_url()
 }
 
 map_initialize();
