@@ -136,7 +136,9 @@ function autoSave()
 // Autoload
 function autoLoad()
 {
-    saveUnpack(localStorage.setItem("completion"));
+    load=localStorage.getItem("completion")
+    if (load != null)
+        saveUnpack(JSON.parse(load));
 }
 
 
@@ -517,6 +519,7 @@ function oncheck()
 }
 control_ps_complete.addEventListener('change', (event) => {
     oncheck()
+    autoSave();
 });
 control_ps_all_ends.addEventListener('change', (event) => {
     allends=event.currentTarget.checked;
@@ -536,6 +539,7 @@ document.body.onkeyup = function(e) {
         if(document.activeElement.id == "")
         {
             setComplete(selected,!control_ps_complete.checked,selected_key);
+            autoSave();
         }
     }
 }
@@ -1254,7 +1258,6 @@ function setComplete(name,done,key=null)
     {
         control_ps_complete.checked = state;
     }
-    autoSave();
 }
 
 function drawMap() {
