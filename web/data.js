@@ -1874,7 +1874,12 @@ character_locations=[
 },
 {
     "name":"Baby Rosalina",
-    "map_position":[912,874],
+    "map_position":[912,784],
+    "map_offset": [29, 29]
+},
+{
+    "name":"Wario",
+    "map_position":[1365,448],
     "map_offset": [29, 29]
 }
 ];
@@ -1885,7 +1890,7 @@ medal_locations = [
 
 {'map_offset': [0,0], 'map_position': [1114, 606],'imgs': ['location'], 'name': 'PM-160'},
 {'map_offset': [0,0], 'map_position': [1137, 578],'imgs': ['location'], 'name': 'PM-169'},
-{'map_offset': [0,0], 'map_position': [1325, 319],'imgs': ['location'], 'name': 'PM-192'},
+{'map_offset': [29, 29], 'map_position': [1322, 343],'imgs': ['location'], 'name': 'PM-192'},
 
 {'map_offset': [0,0], 'map_position': [969, 909],'imgs': ['location'], 'name': 'PM-009'},
 {'map_offset': [0,0], 'map_position': [947, 895],'imgs': ['location'], 'name': 'PM-010'},
