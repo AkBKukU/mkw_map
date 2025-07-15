@@ -84,6 +84,61 @@ marker_show_panel=false;
 
 // --------------------------------- Events --------------------------------- //
 
+// Save Data to JSON String
+function saveBuild()
+{
+    saveData = {"pswitch":[],"medal":[],"panel":[],"custom":[]};
+    markers["pswitch"].forEach((c) => {
+        saveData["pswitch"].push({ "name" : c["name"], "done":c["done"] });
+    });
+    markers["medal"].forEach((c) => {
+        saveData["medal"].push({ "name" : c["name"], "done":c["done"] });
+    });
+    markers["panel"].forEach((c) => {
+        saveData["panel"].push({ "name" : c["name"], "done":c["done"] });
+    });
+
+    markers["custom"].forEach((c) => {
+        saveData["custom"].push({ "name" : c["name"], "x":c["map_position"][0], "y":c["map_position"][1] });
+    });
+
+    return JSON.stringify(saveData);
+}
+
+// Save Data from JSON String
+function saveUnpack(loadData)
+{
+
+    if("pswitch" in loadData) loadData["pswitch"].forEach((c) => {
+        setComplete(pswitchErrata(c["name"]),c["done"],"pswitch");
+    });
+    if("medal" in loadData) loadData["medal"].forEach((c) => {
+        setComplete(c["name"],c["done"],"medal");
+    });
+    if("panel" in loadData) loadData["panel"].forEach((c) => {
+        setComplete(c["name"],c["done"],"panel");
+    });
+    if("custom" in loadData) loadData["custom"].forEach((c) => {
+        map_pointer.x = c["x"];
+        map_pointer.y = c["y"];
+        map_pointer.valid = true;
+        document.getElementById('markerCustomName').value=c["name"];
+        markerCustomAdd(null,false);
+    });
+}
+
+// Autosave
+function autoSave()
+{
+    localStorage.setItem("completion", saveBuild());
+}
+
+// Autoload
+function autoLoad()
+{
+    saveUnpack(localStorage.setItem("completion"));
+}
+
 
 // --------------------------------- Custom Markers
 
@@ -370,24 +425,9 @@ document.getElementById('segDownSplit').addEventListener('click', split_down);
 // Save Completion
 function saveComplete()
 {
-    saveData = {"pswitch":[],"medal":[],"panel":[],"custom":[]};
-    markers["pswitch"].forEach((c) => {
-        saveData["pswitch"].push({ "name" : c["name"], "done":c["done"] });
-    });
-    markers["medal"].forEach((c) => {
-        saveData["medal"].push({ "name" : c["name"], "done":c["done"] });
-    });
-    markers["panel"].forEach((c) => {
-        saveData["panel"].push({ "name" : c["name"], "done":c["done"] });
-    });
-
-    markers["custom"].forEach((c) => {
-        saveData["custom"].push({ "name" : c["name"], "x":c["map_position"][0], "y":c["map_position"][1] });
-    });
-
-    var xmlns_v = "urn:v";
-    download("save.json",JSON.stringify(saveData));
+    download("MKW_Completion.json",saveBuild());
 }
+
 document.getElementById("completeSave").addEventListener('click', saveComplete);
 
 // Upload Completion
@@ -398,23 +438,7 @@ async function uploadCompletion()
     if (file) {
         loadData =  JSON.parse(await file.text());
     }
-
-    if("pswitch" in loadData) loadData["pswitch"].forEach((c) => {
-        setComplete(pswitchErrata(c["name"]),c["done"],"pswitch");
-    });
-    if("medal" in loadData) loadData["medal"].forEach((c) => {
-        setComplete(c["name"],c["done"],"medal");
-    });
-    if("panel" in loadData) loadData["panel"].forEach((c) => {
-        setComplete(c["name"],c["done"],"panel");
-    });
-    if("custom" in loadData) loadData["custom"].forEach((c) => {
-        map_pointer.x = c["x"];
-        map_pointer.y = c["y"];
-        map_pointer.valid = true;
-        document.getElementById('markerCustomName').value=c["name"];
-        markerCustomAdd(null,false);
-    });
+    saveUnpack(loadData);
     drawMap();
 };
 document.getElementById("completeLoad").addEventListener('change', uploadCompletion);
@@ -1230,6 +1254,7 @@ function setComplete(name,done,key=null)
     {
         control_ps_complete.checked = state;
     }
+    autoSave();
 }
 
 function drawMap() {
@@ -1657,3 +1682,4 @@ function windowWidthLayout()
     mapMove(map_control_x,map_control_y,map_control_zoom);
 }
 windowWidthLayout();
+autoLoad();
