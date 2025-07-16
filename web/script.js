@@ -519,7 +519,8 @@ function oncheck()
     setComplete(selected,control_ps_complete.checked,selected_key);
 }
 control_ps_complete.addEventListener('change', (event) => {
-    oncheck()
+    oncheck();
+    map_set_pswitch();
     autoSave();
 });
 control_ps_all_ends.addEventListener('change', (event) => {
@@ -540,6 +541,7 @@ document.body.onkeyup = function(e) {
         if(document.activeElement.id == "")
         {
             setComplete(selected,!control_ps_complete.checked,selected_key);
+            map_set_pswitch();
             autoSave();
         }
     }
@@ -1526,10 +1528,15 @@ function map_set_pswitch()
             // Enable visibility reset
             dispay_set=false;
         }
+        // Track number completed
+        count_complete = 0;
         value.forEach((msps) => {
             img = document.getElementById(msps['name']);
             // Ensure marker is visible before other checks
             if (!dispay_set) img.style.display = "block";
+
+            // Increase Complete Count
+            if (msps["done"]) count_complete++;
 
             // Verify a map offset exists
             if(typeof msps["map_offset"] === 'undefined') {
@@ -1568,6 +1575,15 @@ function map_set_pswitch()
             if (key  == "medal" &&   !marker_show_medal) img.style.display = "none";
             if (key  == "panel" &&   !marker_show_panel) img.style.display = "none";
         });
+
+        let count_display = document.getElementById(key+"_count");
+        if (count_display != null)
+        {
+            if (count_complete)
+                count_display.textContent = "("+count_complete+"/"+markers[key].length+")"
+            else
+                count_display.textContent = "("+markers[key].length+")"
+        }
 
     }
 }

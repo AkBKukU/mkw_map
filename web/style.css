@@ -217,11 +217,12 @@ body
 	color: #eee;
 	background-color: #222f;
 }
+.pretty-menu fieldset > legend span,
 .pretty-menu fieldset > legend a,
 .pretty-menu fieldset > legend a:link,
 .pretty-menu fieldset > legend a:visited
 {
-	color: #999; text-decoration: none;
+	color: #bbb; text-decoration: none;
 }
 .pretty-menu fieldset a,
 .pretty-menu fieldset a:link,
