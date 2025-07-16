@@ -38,6 +38,7 @@ touch_start_dual = true;
 touch_count = 0;
 touch_last = { x: 0, y: 0 };
 
+let save_version = 1.0;
 let isDragging = false;
 let dragStartPosition = { x: 0, y: 0 };
 let clickStartPosition = { x: 0, y: 0 };
@@ -87,7 +88,7 @@ marker_show_panel=false;
 // Save Data to JSON String
 function saveBuild()
 {
-    saveData = {"pswitch":[],"medal":[],"panel":[],"custom":[]};
+    saveData = {"save_version":save_version,"pswitch":[],"medal":[],"panel":[],"custom":[]};
     markers["pswitch"].forEach((c) => {
         saveData["pswitch"].push({ "name" : c["name"], "done":c["done"] });
     });
