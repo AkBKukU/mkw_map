@@ -179,7 +179,7 @@ function markerCustomAdd(event, verbose=true)
     });
     console.log("Added Custom Marker")
     drawMap();
-
+    autoSave();
 }
 document.getElementById("markerCustomAdd").addEventListener('click', markerCustomAdd);
 
@@ -193,7 +193,7 @@ function markerCustomDel()
     map_delMarker(selected,"custom")
     set_selected(markers["pswitch"][0]["name"],null,"pswitch");
     drawMap();
-
+    autoSave();
 }
 document.getElementById("markerCustomDel").addEventListener('click', markerCustomDel);
 
