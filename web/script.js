@@ -927,7 +927,7 @@ function onWheel(event,diff=0) {
     drawMap();
     event.preventDefault();
 }
-canvas.addEventListener('wheel', onWheel);
+document.getElementById("map_items").addEventListener('wheel', onWheel);
 
 // Window Resize
 onresize = (event) => {
