@@ -927,7 +927,7 @@ function onWheel(event,diff=0) {
     drawMap();
     event.preventDefault();
 }
-document.getElementById("map_items").addEventListener('wheel', onWheel);
+document.getElementById("map_scroll_container").addEventListener('wheel', onWheel);
 
 // Window Resize
 onresize = (event) => {
