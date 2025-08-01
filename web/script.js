@@ -739,6 +739,7 @@ document.getElementById('control_marker_panel').addEventListener('change', (even
 });
 
 // Toggle Showing SKG CTA
+/*
 function showSKG(event)
 {
 document.getElementById('skg').style.display = "none";
@@ -746,6 +747,7 @@ document.getElementById('skg').style.display = "none";
 document.getElementById('cta-hide').addEventListener('click', (event) => {
     showSKG()
 });
+*/
 
 
 // --------------------------------- Map Control
